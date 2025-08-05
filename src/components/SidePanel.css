@@ -1,0 +1,80 @@
+.side-panel {
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  background-color: #fafafa;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Prevent overflow at component level */
+  transition: transform 0.3s ease;
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.side-panel.mobile-hidden {
+  transform: translateX(-100%);
+}
+
+@media (max-width: 1200px) {
+  .side-panel {
+    width: 260px;
+    min-width: 260px;
+    max-width: 260px;
+  }
+}
+
+@media (max-width: 768px) {
+  .side-panel {
+    position: fixed;
+    left: 0;
+    top: 60px; /* Position below mobile header */
+    height: calc(100vh - 60px); /* Take remaining height */
+    z-index: 1000;
+    width: 280px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    transform: translateX(-100%);
+  }
+  
+  .side-panel.mobile-visible {
+    transform: translateX(0);
+  }
+}
+
+.side-panel-header {
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #fff;
+}
+
+.side-panel-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.side-panel-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden; /* Prevent horizontal overflow */
+  padding: 8px;
+  min-height: 0; /* Allow flex item to shrink */
+}
+
+.side-panel-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.side-panel-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.side-panel-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.side-panel-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

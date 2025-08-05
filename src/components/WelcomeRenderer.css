@@ -1,0 +1,150 @@
+.welcome-renderer {
+  max-width: 100%;
+  padding: 40px 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.welcome-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.welcome-header h3 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  color: #1a202c;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.welcome-header p {
+  font-size: 1.2rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.features-showcase {
+  margin-top: 48px;
+}
+
+.features-showcase h4 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0 0 32px 0;
+  text-align: center;
+  color: #2d3748;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-category {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-category:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.feature-category h5 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: #2d3748;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 8px;
+}
+
+.feature-category ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature-category li {
+  padding: 8px 0;
+  color: #4a5568;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  border-bottom: 1px solid #f7fafc;
+  transition: color 0.2s ease;
+}
+
+.feature-category li:last-child {
+  border-bottom: none;
+}
+
+.feature-category li:hover {
+  color: #2d3748;
+}
+
+.feature-category strong {
+  color: #2d3748;
+  font-weight: 600;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .welcome-renderer {
+    padding: 24px 16px;
+  }
+  
+  .welcome-header h3 {
+    font-size: 2rem;
+  }
+  
+  .welcome-header p {
+    font-size: 1.1rem;
+  }
+  
+  .features-showcase {
+    margin-top: 32px;
+  }
+  
+  .features-showcase h4 {
+    font-size: 1.5rem;
+    margin-bottom: 24px;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .feature-category {
+    padding: 20px;
+  }
+  
+  .feature-category h5 {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome-renderer {
+    padding: 20px 12px;
+  }
+  
+  .welcome-header h3 {
+    font-size: 1.75rem;
+  }
+  
+  .feature-category {
+    padding: 16px;
+  }
+}

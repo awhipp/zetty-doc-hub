@@ -1,0 +1,660 @@
+import React, { useState, useEffect } from 'react';
+
+# MDX Example
+
+This document showcases advanced MDX capabilities with interactive React components embedded directly in the documentation.
+
+## Interactive Components
+
+### Counter Component
+
+<div style={{
+  padding: '20px',
+  border: '2px solid #e0e0e0',
+  borderRadius: '12px',
+  margin: '20px 0',
+  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  color: 'white'
+}}>
+
+export const Counter = () => {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <div style={{ textAlign: 'center' }}>
+      <h3 style={{ margin: '0 0 20px 0' }}>Interactive Counter</h3>
+      <div style={{ 
+        fontSize: '2rem', 
+        fontWeight: 'bold',
+        margin: '20px 0',
+        padding: '20px',
+        background: 'rgba(255,255,255,0.2)',
+        borderRadius: '8px'
+      }}>
+        {count}
+      </div>
+      <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+        <button 
+          onClick={() => setCount(count - 1)}
+          style={{
+            padding: '10px 20px',
+            fontSize: '16px',
+            border: 'none',
+            borderRadius: '6px',
+            background: '#ff6b6b',
+            color: 'white',
+            cursor: 'pointer'
+          }}
+        >
+          Decrease
+        </button>
+        <button 
+          onClick={() => setCount(0)}
+          style={{
+            padding: '10px 20px',
+            fontSize: '16px',
+            border: 'none',
+            borderRadius: '6px',
+            background: '#feca57',
+            color: 'white',
+            cursor: 'pointer'
+          }}
+        >
+          Reset
+        </button>
+        <button 
+          onClick={() => setCount(count + 1)}
+          style={{
+            padding: '10px 20px',
+            fontSize: '16px',
+            border: 'none',
+            borderRadius: '6px',
+            background: '#48dbfb',
+            color: 'white',
+            cursor: 'pointer'
+          }}
+        >
+          Increase
+        </button>
+      </div>
+    </div>
+  );
+};
+
+<Counter />
+
+</div>
+
+### Live Code Example
+
+This demonstrates how Zetty Doc Hub's file tree system works:
+
+<div style={{
+  margin: '20px 0',
+  border: '1px solid #ddd',
+  borderRadius: '8px',
+  overflow: 'hidden'
+}}>
+
+export const CodeDemo = () => {
+  const [selectedDemo, setSelectedDemo] = useState('fileTree');
+  
+  const demos = {
+    fileTree: {
+      title: 'File Tree Building',
+      code: `// File tree building process
+const docsModules = import.meta.glob('/src/docs/**/*.{md,mdx}');
+
+export const buildFileTree = () => {
+  const fileMap = new Map();
+  const rootNodes = [];
+  
+  Object.keys(docsModules).forEach(filePath => {
+    const relativePath = filePath.replace('/src/docs/', '');
+    const pathParts = relativePath.split('/');
+    
+    // Build hierarchical structure
+    let currentLevel = rootNodes;
+    pathParts.forEach((part, index) => {
+      const isFile = index === pathParts.length - 1;
+      // ... create nodes
+    });
+  });
+  
+  return rootNodes;
+};`
+    },
+    routing: {
+      title: 'URL Routing',
+      code: `// Convert file paths to URLs
+export const filePathToUrl = (filePath) => {
+  return filePath
+    .replace('/src/docs/', '')
+    .replace(/\\.(md|mdx)$/, '');
+};
+
+// Example:
+// "/src/docs/getting-started/installation.md" 
+// becomes "/getting-started/installation"`
+    },
+    loading: {
+      title: 'Dynamic Loading',
+      code: `// Load file content on demand
+const loadFile = async (filePath) => {
+  const moduleLoader = getModuleLoader(filePath);
+  if (moduleLoader) {
+    const module = await moduleLoader();
+    return module.default; // Markdown content
+  }
+  throw new Error('File not found');
+};`
+    }
+  };
+  
+  return (
+    <div>
+      <div style={{
+        background: '#f8f9fa',
+        padding: '10px',
+        borderBottom: '1px solid #ddd'
+      }}>
+        <h4 style={{ margin: '0 0 10px 0' }}>Interactive Code Examples</h4>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          {Object.entries(demos).map(([key, demo]) => (
+            <button
+              key={key}
+              onClick={() => setSelectedDemo(key)}
+              style={{
+                padding: '5px 15px',
+                border: 'none',
+                borderRadius: '4px',
+                background: selectedDemo === key ? '#007acc' : '#e9ecef',
+                color: selectedDemo === key ? 'white' : '#333',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}
+            >
+              {demo.title}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div style={{
+        padding: '20px',
+        background: '#1e1e1e',
+        color: '#d4d4d4',
+        fontFamily: 'Monaco, Consolas, monospace',
+        fontSize: '14px',
+        lineHeight: '1.5',
+        overflow: 'auto'
+      }}>
+        <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
+          {demos[selectedDemo].code}
+        </pre>
+      </div>
+    </div>
+  );
+};
+
+<CodeDemo />
+
+</div>
+
+### Progress Tracker
+
+Track your progress through the documentation:
+
+<div style={{
+  padding: '20px',
+  background: '#f8f9fa',
+  border: '1px solid #dee2e6',
+  borderRadius: '8px',
+  margin: '20px 0'
+}}>
+
+export const ProgressTracker = () => {
+  const [completed, setCompleted] = useState({
+    installation: false,
+    quickStart: false,
+    architecture: false,
+    components: false,
+    development: false
+  });
+  
+  const sections = [
+    { key: 'installation', label: 'Installation Guide', link: '../getting-started/installation' },
+    { key: 'quickStart', label: 'Quick Start', link: '../getting-started/quick-start' },
+    { key: 'architecture', label: 'Architecture Overview', link: '../architecture/overview' },
+    { key: 'components', label: 'Component Documentation', link: '../components/side-panel' },
+    { key: 'development', label: 'Development Guide', link: '../development/contributing' }
+  ];
+  
+  const toggleCompleted = (key) => {
+    setCompleted(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+  
+  const completedCount = Object.values(completed).filter(Boolean).length;
+  const progressPercent = (completedCount / sections.length) * 100;
+  
+  return (
+    <div>
+      <h4 style={{ margin: '0 0 15px 0', color: '#333' }}>Documentation Progress</h4>
+      
+      <div style={{
+        background: '#e9ecef',
+        borderRadius: '10px',
+        height: '20px',
+        marginBottom: '20px',
+        overflow: 'hidden'
+      }}>
+        <div style={{
+          background: 'linear-gradient(90deg, #28a745, #20c997)',
+          height: '100%',
+          width: `${progressPercent}%`,
+          transition: 'width 0.3s ease',
+          borderRadius: '10px'
+        }} />
+      </div>
+      
+      <div style={{ marginBottom: '10px', fontWeight: 'bold', color: '#495057' }}>
+        {completedCount} of {sections.length} sections completed ({Math.round(progressPercent)}%)
+      </div>
+      
+      {sections.map(section => (
+        <div key={section.key} style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          padding: '8px 0',
+          borderBottom: '1px solid #e9ecef'
+        }}>
+          <input
+            type="checkbox"
+            checked={completed[section.key]}
+            onChange={() => toggleCompleted(section.key)}
+            style={{ transform: 'scale(1.2)' }}
+          />
+          <span style={{
+            textDecoration: completed[section.key] ? 'line-through' : 'none',
+            color: completed[section.key] ? '#6c757d' : '#333',
+            flex: 1
+          }}>
+            {section.label}
+          </span>
+          <a 
+            href={section.link}
+            style={{
+              color: '#007acc',
+              textDecoration: 'none',
+              fontSize: '14px'
+            }}
+          >
+            View →
+          </a>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+<ProgressTracker />
+
+</div>
+
+## Custom Components
+
+### Feature Comparison Table
+
+<div style={{ margin: '20px 0' }}>
+
+export const FeatureTable = () => {
+  const features = [
+    { name: 'File Tree Navigation', zetty: true, other: true, notes: 'Dynamic with hot reload' },
+    { name: 'Markdown Rendering', zetty: true, other: true, notes: 'GitHub-flavored markdown' },
+    { name: 'MDX Support', zetty: true, other: false, notes: 'Interactive components' },
+    { name: 'Build-time Discovery', zetty: true, other: false, notes: 'Vite integration' },
+    { name: 'Zero Configuration', zetty: true, other: false, notes: 'Just add files' },
+    { name: 'TypeScript Support', zetty: true, other: true, notes: 'Full type safety' },
+    { name: 'Hot Reload', zetty: true, other: true, notes: 'Instant updates' },
+    { name: 'Custom Themes', zetty: false, other: true, notes: 'Planned feature' }
+  ];
+  
+  return (
+    <div style={{
+      border: '1px solid #dee2e6',
+      borderRadius: '8px',
+      overflow: 'hidden'
+    }}>
+      <div style={{
+        background: '#f8f9fa',
+        padding: '15px',
+        borderBottom: '1px solid #dee2e6'
+      }}>
+        <h4 style={{ margin: 0 }}>Zetty Doc Hub vs Other Solutions</h4>
+      </div>
+      
+      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <thead>
+          <tr style={{ background: '#f1f3f4' }}>
+            <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #dee2e6' }}>
+              Feature
+            </th>
+            <th style={{ padding: '12px', textAlign: 'center', borderBottom: '1px solid #dee2e6' }}>
+              Zetty Doc Hub
+            </th>
+            <th style={{ padding: '12px', textAlign: 'center', borderBottom: '1px solid #dee2e6' }}>
+              Other Tools
+            </th>
+            <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #dee2e6' }}>
+              Notes
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {features.map((feature, index) => (
+            <tr key={index} style={{
+              background: index % 2 === 0 ? '#ffffff' : '#f8f9fa'
+            }}>
+              <td style={{ padding: '12px', borderBottom: '1px solid #dee2e6' }}>
+                {feature.name}
+              </td>
+              <td style={{ 
+                padding: '12px', 
+                textAlign: 'center', 
+                borderBottom: '1px solid #dee2e6',
+                fontSize: '18px'
+              }}>
+                {feature.zetty ? '✅' : '❌'}
+              </td>
+              <td style={{ 
+                padding: '12px', 
+                textAlign: 'center', 
+                borderBottom: '1px solid #dee2e6',
+                fontSize: '18px'
+              }}>
+                {feature.other ? '✅' : '❌'}
+              </td>
+              <td style={{ 
+                padding: '12px', 
+                borderBottom: '1px solid #dee2e6',
+                color: '#6c757d',
+                fontStyle: 'italic'
+              }}>
+                {feature.notes}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+<FeatureTable />
+
+</div>
+
+### Architecture Diagram
+
+<div style={{
+  padding: '20px',
+  background: '#ffffff',
+  border: '1px solid #dee2e6',
+  borderRadius: '8px',
+  margin: '20px 0'
+}}>
+
+export const ArchitectureDiagram = () => {
+  return (
+    <div>
+      <h4 style={{ margin: '0 0 20px 0', textAlign: 'center' }}>Zetty Doc Hub Architecture</h4>
+      
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '15px',
+        maxWidth: '600px',
+        margin: '0 auto'
+      }}>
+        
+        {/* User Interface Layer */}
+        <div style={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: 'white',
+          padding: '15px',
+          borderRadius: '8px',
+          textAlign: 'center'
+        }}>
+          <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>User Interface</div>
+          <div style={{ fontSize: '14px', opacity: 0.9 }}>
+            SidePanel • MainContent • MarkdownRenderer
+          </div>
+        </div>
+        
+        {/* Arrow */}
+        <div style={{ textAlign: 'center', fontSize: '24px' }}>↓</div>
+        
+        {/* Business Logic Layer */}
+        <div style={{
+          background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+          color: 'white',
+          padding: '15px',
+          borderRadius: '8px',
+          textAlign: 'center'
+        }}>
+          <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>Business Logic</div>
+          <div style={{ fontSize: '14px', opacity: 0.9 }}>
+            FileTree Utils • Routing • Markdown Loading
+          </div>
+        </div>
+        
+        {/* Arrow */}
+        <div style={{ textAlign: 'center', fontSize: '24px' }}>↓</div>
+        
+        {/* Build System Layer */}
+        <div style={{
+          background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+          color: 'white',
+          padding: '15px',
+          borderRadius: '8px',
+          textAlign: 'center'
+        }}>
+          <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>Build System</div>
+          <div style={{ fontSize: '14px', opacity: 0.9 }}>
+            Vite • TypeScript • ESLint • React Router
+          </div>
+        </div>
+        
+        {/* Arrow */}
+        <div style={{ textAlign: 'center', fontSize: '24px' }}>↓</div>
+        
+        {/* Content Layer */}
+        <div style={{
+          background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+          color: 'white',
+          padding: '15px',
+          borderRadius: '8px',
+          textAlign: 'center'
+        }}>
+          <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>Content</div>
+          <div style={{ fontSize: '14px', opacity: 0.9 }}>
+            Markdown Files • MDX Components • Assets
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<ArchitectureDiagram />
+
+</div>
+
+## Mathematical Expressions
+
+MDX also supports mathematical expressions and formulas:
+
+<div style={{
+  padding: '20px',
+  background: '#f8f9fa',
+  border: '1px solid #dee2e6',
+  borderRadius: '8px',
+  margin: '20px 0'
+}}>
+
+### Build Time Complexity
+
+The file tree building algorithm has a time complexity of **O(n log n)** where:
+- **n** = number of files in the documentation
+- **log n** factor comes from the sorting operation
+
+### Memory Usage Formula
+
+<div style={{
+  fontFamily: 'monospace',
+  fontSize: '16px',
+  background: 'white',
+  padding: '15px',
+  borderRadius: '6px',
+  margin: '10px 0'
+}}>
+Memory = (Files × Node_Size) + (Content × Compression_Ratio)
+</div>
+
+Where:
+- **Files** = Total number of documentation files
+- **Node_Size** ≈ 150 bytes per FileTreeNode
+- **Content** = Total size of markdown content
+- **Compression_Ratio** ≈ 0.3 (due to dynamic loading)
+
+</div>
+
+## Code Integration
+
+### Live File Tree Example
+
+Here's how the actual file tree is built in this application:
+
+<div style={{
+  border: '1px solid #dee2e6',
+  borderRadius: '8px',
+  margin: '20px 0',
+  overflow: 'hidden'
+}}>
+
+export const LiveFileTree = () => {
+  // This would normally import the actual buildFileTree function
+  // but for demo purposes, we'll simulate it
+  const mockFileTree = [
+    {
+      name: 'README.md',
+      path: '/src/docs/README.md',
+      type: 'file'
+    },
+    {
+      name: 'getting-started',
+      path: '/src/docs/getting-started',
+      type: 'folder',
+      children: [
+        { name: 'installation.md', path: '/src/docs/getting-started/installation.md', type: 'file' },
+        { name: 'quick-start.md', path: '/src/docs/getting-started/quick-start.md', type: 'file' },
+        { name: 'configuration.mdx', path: '/src/docs/getting-started/configuration.mdx', type: 'file' }
+      ]
+    },
+    {
+      name: 'architecture',
+      path: '/src/docs/architecture',
+      type: 'folder',
+      children: [
+        { name: 'overview.md', path: '/src/docs/architecture/overview.md', type: 'file' },
+        { name: 'file-tree-system.md', path: '/src/docs/architecture/file-tree-system.md', type: 'file' },
+        { name: 'routing.md', path: '/src/docs/architecture/routing.md', type: 'file' }
+      ]
+    }
+  ];
+  
+  const [expandedFolders, setExpandedFolders] = useState(new Set(['getting-started']));
+  
+  const toggleFolder = (path) => {
+    setExpandedFolders(prev => {
+      const next = new Set(prev);
+      if (next.has(path)) {
+        next.delete(path);
+      } else {
+        next.add(path);
+      }
+      return next;
+    });
+  };
+  
+  const renderNode = (node, level = 0) => {
+    const isExpanded = expandedFolders.has(node.path);
+    
+    return (
+      <div key={node.path}>
+        <div 
+          style={{
+            paddingLeft: `${level * 20 + 10}px`,
+            padding: '5px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            cursor: node.type === 'folder' ? 'pointer' : 'default',
+            background: level % 2 === 0 ? '#f8f9fa' : 'white'
+          }}
+          onClick={() => node.type === 'folder' && toggleFolder(node.path)}
+        >
+          <span style={{ fontSize: '14px' }}>
+            {node.type === 'folder' ? (isExpanded ? '📂' : '📁') : '📄'}
+          </span>
+          <span style={{ fontSize: '14px', fontFamily: 'monospace' }}>
+            {node.name}
+          </span>
+        </div>
+        
+        {node.type === 'folder' && isExpanded && node.children && (
+          <div>
+            {node.children.map(child => renderNode(child, level + 1))}
+          </div>
+        )}
+      </div>
+    );
+  };
+  
+  return (
+    <div>
+      <div style={{
+        background: '#343a40',
+        color: 'white',
+        padding: '10px 15px',
+        fontWeight: 'bold'
+      }}>
+        Live File Tree Structure
+      </div>
+      <div style={{ maxHeight: '300px', overflow: 'auto' }}>
+        {mockFileTree.map(node => renderNode(node))}
+      </div>
+    </div>
+  );
+};
+
+<LiveFileTree />
+
+</div>
+
+## Conclusion
+
+This MDX document demonstrates the powerful combination of Markdown content with interactive React components. The ability to embed live, functional components directly in documentation makes it possible to create engaging, educational content that goes far beyond static text.
+
+**Key Benefits of MDX in Zetty Doc Hub:**
+- 📝 Standard markdown for content
+- ⚛️ React components for interactivity  
+- 🎨 Custom styling with inline CSS
+- 🔄 State management within documents
+- 🎯 Perfect for tutorials and demos
+
+---
+
+**Explore More:**
+- [Markdown Features](./markdown-example) - Standard markdown capabilities
+- [Template Examples](./general-template-example) - Document templates available

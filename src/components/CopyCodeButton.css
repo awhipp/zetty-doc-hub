@@ -1,0 +1,85 @@
+.copy-code-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--bg-secondary, #f8f9fa);
+  border: 1px solid var(--border-color, #dee2e6);
+  border-radius: 4px;
+  color: var(--text-secondary, #666);
+  cursor: pointer;
+  padding: 6px;
+  opacity: 0;
+  transition: all 0.2s ease;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+pre:hover .copy-code-button {
+  opacity: 1;
+}
+
+.copy-code-button:hover {
+  background: var(--accent-color, #007bff);
+  color: white;
+  border-color: var(--accent-color, #007bff);
+  transform: scale(1.05);
+}
+
+.copy-code-button:active {
+  transform: scale(0.95);
+}
+
+.copy-code-button.copied {
+  background: #28a745;
+  color: white;
+  border-color: #28a745;
+}
+
+.copy-code-button svg {
+  transition: transform 0.1s ease;
+}
+
+/* Ensure pre blocks have the right styling for the button */
+pre {
+  position: relative !important;
+}
+
+/* Better visibility on dark backgrounds */
+[data-theme="dark"] .copy-code-button {
+  background: var(--bg-tertiary, #4a5568);
+  border-color: var(--border-color, #4a5568);
+  color: var(--text-secondary, #a0aec0);
+}
+
+[data-theme="dark"] .copy-code-button:hover {
+  background: var(--accent-color, #63b3ed);
+  border-color: var(--accent-color, #63b3ed);
+}
+
+/* Animation for success state */
+.copy-code-button.copied svg {
+  animation: checkmark 0.3s ease-in-out;
+}
+
+@keyframes checkmark {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .copy-code-button {
+    opacity: 1; /* Always visible on mobile */
+    top: 4px;
+    right: 4px;
+    padding: 4px;
+  }
+  
+  .copy-code-button svg {
+    width: 14px;
+    height: 14px;
+  }
+}

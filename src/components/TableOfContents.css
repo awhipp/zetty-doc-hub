@@ -1,0 +1,308 @@
+/* Table of Contents Styles */
+.table-of-contents {
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  background: #f8f9fa;
+  border-left: 1px solid #e9ecef;
+  padding: 0;
+  flex-shrink: 0; /* Prevent shrinking */
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 1200px) {
+  .table-of-contents {
+    width: 260px;
+    min-width: 260px;
+    max-width: 260px;
+  }
+}
+
+@media (max-width: 768px) {
+  .table-of-contents {
+    display: none; /* Hide on mobile to maintain clean layout */
+  }
+}
+
+.toc-sticky {
+  padding: 1.5rem;
+  flex: 1;
+  overflow-y: auto; /* Allow internal scrolling */
+  overflow-x: hidden; /* Prevent horizontal overflow */
+  min-height: 0; /* Allow flex item to shrink */
+}
+
+/* Custom scrollbar styling for TOC */
+.toc-sticky::-webkit-scrollbar {
+  width: 6px;
+}
+
+.toc-sticky::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.toc-sticky::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.toc-sticky::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.toc-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #343a40;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.toc-nav {
+  margin: 0;
+  position: relative;
+}
+
+.toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.toc-item {
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.toc-link {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0;
+  border: none;
+  background: transparent;
+  color: #6c757d;
+  text-decoration: none;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.toc-link:hover {
+  color: #495057;
+  transform: translateX(2px);
+}
+
+.toc-active .toc-link {
+  color: #007bff;
+  font-weight: 500;
+  position: relative;
+}
+
+/* Hierarchical styling for different heading levels */
+.toc-level-1 {
+  margin-top: 0.75rem;
+}
+
+.toc-level-1:first-child {
+  margin-top: 0;
+}
+
+.toc-level-1 .toc-link {
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-left: 4px solid transparent;
+  padding-left: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.toc-level-2 {
+  margin-top: 0.25rem;
+}
+
+.toc-level-2 .toc-link {
+  padding-left: 1rem;
+  border-left: 3px solid #e9ecef;
+  margin-left: 0.5rem;
+  position: relative;
+}
+
+.toc-level-2 .toc-link::before {
+  content: '';
+  position: absolute;
+  left: -3px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #dee2e6;
+}
+
+.toc-level-3 .toc-link::after {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 50%;
+  width: 8px;
+  height: 1px;
+  background: #dee2e6;
+  transform: translateY(-50%);
+}
+
+.toc-level-4 .toc-link::after {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 50%;
+  width: 6px;
+  height: 1px;
+  background: #e9ecef;
+  transform: translateY(-50%);
+}
+
+.toc-level-3 .toc-link {
+  padding-left: 1rem;
+  font-size: 0.85rem;
+  border-left: 2px solid #dee2e6;
+  margin-left: 1rem;
+  background: linear-gradient(90deg, #f8f9fa 0%, transparent 20%);
+}
+
+.toc-level-4 .toc-link {
+  padding-left: 1rem;
+  font-size: 0.85rem;
+  border-left: 2px solid #e9ecef;
+  margin-left: 1.5rem;
+  background: linear-gradient(90deg, #f1f3f4 0%, transparent 15%);
+  opacity: 0.9;
+}
+
+.toc-level-5 .toc-link {
+  padding-left: 0.75rem;
+  font-size: 0.8rem;
+  border-left: 1px solid #dee2e6;
+  margin-left: 2rem;
+  background: linear-gradient(90deg, #f8f9fa 0%, transparent 10%);
+  opacity: 0.8;
+}
+
+.toc-level-6 .toc-link {
+  padding-left: 0.75rem;
+  font-size: 0.8rem;
+  border-left: 1px solid #e9ecef;
+  margin-left: 2.5rem;
+  background: linear-gradient(90deg, #f1f3f4 0%, transparent 10%);
+  opacity: 0.7;
+}
+
+/* Active state adjustments for hierarchical levels */
+.toc-level-1.toc-active .toc-link {
+  border-left-color: #007bff;
+}
+
+.toc-level-2.toc-active .toc-link {
+  border-left-color: #007bff;
+  background: linear-gradient(90deg, #e3f2fd 0%, transparent 30%);
+}
+
+.toc-level-2.toc-active .toc-link::before {
+  background: #007bff;
+}
+
+.toc-level-3.toc-active .toc-link {
+  border-left-color: #007bff;
+  background: linear-gradient(90deg, #e3f2fd 0%, transparent 25%);
+}
+
+.toc-level-4.toc-active .toc-link {
+  border-left-color: #007bff;
+  background: linear-gradient(90deg, #e3f2fd 0%, transparent 20%);
+}
+
+.toc-level-5.toc-active .toc-link {
+  border-left-color: #007bff;
+  background: linear-gradient(90deg, #e3f2fd 0%, transparent 15%);
+}
+
+.toc-level-6.toc-active .toc-link {
+  border-left-color: #007bff;
+  background: linear-gradient(90deg, #e3f2fd 0%, transparent 15%);
+}
+
+/* Hover state adjustments for hierarchical levels */
+.toc-level-1 .toc-link:hover {
+  padding-left: 0.75rem;
+  border-left-color: #6c757d;
+}
+
+.toc-level-2 .toc-link:hover {
+  border-left-color: #6c757d;
+  background: linear-gradient(90deg, #e9ecef 0%, transparent 25%);
+}
+
+.toc-level-3 .toc-link:hover {
+  border-left-color: #6c757d;
+  background: linear-gradient(90deg, #e9ecef 0%, transparent 25%);
+}
+
+.toc-level-4 .toc-link:hover {
+  border-left-color: #6c757d;
+  background: linear-gradient(90deg, #e9ecef 0%, transparent 20%);
+}
+
+.toc-level-5 .toc-link:hover {
+  border-left-color: #6c757d;
+  background: linear-gradient(90deg, #e9ecef 0%, transparent 15%);
+}
+
+.toc-level-6 .toc-link:hover {
+  border-left-color: #6c757d;
+  background: linear-gradient(90deg, #e9ecef 0%, transparent 15%);
+}
+
+.toc-placeholder {
+  color: #6c757d;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.toc-placeholder p {
+  margin: 0 0 0.5rem 0;
+}
+
+.toc-hint {
+  font-style: italic;
+  opacity: 0.8;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 1200px) {
+  .table-of-contents {
+    width: 300px;
+    min-width: 300px;
+  }
+  
+  .toc-sticky {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .table-of-contents {
+    width: 100%;
+    min-width: unset;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid #e9ecef;
+    position: relative;
+  }
+}

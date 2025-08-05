@@ -1,0 +1,278 @@
+import React from 'react';
+
+# Configuration Guide
+
+Customize your Zetty Documentation Hub to fit your needs and branding.
+
+## Base Configuration
+
+The main configuration is handled through Vite's configuration system in `vite.config.ts`:
+
+```typescript
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  base: '/zetty-doc-hub/', // GitHub Pages base path
+  build: {
+    outDir: 'dist',
+    sourcemap: true
+  }
+})
+```
+
+## Deployment Configuration
+
+### GitHub Pages
+
+The application is pre-configured for GitHub Pages deployment with the base path `/zetty-doc-hub/`. 
+
+**To deploy to your own repository:**
+
+1. Update the `base` path in `vite.config.ts`:
+```typescript
+base: '/your-repo-name/',
+```
+
+2. Update the workflow file `.github/workflows/deploy.yml` if needed
+
+### Custom Domain
+
+For a custom domain, set the base path to `/`:
+
+```typescript
+export default defineConfig({
+  base: '/', // For custom domain or root deployment
+  // ... rest of config
+})
+```
+
+## Styling Customization
+
+### CSS Custom Properties
+
+The application uses CSS custom properties that can be overridden:
+
+<div style={{
+  padding: '20px',
+  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  borderRadius: '8px',
+  color: 'white',
+  margin: '20px 0'
+}}>
+  <h4 style={{margin: '0 0 10px 0'}}>🎨 Theming Example</h4>
+  <p style={{margin: 0}}>This is a custom styled component in MDX showing how you can enhance your documentation with interactive elements.</p>
+</div>
+
+### Component Styling
+
+Each component has its own CSS file:
+
+- `SidePanel.css` - Navigation panel styles
+- `FileTreeNode.css` - File tree item styles  
+- `MainContent.css` - Main content area styles
+- `MarkdownRenderer.css` - Markdown content styles
+
+### Code Highlighting Theme
+
+Syntax highlighting is powered by highlight.js. You can change the theme by:
+
+1. Installing a different highlight.js theme:
+```bash
+npm install highlight.js
+```
+
+2. Importing it in your component:
+```typescript
+import 'highlight.js/styles/github-dark.css'; // or any other theme
+```
+
+## File Discovery Configuration
+
+The file discovery system uses Vite's glob patterns:
+
+```typescript
+// In src/utils/fileTree.ts
+const docsModules = import.meta.glob('/src/docs/**/*.{md,mdx}', { eager: false });
+```
+
+### Supported File Extensions
+
+Currently supported extensions:
+- `.md` - Standard Markdown
+- `.mdx` - Markdown with JSX
+
+### Adding New Extensions
+
+To support additional file types, update the glob pattern:
+
+```typescript
+const docsModules = import.meta.glob('/src/docs/**/*.{md,mdx}', { eager: false });
+```
+
+## Site Configuration
+
+### Environment Variables
+
+Customize your documentation hub using environment variables. Create a `.env` file in the root directory:
+
+```bash
+# Site Configuration
+VITE_SITE_TITLE="My Documentation Hub"
+VITE_SITE_DESCRIPTION="A comprehensive documentation hub for my project"
+VITE_SITE_AUTHOR="My Team"
+
+# Navigation
+VITE_NAVIGATION_SIDEBAR_TITLE="My Docs"
+
+# Branding
+VITE_BRANDING_FAVICON="/my-favicon.ico"
+VITE_BRANDING_LOGO="/path/to/logo.png"
+```
+
+**Available Configuration Options:**
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `VITE_SITE_TITLE` | Main site title (appears in browser tab) | "Zetty Doc Hub" |
+| `VITE_SITE_DESCRIPTION` | Site description for meta tags | "A modern documentation hub..." |
+| `VITE_SITE_AUTHOR` | Site author for meta information | "Zetty Doc Hub Team" |
+| `VITE_NAVIGATION_SIDEBAR_TITLE` | Sidebar header title | "Documentation" |
+| `VITE_BRANDING_FAVICON` | Path to favicon | "/vite.svg" |
+| `VITE_BRANDING_LOGO` | Path to logo image (optional) | null |
+
+### Default Configuration
+
+The application includes sensible defaults defined in `src/config/siteConfig.ts`. You can also reference the example configuration file:
+
+```bash
+cp .env.example .env
+# Edit .env with your preferred values
+```
+
+## Environment Variables
+
+Create a `.env` file for environment-specific configuration:
+
+```bash
+# .env
+VITE_APP_TITLE="My Documentation Hub"
+VITE_BASE_URL="/my-docs/"
+VITE_GITHUB_REPO="username/repo-name"
+```
+
+Access in your code:
+```typescript
+const appTitle = import.meta.env.VITE_APP_TITLE || 'Zetty Doc Hub';
+```
+
+## Advanced Configuration
+
+### Custom Markdown Rendering
+
+The markdown renderer can be customized in `MarkdownRenderer.tsx`:
+
+```typescript
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeHighlight from 'rehype-highlight';
+
+// Add custom plugins
+<ReactMarkdown
+  remarkPlugins={[remarkGfm, customRemarkPlugin]}
+  rehypePlugins={[rehypeHighlight, customRehypePlugin]}
+>
+  {content}
+</ReactMarkdown>
+```
+
+### Router Configuration
+
+Customize routing behavior in `App.tsx`:
+
+```typescript
+import { BrowserRouter, HashRouter } from 'react-router-dom';
+
+// Use HashRouter for GitHub Pages without custom domain
+<HashRouter basename="/zetty-doc-hub">
+  <Routes>
+    {/* routes */}
+  </Routes>
+</HashRouter>
+```
+
+## Performance Optimization
+
+### Build Optimization
+
+Configure build optimizations in `vite.config.ts`:
+
+```typescript
+export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          markdown: ['react-markdown', '@mdx-js/react']
+        }
+      }
+    }
+  }
+})
+```
+
+### Code Splitting
+
+Large markdown files are automatically code-split thanks to Vite's dynamic imports.
+
+## Development Configuration
+
+### ESLint Configuration
+
+The project uses ESLint with TypeScript support. Customize rules in `eslint.config.js`:
+
+```javascript
+export default tseslint.config(
+  { ignores: ['dist'] },
+  {
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ['**/*.{ts,tsx}'],
+    rules: {
+      // Add custom rules
+      '@typescript-eslint/no-unused-vars': 'warn',
+    },
+  }
+)
+```
+
+### TypeScript Configuration
+
+TypeScript settings are in `tsconfig.json` and `tsconfig.app.json`:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  }
+}
+```
+
+---
+
+**Next Steps:**
+- [View Examples](../examples/general-template-example)
