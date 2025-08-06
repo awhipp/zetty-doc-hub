@@ -11,16 +11,16 @@ const getCurrentBasePath = (): string => {
 
 // URL and file path utilities for routing
 export const filePathToUrl = (filePath: string): string => {
-  // Convert '/src/docs/getting-started.md' to '/getting-started'
-  // Convert '/src/docs/api/overview.md' to '/api/overview'
-  return filePath
-    .replace(PATHS.DOCS_ROOT + '/', '/')
-    .replace(/\.(md|mdx)$/, '');
+  // Convert '/src/docs/getting-started.md' to '/getting-started.md'
+  // Convert '/src/docs/api/overview.mdx' to '/api/overview.mdx'
+  // Keep file extensions to avoid conflicts between files with same names
+  return filePath.replace(PATHS.DOCS_ROOT + '/', '/');
 };
 
 export const urlToFilePath = (url: string): string => {
-  // Convert '/getting-started' to '/src/docs/getting-started.md'
-  // Convert '/api/overview' to '/src/docs/api/overview.md'
+  // Convert '/getting-started.md' to '/src/docs/getting-started.md'
+  // Convert '/api/overview.mdx' to '/src/docs/api/overview.mdx'
+  // Now expects URLs to include file extensions
   
   const basePath = getCurrentBasePath();
   
@@ -35,8 +35,12 @@ export const urlToFilePath = (url: string): string => {
     cleanUrl = cleanUrl.replace(`${basePath}/`, '');
   }
   
-  // For now, we'll try .md first, then .mdx
-  // In a real app, you might want to check which file actually exists
+  // If URL already has extension, use it directly
+  if (cleanUrl.match(EXTENSIONS_PATTERN)) {
+    return `${PATHS.DOCS_ROOT}/${cleanUrl}`;
+  }
+  
+  // Fallback to .md if no extension provided (for backwards compatibility)
   return `${PATHS.DOCS_ROOT}/${cleanUrl}.md`;
 };
 
@@ -93,10 +97,8 @@ export const convertInternalLinks = (content: string): string => {
   return content.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, text, url) => {
     // Check if it's an internal link (doesn't start with http/https/mailto)
     if (!url.match(/^(https?:\/\/|mailto:|#)/)) {
-      // Convert internal markdown links to router links
-      // Remove .md/.mdx extensions from the URL
-      const cleanUrl = url.replace(/\.(md|mdx)$/, '');
-      return `[${text}](${cleanUrl})`;
+      // Keep internal markdown links as-is since we now preserve extensions in URLs
+      return `[${text}](${url})`;
     }
     return match;
   });

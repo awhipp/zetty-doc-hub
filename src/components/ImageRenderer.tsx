@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getFileExtension } from '../utils/fileUtils';
-import { PATHS } from '../utils/constants';
+import { loadImageUrl } from '../utils/imageLoader';
 import './ImageRenderer.css';
 
 interface ImageRendererProps {
@@ -10,7 +10,29 @@ interface ImageRendererProps {
 const ImageRenderer: React.FC<ImageRendererProps> = ({ filePath }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
+  const [imageUrl, setImageUrl] = useState<string>('');
   const [naturalSize, setNaturalSize] = useState<{ width: number; height: number } | null>(null);
+
+  useEffect(() => {
+    const loadImage = async () => {
+      setLoading(true);
+      setError(false);
+      
+      try {
+        const url = await loadImageUrl(filePath);
+        if (url) {
+          setImageUrl(url);
+        } else {
+          setError(true);
+        }
+      } catch (err) {
+        console.error('Error loading image:', err);
+        setError(true);
+      }
+    };
+
+    loadImage();
+  }, [filePath]);
 
   const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
     const img = event.currentTarget;
@@ -21,12 +43,6 @@ const ImageRenderer: React.FC<ImageRendererProps> = ({ filePath }) => {
   const handleImageError = () => {
     setLoading(false);
     setError(true);
-  };
-
-  const getImageUrl = (filePath: string): string => {
-    // Convert from internal file path to public URL
-    const publicPath = filePath.replace(PATHS.DOCS_ROOT, PATHS.DOCS_ROOT_PUBLIC);
-    return publicPath;
   };
 
   const getFileName = (filePath: string): string => {
@@ -98,14 +114,16 @@ const ImageRenderer: React.FC<ImageRendererProps> = ({ filePath }) => {
           </div>
         )}
         
-        <img
-          src={getImageUrl(filePath)}
-          alt={getFileName(filePath)}
-          className={`image-display ${loading ? 'loading' : ''}`}
-          onLoad={handleImageLoad}
-          onError={handleImageError}
-          style={{ display: loading ? 'none' : 'block' }}
-        />
+        {imageUrl && (
+          <img
+            src={imageUrl}
+            alt={getFileName(filePath)}
+            className={`image-display ${loading ? 'loading' : ''}`}
+            onLoad={handleImageLoad}
+            onError={handleImageError}
+            style={{ display: loading ? 'none' : 'block' }}
+          />
+        )}
       </div>
 
       {!loading && !error && (

@@ -5,7 +5,7 @@ import SidePanel from './components/SidePanel'
 import MainContent from './components/MainContent'
 import Footer from './components/Footer'
 import TableOfContents from './components/TableOfContents'
-import { urlToFilePathWithExtension } from './utils/routing'
+import { urlToFilePathWithExtension, filePathToUrl } from './utils/routing'
 import { getAvailableFiles } from './utils/markdownLoader'
 import { SiteConfigProvider } from './contexts/SiteConfigContext'
 import { useSiteConfig } from './hooks/useSiteConfig'
@@ -45,10 +45,8 @@ const RoutedContent = () => {
   const selectedFile = availableFiles.includes(potentialFile) ? potentialFile : undefined;
   
   const handleFileSelect = (filePath: string) => {
-    // Convert file path to URL and navigate
-    const url = filePath
-      .replace('/src/docs/', '/')
-      .replace(/\.(md|mdx)$/, '');
+    // Convert file path to URL and navigate (now preserves file extensions)
+    const url = filePathToUrl(filePath);
     navigate(url);
   };
 

@@ -32,6 +32,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   };
 
   const getDisplayPath = (filePath: string): string => {
+    // Show clean path without extensions for display purposes
     return filePath
       .replace('/src/docs/', '')
       .replace(/\.(md|mdx)$/, '');

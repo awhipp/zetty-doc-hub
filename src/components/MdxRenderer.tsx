@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { MDXProvider } from '@mdx-js/react';
-import { loadMdxComponent, loadMdxFrontMatter } from '../utils/markdownLoader';
+import { loadMdxComponent, loadMdxFrontMatter, loadMdxRawContent } from '../utils/markdownLoader';
 import { getTemplate } from './templates';
 import type { FrontMatter } from '../types/template';
 import LinkComponent from './LinkComponent';
 import ImageComponent from './ImageComponent';
 import TemplateWrapper from './TemplateWrapper';
+import DocumentStats from './DocumentStats';
 import './MarkdownRenderer.css';
 
 interface MdxRendererProps {
@@ -15,6 +16,7 @@ interface MdxRendererProps {
 const MdxRenderer: React.FC<MdxRendererProps> = ({ filePath }) => {
   const [MdxComponent, setMdxComponent] = useState<React.ComponentType | null>(null);
   const [frontMatter, setFrontMatter] = useState<FrontMatter>({});
+  const [rawContent, setRawContent] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,12 +26,14 @@ const MdxRenderer: React.FC<MdxRendererProps> = ({ filePath }) => {
       setError(null);
       
       try {
-        const [Component, frontMatterData] = await Promise.all([
+        const [Component, frontMatterData, rawMdxContent] = await Promise.all([
           loadMdxComponent(filePath),
-          loadMdxFrontMatter()
+          loadMdxFrontMatter(),
+          loadMdxRawContent(filePath)
         ]);
         setMdxComponent(() => Component);
         setFrontMatter(frontMatterData);
+        setRawContent(rawMdxContent);
       } catch (err) {
         console.error('Error loading MDX file:', err);
         setError('Failed to load the MDX file content.');
@@ -116,14 +120,17 @@ const MdxRenderer: React.FC<MdxRendererProps> = ({ filePath }) => {
   );
 
   return (
-    <TemplateWrapper
-      TemplateComponent={TemplateComponent}
-      templateProps={{
-        content: mdxContent,
-        frontMatter: frontMatter,
-        filePath: filePath
-      }}
-    />
+    <div className="mdx-content-wrapper">
+      <DocumentStats content={rawContent} />
+      <TemplateWrapper
+        TemplateComponent={TemplateComponent}
+        templateProps={{
+          content: mdxContent,
+          frontMatter: frontMatter,
+          filePath: filePath
+        }}
+      />
+    </div>
   );
 };
 
