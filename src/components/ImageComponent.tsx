@@ -59,35 +59,41 @@ const ImageComponent: React.FC<ImageComponentProps> = ({
 
   if (loading) {
     return (
-      <div className="image-loading" style={{
+      <span className="image-loading" style={{
+        display: 'inline-block',
         border: '2px dashed #ccc',
         padding: '20px',
         textAlign: 'center',
         backgroundColor: '#f9f9f9',
         borderRadius: '6px',
         margin: '1rem 0',
-        color: '#666'
+        color: '#666',
+        verticalAlign: 'middle'
       }}>
-        <div>📷 Loading image...</div>
+        <span>📷 Loading image...</span>
+        <br />
         <small>{src}</small>
-      </div>
+      </span>
     );
   }
 
   if (error || !resolvedSrc) {
     return (
-      <div className="image-error" style={{
+      <span className="image-error" style={{
+        display: 'inline-block',
         border: '2px dashed #ccc',
         padding: '20px',
         textAlign: 'center',
         backgroundColor: '#f9f9f9',
         borderRadius: '6px',
         margin: '1rem 0',
-        color: '#666'
+        color: '#666',
+        verticalAlign: 'middle'
       }}>
-        <div>📷 Image not found</div>
+        <span>📷 Image not found</span>
+        <br />
         <small>{src}</small>
-      </div>
+      </span>
     );
   }
   
