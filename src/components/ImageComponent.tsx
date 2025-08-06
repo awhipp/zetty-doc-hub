@@ -37,8 +37,6 @@ const ImageComponent: React.FC<ImageComponentProps> = ({
         
         // Load the image URL via Vite modules
         const imageUrl = await loadImageUrl(absolutePath);
-
-        console.log(`Resolved image path: ${absolutePath} -> ${imageUrl}`);
         
         if (imageUrl) {
           setResolvedSrc(imageUrl);

@@ -1,3 +1,4 @@
+import { get } from 'http';
 import { IMAGE_EXTENSIONS } from './constants';
 
 // Image modules loaded via Vite's import.meta.glob
@@ -22,7 +23,9 @@ export const loadImageUrl = async (filePath: string): Promise<string | null> => 
       return imageUrl as string;
     } else {
       console.warn(`Image not found in modules: ${filePath}`);
-      console.log('Available image files:', Object.keys(imageModules));
+      if (import.meta.env && import.meta.env.DEV) {
+        console.log('Available image files:', getAvailableImagePaths());
+      }
       return null;
     }
   } catch (error) {
