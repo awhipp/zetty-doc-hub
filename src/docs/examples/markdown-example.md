@@ -299,21 +299,6 @@ Math: &alpha; &beta; &gamma; &delta; &pi; &Sigma; &infin;
 
 ## Advanced Markdown Features
 
-### Collapsible Sections
-
-Standard HTML details and summary tags work in GitHub-flavored Markdown:
-
-<details>
-<summary>Click to expand details</summary>
-
-This content is hidden by default and can be expanded by clicking the summary above.
-
-- This is useful for FAQ sections
-- Or for showing additional technical details
-- Without cluttering the main content
-
-</details>
-
 ### Callout Boxes (Using Blockquotes)
 
 #### Warning
