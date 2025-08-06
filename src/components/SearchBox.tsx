@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { searchDocumentation } from '../utils/searchUtils';
+import React, { useRef, useEffect, useState } from 'react';
+import { useSearch } from '../hooks/useSearch';
 import SearchResults from './SearchResults';
 import type { SearchResult } from '../types/search';
 import './SearchBox.css';
@@ -13,58 +13,39 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   onResultSelect, 
   placeholder = "Search documentation..." 
 }) => {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
-  
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchBoxRef = useRef<HTMLDivElement>(null);
-  const debounceTimeoutRef = useRef<number | undefined>(undefined);
+  const [isOpen, setIsOpen] = useState(false);
+  
+  const {
+    query,
+    setQuery,
+    results,
+    isLoading,
+    selectedIndex,
+    setSelectedIndex,
+    clearSearch,
+    navigateResults
+  } = useSearch({
+    maxResults: 8,
+    minScore: 0.1,
+    autoSearch: true
+  });
 
-  // Handle search with debouncing
-  const handleSearch = async (searchQuery: string) => {
-    if (!searchQuery.trim()) {
-      setResults([]);
-      setIsOpen(false);
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const searchResults = await searchDocumentation(searchQuery, {
-        maxResults: 8,
-        minScore: 0.1
-      });
-      setResults(searchResults);
-      setIsOpen(searchResults.length > 0);
-      setSelectedIndex(-1);
-    } catch (error) {
-      console.error('Search failed:', error);
-      setResults([]);
-      setIsOpen(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Debounced search
+  // Update isOpen based on results
   useEffect(() => {
-    if (debounceTimeoutRef.current) {
-      clearTimeout(debounceTimeoutRef.current);
+    setIsOpen(results.length > 0 && query.trim() !== '');
+  }, [results, query]);
+
+  // Handle result selection
+  const handleResultSelect = (result: SearchResult) => {
+    if (onResultSelect) {
+      onResultSelect(result.filePath);
     }
-
-    debounceTimeoutRef.current = window.setTimeout(() => {
-      handleSearch(query);
-    }, 300);
-
-    return () => {
-      if (debounceTimeoutRef.current) {
-        clearTimeout(debounceTimeoutRef.current);
-      }
-    };
-  }, [query]);
+    clearSearch();
+    setIsOpen(false);
+    searchInputRef.current?.blur();
+  };
 
   // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,16 +58,9 @@ const SearchBox: React.FC<SearchBoxProps> = ({
 
     switch (e.key) {
       case 'ArrowDown':
-        e.preventDefault();
-        setSelectedIndex(prev => 
-          prev < results.length - 1 ? prev + 1 : 0
-        );
-        break;
       case 'ArrowUp':
         e.preventDefault();
-        setSelectedIndex(prev => 
-          prev > 0 ? prev - 1 : results.length - 1
-        );
+        navigateResults(e.key === 'ArrowDown' ? 'down' : 'up');
         break;
       case 'Enter':
         e.preventDefault();
@@ -102,18 +76,6 @@ const SearchBox: React.FC<SearchBoxProps> = ({
     }
   };
 
-  // Handle result selection
-  const handleResultSelect = (result: SearchResult) => {
-    if (onResultSelect) {
-      onResultSelect(result.filePath);
-    }
-    setQuery('');
-    setResults([]);
-    setIsOpen(false);
-    setSelectedIndex(-1);
-    searchInputRef.current?.blur();
-  };
-
   // Handle click outside to close
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -125,7 +87,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [setSelectedIndex]);
 
   // Handle input focus
   const handleFocus = () => {
