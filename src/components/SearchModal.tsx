@@ -157,8 +157,8 @@ const SearchModal: React.FC<SearchModalProps> = ({
   };
 
   return (
-    <div className="search-modal-overlay">
-      <div className="search-modal" ref={modalRef}>
+    <div className="search-modal-overlay fade-in">
+      <div className="search-modal fade-in-down" ref={modalRef}>
         <div className="search-modal-header">
           <div className="search-input-container">
             <div className="search-icon">
@@ -180,7 +180,7 @@ const SearchModal: React.FC<SearchModalProps> = ({
           </div>
           <button 
             onClick={onClose}
-            className="close-button"
+            className="btn-base btn-icon btn-ghost close-button"
             aria-label="Close search"
           >
             <IconClose width={16} height={16} />

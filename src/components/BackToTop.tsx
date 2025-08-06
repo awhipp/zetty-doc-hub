@@ -12,14 +12,16 @@ const BackToTop: React.FC = () => {
   if (!isVisible) return null;
 
   return (
-    <button
-      className="back-to-top"
-      onClick={scrollToTop}
-      aria-label="Scroll to top"
-      title="Back to top"
-    >
-      <IconArrowUp />
-    </button>
+    <div className="back-to-top">
+      <button
+        className="btn-base btn-icon-lg back-to-top-btn fade-in-up"
+        onClick={scrollToTop}
+        aria-label="Scroll to top"
+        title="Back to top"
+      >
+        <IconArrowUp />
+      </button>
+    </div>
   );
 };
 

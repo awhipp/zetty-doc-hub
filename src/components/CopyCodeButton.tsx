@@ -36,7 +36,7 @@ const CopyCodeButton: React.FC = () => {
           return (
             <button
               onClick={handleCopy}
-              className={`copy-code-btn ${copied ? 'copied' : ''}`}
+              className={`btn-base btn-icon btn-secondary hover-scale copy-code-btn ${copied ? 'copied' : ''}`}
               aria-label={copied ? 'Copied!' : 'Copy code to clipboard'}
               title={copied ? 'Copied!' : 'Copy code'}
             >

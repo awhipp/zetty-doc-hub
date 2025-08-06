@@ -39,14 +39,14 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidePanel, isSidePanelVisible, 
           </h1>
           <div className="header-controls">
             <button 
-              className="mobile-menu-toggle"
+              className="btn-base btn-icon mobile-menu-toggle"
               onClick={onToggleSidePanel}
               aria-label="Toggle navigation menu"
             >
               {isSidePanelVisible ? <IconClose /> : <IconMenu />}
             </button>
             <button 
-              className="search-button"
+              className="btn-base btn-icon btn-secondary search-button"
               onClick={handleSearchClick}
               aria-label="Open search"
             >

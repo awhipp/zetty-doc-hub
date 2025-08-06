@@ -123,7 +123,7 @@ const QABox: React.FC<QABoxProps> = ({ onNavigateToFile }) => {
           />
           <button 
             type="submit" 
-            className="qa-submit-btn"
+            className="btn-base btn-primary qa-submit-btn"
             disabled={!question.trim() || isLoading}
           >
             {isLoading ? '⏳' : '🚀'}

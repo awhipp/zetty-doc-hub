@@ -12,12 +12,12 @@
 
 .search-input {
   width: 100%;
-  padding: 8px 40px 8px 16px;
+  padding: var(--space-sm) 40px var(--space-sm) var(--space-md);
   border: 1px solid #ddd;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 14px;
   background-color: #fff;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
   outline: none;
 }
 
@@ -32,7 +32,7 @@
 
 .search-icon {
   position: absolute;
-  right: 12px;
+  right: var(--space-md);
   display: flex;
   align-items: center;
   justify-content: center;
