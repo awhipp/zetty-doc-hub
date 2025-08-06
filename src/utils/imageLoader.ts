@@ -1,4 +1,3 @@
-import { get } from 'http';
 import { IMAGE_EXTENSIONS } from './constants';
 
 // Image modules loaded via Vite's import.meta.glob
