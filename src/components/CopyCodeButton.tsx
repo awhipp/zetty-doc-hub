@@ -1,57 +1,56 @@
 import React, { useEffect } from 'react';
+import { useDOMQuery } from '../hooks';
+import { IconCopy, IconCheck } from './shared';
+import { createRoot } from 'react-dom/client';
 import './CopyCodeButton.css';
 
 const CopyCodeButton: React.FC = () => {
+  const { queryElements } = useDOMQuery({ cache: false }); // Don't cache as code blocks change
+
   useEffect(() => {
     const addCopyButtons = () => {
-      const codeBlocks = document.querySelectorAll('pre code');
+      const codeBlocks = queryElements<HTMLElement>('pre code');
       
       codeBlocks.forEach((codeBlock) => {
         const pre = codeBlock.parentElement as HTMLPreElement;
         if (!pre || pre.querySelector('.copy-code-button')) return;
         
-        const button = document.createElement('button');
-        button.className = 'copy-code-button';
-        button.setAttribute('aria-label', 'Copy code to clipboard');
-        button.setAttribute('title', 'Copy code');
-        button.innerHTML = `
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-        `;
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'copy-code-button';
         
-        button.addEventListener('click', async () => {
-          const code = codeBlock.textContent || '';
+        const CopyButton: React.FC = () => {
+          const [copied, setCopied] = React.useState(false);
           
-          try {
-            await navigator.clipboard.writeText(code);
-            button.innerHTML = `
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="20,6 9,17 4,12"></polyline>
-              </svg>
-            `;
-            button.setAttribute('title', 'Copied!');
-            button.classList.add('copied');
+          const handleCopy = async () => {
+            const code = codeBlock.textContent || '';
             
-            setTimeout(() => {
-              button.innerHTML = `
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                </svg>
-              `;
-              button.setAttribute('title', 'Copy code');
-              button.classList.remove('copied');
-            }, 2000);
-          } catch (err) {
-            console.error('Failed to copy code:', err);
-            button.setAttribute('title', 'Failed to copy');
-          }
-        });
+            try {
+              await navigator.clipboard.writeText(code);
+              setCopied(true);
+              setTimeout(() => setCopied(false), 2000);
+            } catch (err) {
+              console.error('Failed to copy code:', err);
+            }
+          };
+
+          return (
+            <button
+              onClick={handleCopy}
+              className={`copy-code-btn ${copied ? 'copied' : ''}`}
+              aria-label={copied ? 'Copied!' : 'Copy code to clipboard'}
+              title={copied ? 'Copied!' : 'Copy code'}
+            >
+              {copied ? <IconCheck /> : <IconCopy />}
+            </button>
+          );
+        };
+
+        // Render React component into button container
+        const root = createRoot(buttonContainer);
+        root.render(<CopyButton />);
         
         pre.style.position = 'relative';
-        pre.appendChild(button);
+        pre.appendChild(buttonContainer);
       });
     };
 
@@ -74,7 +73,7 @@ const CopyCodeButton: React.FC = () => {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [queryElements]);
 
   return null; // This component doesn't render anything itself
 };

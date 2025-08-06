@@ -2,6 +2,10 @@
   position: absolute;
   top: 8px;
   right: 8px;
+  z-index: 10;
+}
+
+.copy-code-btn {
   background: var(--bg-secondary, #f8f9fa);
   border: 1px solid var(--border-color, #dee2e6);
   border-radius: 4px;
@@ -10,28 +14,27 @@
   padding: 6px;
   opacity: 0;
   transition: all 0.2s ease;
-  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-pre:hover .copy-code-button {
+pre:hover .copy-code-btn {
   opacity: 1;
 }
 
-.copy-code-button:hover {
+.copy-code-btn:hover {
   background: var(--accent-color, #007bff);
   color: white;
   border-color: var(--accent-color, #007bff);
   transform: scale(1.05);
 }
 
-.copy-code-button:active {
+.copy-code-btn:active {
   transform: scale(0.95);
 }
 
-.copy-code-button.copied {
+.copy-code-btn.copied {
   background: #28a745;
   color: white;
   border-color: #28a745;
