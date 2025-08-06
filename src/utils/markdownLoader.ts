@@ -14,6 +14,12 @@ const markdownModules = import.meta.glob('/src/docs/**/*.md', {
 // Get MDX files as compiled React components (for .mdx files)
 const mdxModules = import.meta.glob('/src/docs/**/*.mdx');
 
+// Get MDX files as raw text (for DocumentStats and content analysis)
+const mdxRawModules = import.meta.glob('/src/docs/**/*.mdx', { 
+  query: '?raw',
+  import: 'default'
+});
+
 export const loadMarkdownContent = async (filePath: string): Promise<ParsedMarkdown> => {
   // MDX files should not be loaded as raw text - they're compiled React components
   if (isMdxFile(filePath)) {
@@ -129,6 +135,34 @@ export const loadMdxFrontMatter = async (): Promise<FrontMatter> => {
   } catch (error) {
     console.error('Error loading MDX front matter:', error);
     return {};
+  }
+};
+
+// Function to load raw MDX content for DocumentStats
+export const loadMdxRawContent = async (filePath: string): Promise<string> => {
+  try {
+    // Check if we have a module loader for this MDX file path
+    const moduleLoader = mdxRawModules[filePath];
+    
+    if (moduleLoader) {
+      const rawContent = await moduleLoader();
+      // Remove front matter and clean up MDX-specific syntax for stats
+      const content = (rawContent as string)
+        .replace(/^---[\s\S]*?---\n?/, '') // Remove front matter
+        .replace(/import\s+.*?from\s+['"].*?['"];?\n?/g, '') // Remove imports
+        .replace(/export\s+.*?(?=\n\n|\n#|\n$)/gs, '') // Remove exports
+        .replace(/<[^>]*>/g, '') // Remove JSX tags
+        .replace(/{\s*\/\*[\s\S]*?\*\/\s*}/g, '') // Remove JSX comments
+        .trim();
+      
+      return content;
+    } else {
+      console.warn(`Raw MDX file not found: ${filePath}`);
+      return '';
+    }
+  } catch (error) {
+    console.error('Error loading raw MDX content:', error);
+    return '';
   }
 };
 

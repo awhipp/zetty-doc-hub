@@ -36,6 +36,7 @@ export const EXTENSIONS_PATTERN = new RegExp(`\\.(${SUPPORTED_EXTENSIONS.join('|
 // This function will be called at runtime to get the current base path
 export const getBasePath = (): string => {
   // Use environment variable first, fallback to default
+  // Note: This should match the value used in vite.config.ts and the site config
   return import.meta.env.VITE_BASE_PATH || '/';
 };
 
