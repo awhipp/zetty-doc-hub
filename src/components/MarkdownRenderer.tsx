@@ -6,11 +6,10 @@ import { loadMarkdownContent } from '../utils/markdownLoader';
 import { getTemplate } from './templates';
 import type { ParsedMarkdown } from '../types/template';
 import MdxRenderer from './MdxRenderer';
-import LinkComponent from './LinkComponent';
-import ImageComponent from './ImageComponent';
 import TemplateWrapper from './TemplateWrapper';
 import DocumentStats from './DocumentStats';
 import { isMdxFile, isMarkdownFile } from '../utils/fileUtils';
+import { createCustomComponents, ContentLoading, ErrorState } from './shared';
 import './MarkdownRenderer.css';
 
 interface MarkdownRendererProps {
@@ -61,44 +60,12 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ filePath }) => {
   }
 
   // Custom link component to handle internal navigation
-  const customComponents = {
-    // Custom components for better styling
-    h1: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-      <h1 className="markdown-h1" {...props}>{children}</h1>
-    ),
-    h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-      <h2 className="markdown-h2" {...props}>{children}</h2>
-    ),
-    h3: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-      <h3 className="markdown-h3" {...props}>{children}</h3>
-    ),
-    a: LinkComponent,
-    img: ({ src, alt, title, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) => (
-      <ImageComponent 
-        src={src || ''} 
-        alt={alt} 
-        title={title}
-        currentDocPath={filePath}
-        {...props}
-      />
-    ),
-    table: ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
-      <div className="markdown-table-container">
-        <table className="markdown-table" {...props}>{children}</table>
-      </div>
-    ),
-    blockquote: ({ children, ...props }: React.HTMLAttributes<HTMLQuoteElement>) => (
-      <blockquote className="markdown-blockquote" {...props}>{children}</blockquote>
-    ),
-  };
+  const customComponents = createCustomComponents({ filePath });
 
   if (loading) {
     return (
       <div className="markdown-renderer">
-        <div className="markdown-loading">
-          <div className="loading-spinner"></div>
-          <p>Loading content...</p>
-        </div>
+        <ContentLoading />
       </div>
     );
   }
@@ -106,10 +73,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ filePath }) => {
   if (error) {
     return (
       <div className="markdown-renderer">
-        <div className="markdown-error">
-          <h3>Error</h3>
-          <p>{error}</p>
-        </div>
+        <ErrorState message={error} />
       </div>
     );
   }

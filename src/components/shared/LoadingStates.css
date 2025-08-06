@@ -1,0 +1,124 @@
+/* Shared Loading States Styles */
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-spinner--small {
+  width: 16px;
+  height: 16px;
+}
+
+.loading-spinner--medium {
+  width: 24px;
+  height: 24px;
+}
+
+.loading-spinner--large {
+  width: 32px;
+  height: 32px;
+}
+
+.spinner {
+  width: 100%;
+  height: 100%;
+  border: 2px solid var(--border-color, #e2e8f0);
+  border-top: 2px solid var(--accent-color, #007bff);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  gap: 16px;
+}
+
+.loading-message p {
+  margin: 0;
+  color: var(--text-secondary, #666);
+  font-size: 0.95rem;
+}
+
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  background: var(--error-bg, #fee);
+  border: 1px solid var(--error-border, #fcc);
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.error-state h3 {
+  margin: 0 0 12px 0;
+  color: var(--error-color, #d32f2f);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.error-state p {
+  margin: 0;
+  color: var(--error-text, #b71c1c);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.content-loading {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+/* Dark theme support */
+[data-theme="dark"] .loading-message p {
+  color: var(--text-secondary-dark, #a0aec0);
+}
+
+[data-theme="dark"] .error-state {
+  background: var(--error-bg-dark, #2d1b1b);
+  border-color: var(--error-border-dark, #5a2626);
+}
+
+[data-theme="dark"] .error-state h3 {
+  color: var(--error-color-dark, #f56565);
+}
+
+[data-theme="dark"] .error-state p {
+  color: var(--error-text-dark, #feb2b2);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .loading-message,
+  .error-state {
+    padding: 24px 16px;
+  }
+  
+  .loading-message p,
+  .error-state p {
+    font-size: 0.9rem;
+  }
+}

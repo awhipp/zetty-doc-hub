@@ -3,10 +3,9 @@ import { MDXProvider } from '@mdx-js/react';
 import { loadMdxComponent, loadMdxFrontMatter, loadMdxRawContent } from '../utils/markdownLoader';
 import { getTemplate } from './templates';
 import type { FrontMatter } from '../types/template';
-import LinkComponent from './LinkComponent';
-import ImageComponent from './ImageComponent';
 import TemplateWrapper from './TemplateWrapper';
 import DocumentStats from './DocumentStats';
+import { createCustomComponents, ContentLoading, ErrorState } from './shared';
 import './MarkdownRenderer.css';
 
 interface MdxRendererProps {
@@ -46,68 +45,18 @@ const MdxRenderer: React.FC<MdxRendererProps> = ({ filePath }) => {
   }, [filePath]);
 
   // MDX components mapping for consistent styling and functionality
-  const mdxComponents = {
-    // Custom components for better styling (matching MarkdownRenderer)
-    h1: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-      <h1 className="markdown-h1" {...props}>{children}</h1>
-    ),
-    h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-      <h2 className="markdown-h2" {...props}>{children}</h2>
-    ),
-    h3: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-      <h3 className="markdown-h3" {...props}>{children}</h3>
-    ),
-    a: LinkComponent, // Use the shared LinkComponent for consistent internal navigation
-    img: ({ src, alt, title, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) => (
-      <ImageComponent 
-        src={src || ''} 
-        alt={alt} 
-        title={title}
-        currentDocPath={filePath}
-        {...props}
-      />
-    ),
-    table: ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
-      <div className="markdown-table-container">
-        <table className="markdown-table" {...props}>{children}</table>
-      </div>
-    ),
-    blockquote: ({ children, ...props }: React.HTMLAttributes<HTMLQuoteElement>) => (
-      <blockquote className="markdown-blockquote" {...props}>{children}</blockquote>
-    ),
-  };
+  const mdxComponents = createCustomComponents({ filePath });
 
   if (loading) {
-    return (
-      <div className="markdown-renderer">
-        <div className="markdown-loading">
-          <div className="loading-spinner"></div>
-          <p>Loading content...</p>
-        </div>
-      </div>
-    );
+    return <ContentLoading />;
   }
 
   if (error) {
-    return (
-      <div className="markdown-renderer">
-        <div className="markdown-error">
-          <h3>Error</h3>
-          <p>{error}</p>
-        </div>
-      </div>
-    );
+    return <ErrorState message={error} />;
   }
 
   if (!MdxComponent) {
-    return (
-      <div className="markdown-renderer">
-        <div className="markdown-error">
-          <h3>Error</h3>
-          <p>No MDX component could be loaded.</p>
-        </div>
-      </div>
-    );
+    return <ErrorState message="No MDX component could be loaded." />;
   }
 
   // Get the appropriate template based on front matter

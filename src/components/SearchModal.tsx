@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { searchDocumentation } from '../utils/searchUtils';
+import React, { useRef, useEffect } from 'react';
 import type { SearchResult } from '../types/search';
 import { EXTENSIONS_PATTERN } from '../utils/constants';
+import { useSearch } from '../hooks';
+import { IconSearch, IconClose, SearchLoading } from './shared';
 import './SearchModal.css';
 
 interface SearchModalProps {
@@ -15,54 +16,22 @@ const SearchModal: React.FC<SearchModalProps> = ({
   onClose, 
   onResultSelect 
 }) => {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const { 
+    query, 
+    setQuery, 
+    results, 
+    isLoading, 
+    selectedIndex, 
+    navigateResults,
+    clearSearch 
+  } = useSearch({
+    maxResults: 10,
+    minScore: 0.1,
+    debounceDelay: 200
+  });
   
   const inputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
-  const debounceTimeoutRef = useRef<number | undefined>(undefined);
-
-  // Handle search with debouncing
-  const handleSearch = async (searchQuery: string) => {
-    if (!searchQuery.trim()) {
-      setResults([]);
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const searchResults = await searchDocumentation(searchQuery, {
-        maxResults: 10,
-        minScore: 0.1
-      });
-      setResults(searchResults);
-      setSelectedIndex(-1);
-    } catch (error) {
-      console.error('Search failed:', error);
-      setResults([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Debounced search
-  useEffect(() => {
-    if (debounceTimeoutRef.current) {
-      clearTimeout(debounceTimeoutRef.current);
-    }
-
-    debounceTimeoutRef.current = window.setTimeout(() => {
-      handleSearch(query);
-    }, 200);
-
-    return () => {
-      if (debounceTimeoutRef.current) {
-        clearTimeout(debounceTimeoutRef.current);
-      }
-    };
-  }, [query]);
 
   // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,15 +43,11 @@ const SearchModal: React.FC<SearchModalProps> = ({
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
-        setSelectedIndex(prev => 
-          prev < results.length - 1 ? prev + 1 : 0
-        );
+        navigateResults('down');
         break;
       case 'ArrowUp':
         e.preventDefault();
-        setSelectedIndex(prev => 
-          prev > 0 ? prev - 1 : results.length - 1
-        );
+        navigateResults('up');
         break;
       case 'Enter':
         e.preventDefault();
@@ -93,6 +58,7 @@ const SearchModal: React.FC<SearchModalProps> = ({
         }
         break;
       case 'Escape':
+        e.preventDefault();
         onClose();
         break;
     }
@@ -110,11 +76,9 @@ const SearchModal: React.FC<SearchModalProps> = ({
   useEffect(() => {
     if (isOpen && inputRef.current) {
       inputRef.current.focus();
-      setQuery('');
-      setResults([]);
-      setSelectedIndex(-1);
+      clearSearch();
     }
-  }, [isOpen]);
+  }, [isOpen, clearSearch]);
 
   // Handle click outside to close
   useEffect(() => {
@@ -193,15 +157,12 @@ const SearchModal: React.FC<SearchModalProps> = ({
   };
 
   return (
-    <div className="search-modal-overlay">
-      <div className="search-modal" ref={modalRef}>
+    <div className="search-modal-overlay fade-in">
+      <div className="search-modal fade-in-down" ref={modalRef}>
         <div className="search-modal-header">
           <div className="search-input-container">
             <div className="search-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8"/>
-                <path d="m21 21-4.35-4.35"/>
-              </svg>
+              <IconSearch />
             </div>
             <input
               ref={inputRef}
@@ -214,20 +175,15 @@ const SearchModal: React.FC<SearchModalProps> = ({
               aria-label="Search documentation"
             />
             {isLoading && (
-              <div className="search-spinner">
-                <div className="spinner" />
-              </div>
+              <SearchLoading />
             )}
           </div>
           <button 
             onClick={onClose}
-            className="close-button"
+            className="btn-base btn-icon btn-ghost close-button"
             aria-label="Close search"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M18 6L6 18"/>
-              <path d="M6 6L18 18"/>
-            </svg>
+            <IconClose width={16} height={16} />
           </button>
         </div>
 

@@ -135,7 +135,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentRef }) => {
                 className={`toc-item toc-level-${item.level} ${activeId === item.id ? 'toc-active' : ''}`}
               >
                 <button
-                  className="toc-link"
+                  className="toc-link clickable"
                   onClick={() => scrollToHeading(item.id)}
                   title={item.text}
                 >
