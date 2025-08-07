@@ -22,15 +22,14 @@ Files in hidden directories:
 
 ## Configuration
 
-To hide directories, add them to the `hiddenDirectories` array in `site.config.json`:
+To hide directories, add them to the `VITE_NAVIGATION_HIDDEN_DIRECTORIES` environment variable in your `.env` file:
 
-```json
-{
-  "navigation": {
-    "hiddenDirectories": ["src/docs/examples/hidden"]
-  }
-}
+```bash
+# In .env file
+VITE_NAVIGATION_HIDDEN_DIRECTORIES="src/docs/examples/hidden,src/docs/private"
 ```
+
+For multiple directories, separate them with commas.
 
 ## Try it out
 

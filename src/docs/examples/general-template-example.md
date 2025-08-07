@@ -14,7 +14,9 @@ This document showcases the different template options available in Zetty Doc Hu
 ## Available Templates
 
 ### 1. General Template
+
 The `general` template provides a clean, simple layout with:
+
 - Optional header section with title, description, author, and date
 - Main content area with standard markdown rendering
 - Footer with Zetty Doc Hub branding
@@ -22,7 +24,9 @@ The `general` template provides a clean, simple layout with:
 **Use case**: General documentation, guides, and standard content.
 
 ### 2. Effort Template
+
 The `effort` template is designed for body of work tracking and effort planning with:
+
 - Professional header with effort metadata and badge
 - Structured layout with effort details sidebar
 - Support for assignees, dates, status tracking
@@ -36,21 +40,21 @@ Zetty Doc Hub supports hiding specific directories from the side panel navigatio
 
 ### Configuration
 
-Add directories to hide in your `site.config.json`:
+Add directories to hide in your `.env` file:
 
-```json
-{
-  "navigation": {
-    "hiddenDirectories": ["src/docs/examples/hidden"]
-  }
-}
+```bash
+# In .env file
+VITE_NAVIGATION_HIDDEN_DIRECTORIES="src/docs/examples/hidden,src/docs/private"
 ```
+
+For multiple directories, separate them with commas.
 
 ### Example
 
 Try accessing this [hidden directory example](/examples/hidden/README) - it won't appear in the navigation but works via direct link!
 
 **Use cases for hidden directories:**
+
 - Daily notes and personal documentation
 - Draft content not ready for general consumption  
 - Internal team documentation
@@ -71,7 +75,8 @@ tags: ["tag1", "tag2"]
 ---
 ```
 
-### Template Options:
+### Template Options
+
 - `general` - Standard layout with header and footer
 - `effort` - Body of work template for effort tracking and project planning
 
