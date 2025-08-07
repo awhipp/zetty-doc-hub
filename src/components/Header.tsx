@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchModal from './SearchModal';
 import { useSiteConfig } from '../hooks/useSiteConfig';
-import { IconMenu, IconClose, IconSearch } from './shared/Icons';
+import { IconMenu, IconClose, IconSearch, IconGitHub } from './shared/Icons';
 import './Header.css';
 
 interface HeaderProps {
@@ -45,6 +45,17 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidePanel, isSidePanelVisible, 
             >
               {isSidePanelVisible ? <IconClose /> : <IconMenu />}
             </button>
+            {siteConfig.github?.url && (
+              <a
+                href={siteConfig.github.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-base btn-icon btn-secondary github-link"
+                aria-label="View on GitHub"
+              >
+                <IconGitHub />
+              </a>
+            )}
             <button 
               className="btn-base btn-icon btn-secondary search-button"
               onClick={handleSearchClick}

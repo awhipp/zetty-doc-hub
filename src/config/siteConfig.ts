@@ -18,6 +18,9 @@ export interface SiteConfig {
     deployment?: {
         basePath: string;
     };
+    github?: {
+        url: string;
+    };
 }
 
 export const defaultSiteConfig: SiteConfig = {
@@ -39,6 +42,9 @@ export const defaultSiteConfig: SiteConfig = {
     },
     deployment: {
         basePath: "/"
+    },
+    github: {
+        url: "https://github.com/your-username/your-repo"
     }
 };
 
@@ -75,6 +81,9 @@ export const getSiteConfig = (): SiteConfig => {
         },
         deployment: {
             basePath: import.meta.env.VITE_BASE_PATH || defaultSiteConfig.deployment?.basePath || "/"
+        },
+        github: {
+            url: import.meta.env.VITE_GITHUB_URL || defaultSiteConfig.github?.url || ""
         }
     };
 };
