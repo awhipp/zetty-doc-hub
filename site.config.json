@@ -1,21 +1,23 @@
 {
-  "site": {
-    "title": "Zetty Doc Hub",
-    "description": "A modern documentation hub built with React and TypeScript",
-    "author": "Zetty Doc Hub Team"
-  },
-  "navigation": {
-    "sidebarTitle": "File Explorer",
-    "hiddenDirectories": ["src/docs/examples/hidden"]
-  },
-  "branding": {
-    "favicon": "/vite.svg",
-    "logo": null
-  },
-  "footer": {
-    "text": "Documentation Hub - Organized with Zetty Doc Hub"
-  },
-  "deployment": {
-    "basePath": "/"
-  }
+    "site": {
+        "title": "Zetty Doc Hub",
+        "description": "A modern documentation hub built with React and TypeScript",
+        "author": "Zetty Doc Hub Team"
+    },
+    "navigation": {
+        "sidebarTitle": "File Explorer",
+        "hiddenDirectories": [
+            "src/docs/examples/hidden"
+        ]
+    },
+    "branding": {
+        "favicon": "/favicon.svg",
+        "logo": null
+    },
+    "footer": {
+        "text": "Documentation Hub - Organized with Zetty Doc Hub"
+    },
+    "deployment": {
+        "basePath": "/"
+    }
 }
