@@ -44,7 +44,7 @@
     align-items: center;
     position: absolute;
     gap: 8px;
-    right: 32px;
+    left: 32px;
     min-width: 0;
 }
 
@@ -52,10 +52,22 @@
     display: none;
     background: #007acc;
     color: white;
+    min-width: 44px;
+    /* Minimum touch target size */
+    min-height: 44px;
+    /* Minimum touch target size */
+    border-radius: 8px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .mobile-menu-toggle:hover {
     background: #005999;
+    transform: scale(1.05);
+}
+
+.mobile-menu-toggle:active {
+    transform: scale(0.95);
+    transition-duration: 0.1s;
 }
 
 .search-button {
