@@ -128,6 +128,9 @@ VITE_NAVIGATION_SIDEBAR_TITLE="My Docs"
 
 # Branding
 VITE_BRANDING_FAVICON="/my-favicon.ico"
+
+# GitHub Integration
+VITE_GITHUB_URL="https://github.com/your-username/your-repo"
 ```
 
 **Available Configuration Options:**
@@ -139,6 +142,7 @@ VITE_BRANDING_FAVICON="/my-favicon.ico"
 | `VITE_SITE_AUTHOR` | Site author for meta information | "Zetty Doc Hub Team" |
 | `VITE_NAVIGATION_SIDEBAR_TITLE` | Sidebar header title | "Documentation" |
 | `VITE_BRANDING_FAVICON` | Path to favicon | "/favicon.svg" |
+| `VITE_GITHUB_URL` | GitHub repository URL | "https://github.com/your-username/your-repo" |
 
 ### Default Configuration
 
@@ -156,6 +160,27 @@ For complete configuration options, check the `.env.example` file which includes
 - `VITE_NAVIGATION_HIDDEN_DIRECTORIES` - Comma-separated list of directories to hide from navigation
 - `VITE_NAVIGATION_MAX_TOC_LEVEL` - Maximum heading level for table of contents (1-6)
 - `VITE_FOOTER_TEXT` - Custom footer text
+- `VITE_GITHUB_URL` - GitHub repository URL for source code links
+
+## GitHub Integration
+
+Zetty Doc Hub supports linking to GitHub repositories to provide quick access to source code. When configured, a GitHub icon appears in the header that links to your repository.
+
+### Configuration
+
+Set up GitHub integration by adding your repository URL to your `.env` file:
+
+```bash
+# GitHub Integration
+VITE_GITHUB_URL="https://github.com/your-username/your-repository-name"
+```
+
+### Features
+
+- **Repository Link**: Displays a GitHub icon in the header that links to your repository
+- **Flexible URLs**: Supports any Git hosting service (GitHub, GitLab, Bitbucket, etc.)
+- **Optional Configuration**: GitHub link only appears when URL is configured
+- **Direct Linking**: Uses the exact URL you provide for maximum flexibility
 
 ## Environment Variables
 
@@ -163,9 +188,8 @@ Create a `.env` file for environment-specific configuration:
 
 ```bash
 # .env
-VITE_APP_TITLE="My Documentation Hub"
-VITE_BASE_URL="/my-docs/"
-VITE_GITHUB_REPO="username/repo-name"
+VITE_SITE_TITLE="My Documentation Hub"
+VITE_GITHUB_URL="https://github.com/username/repo-name"
 ```
 
 Access in your code:
