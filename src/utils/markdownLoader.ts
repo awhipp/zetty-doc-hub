@@ -126,12 +126,20 @@ export const loadMdxComponent = async (filePath: string): Promise<React.Componen
 };
 
 // Function to extract front matter from MDX files
-export const loadMdxFrontMatter = async (): Promise<FrontMatter> => {
+export const loadMdxFrontMatter = async (filePath: string): Promise<FrontMatter> => {
   try {
-    // For MDX files, we need to get the raw source to parse front matter
-    // Since Vite processes MDX files, we'll need to handle this differently
-    // For now, we'll return an empty object and handle front matter within the MDX file itself
-    return {};
+    // Check if we have a module loader for this MDX file path
+    const moduleLoader = mdxRawModules[filePath];
+    
+    if (moduleLoader) {
+      const rawContent = await moduleLoader();
+      const parsed = matter(rawContent as string);
+      
+      return parsed.data as FrontMatter;
+    } else {
+      console.warn(`MDX file not found for frontmatter parsing: ${filePath}`);
+      return {};
+    }
   } catch (error) {
     console.error('Error loading MDX front matter:', error);
     return {};

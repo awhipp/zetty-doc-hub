@@ -27,7 +27,7 @@ const MdxRenderer: React.FC<MdxRendererProps> = ({ filePath }) => {
       try {
         const [Component, frontMatterData, rawMdxContent] = await Promise.all([
           loadMdxComponent(filePath),
-          loadMdxFrontMatter(),
+          loadMdxFrontMatter(filePath),
           loadMdxRawContent(filePath)
         ]);
         setMdxComponent(() => Component);
