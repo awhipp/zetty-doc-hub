@@ -128,7 +128,6 @@ VITE_NAVIGATION_SIDEBAR_TITLE="My Docs"
 
 # Branding
 VITE_BRANDING_FAVICON="/my-favicon.ico"
-VITE_BRANDING_LOGO="/path/to/logo.png"
 ```
 
 **Available Configuration Options:**
@@ -139,17 +138,24 @@ VITE_BRANDING_LOGO="/path/to/logo.png"
 | `VITE_SITE_DESCRIPTION` | Site description for meta tags | "A modern documentation hub..." |
 | `VITE_SITE_AUTHOR` | Site author for meta information | "Zetty Doc Hub Team" |
 | `VITE_NAVIGATION_SIDEBAR_TITLE` | Sidebar header title | "Documentation" |
-| `VITE_BRANDING_FAVICON` | Path to favicon | "/vite.svg" |
-| `VITE_BRANDING_LOGO` | Path to logo image (optional) | null |
+| `VITE_BRANDING_FAVICON` | Path to favicon | "/favicon.svg" |
 
 ### Default Configuration
 
-The application includes sensible defaults defined in `src/config/siteConfig.ts`. You can also reference the example configuration file:
+The application includes sensible defaults defined in `src/config/siteConfig.ts`. All configuration is now managed through environment variables with fallbacks to these defaults. You can reference the example configuration file:
 
 ```bash
 cp .env.example .env
 # Edit .env with your preferred values
 ```
+
+### Additional Environment Variables
+
+For complete configuration options, check the `.env.example` file which includes:
+
+- `VITE_NAVIGATION_HIDDEN_DIRECTORIES` - Comma-separated list of directories to hide from navigation
+- `VITE_NAVIGATION_MAX_TOC_LEVEL` - Maximum heading level for table of contents (1-6)
+- `VITE_FOOTER_TEXT` - Custom footer text
 
 ## Environment Variables
 
