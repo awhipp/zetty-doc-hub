@@ -28,7 +28,7 @@ export const defaultSiteConfig: SiteConfig = {
     },
     navigation: {
         sidebarTitle: "File Explorer",
-        hiddenDirectories: [],
+        hiddenDirectories: ["src/docs/examples/hidden/"],
         maxTocLevel: 2
     },
     branding: {
