@@ -217,6 +217,14 @@ const generateId = (): string => {
  * Get common questions that users might ask
  */
 export const getCommonQuestions = (): string[] => {
+  // Get from environment variable or use defaults
+  const envQuestions = import.meta.env.VITE_QA_COMMON_QUESTIONS;
+  
+  if (envQuestions) {
+    return envQuestions.split(',').map(q => q.trim()).filter(q => q.length > 0);
+  }
+  
+  // Default questions
   return [
     "How do I install Zetty Doc Hub?",
     "What is Zetty Doc Hub?",

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { generateAnswer, getCommonQuestions } from '../utils/qaUtils';
+import { generateAnswer } from '../utils/qaUtils';
+import { useSiteConfig } from '../hooks/useSiteConfig';
 import type { QAQuestion, QAAnswer } from '../types/qa';
 import './QABox.css';
 
@@ -17,7 +18,27 @@ const QABox: React.FC<QABoxProps> = ({ onNavigateToFile }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const qaBoxRef = useRef<HTMLDivElement>(null);
 
-  const commonQuestions = getCommonQuestions();
+  // Get site configuration
+  const siteConfig = useSiteConfig();
+  const commonQuestions = siteConfig.qa?.commonQuestions || [];
+  const placeholderText = siteConfig.qa?.placeholder || "e.g., How do I install Zetty Doc Hub?";
+
+  // Get configurable placeholder text
+  
+
+  // Handle keyboard events
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      if (!question.trim() || isLoading) return;
+      
+      // Trigger form submission
+      const form = qaBoxRef.current?.querySelector('form');
+      if (form) {
+        form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+      }
+    }
+  };
 
   // Handle question submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -115,8 +136,9 @@ const QABox: React.FC<QABoxProps> = ({ onNavigateToFile }) => {
             ref={textareaRef}
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
+            onKeyDown={handleKeyDown}
             onFocus={() => setShowSuggestions(true)}
-            placeholder="e.g., How do I install Zetty Doc Hub?"
+            placeholder={placeholderText}
             className="qa-textarea"
             rows={1}
             disabled={isLoading}

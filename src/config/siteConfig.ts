@@ -21,6 +21,10 @@ export interface SiteConfig {
     github?: {
         url: string;
     };
+    qa?: {
+        placeholder: string;
+        commonQuestions: string[];
+    };
 }
 
 export const defaultSiteConfig: SiteConfig = {
@@ -45,6 +49,19 @@ export const defaultSiteConfig: SiteConfig = {
     },
     github: {
         url: "https://github.com/your-username/your-repo"
+    },
+    qa: {
+        placeholder: "e.g., How do I install Zetty Doc Hub?",
+        commonQuestions: [
+            "How do I install Zetty Doc Hub?",
+            "What is Zetty Doc Hub?",
+            "How do I configure the documentation hub?",
+            "Where can I find examples?",
+            "How does the file tree system work?",
+            "What file formats are supported?",
+            "How do I add new documentation?",
+            "How do I customize the appearance?"
+        ]
     }
 };
 
@@ -54,6 +71,12 @@ export const getSiteConfig = (): SiteConfig => {
     const parseHiddenDirectories = (envValue: string | undefined): string[] => {
         if (!envValue) return defaultSiteConfig.navigation.hiddenDirectories || [];
         return envValue.split(',').map(dir => dir.trim()).filter(dir => dir.length > 0);
+    };
+
+    // Parse common questions from comma-separated string
+    const parseCommonQuestions = (envValue: string | undefined): string[] => {
+        if (!envValue) return defaultSiteConfig.qa?.commonQuestions || [];
+        return envValue.split(',').map(q => q.trim()).filter(q => q.length > 0);
     };
 
     // Parse max TOC level with fallback
@@ -84,6 +107,10 @@ export const getSiteConfig = (): SiteConfig => {
         },
         github: {
             url: import.meta.env.VITE_GITHUB_URL || defaultSiteConfig.github?.url || ""
+        },
+        qa: {
+            placeholder: import.meta.env.VITE_QA_PLACEHOLDER || defaultSiteConfig.qa?.placeholder || "e.g., How do I install Zetty Doc Hub?",
+            commonQuestions: parseCommonQuestions(import.meta.env.VITE_QA_COMMON_QUESTIONS)
         }
     };
 };
