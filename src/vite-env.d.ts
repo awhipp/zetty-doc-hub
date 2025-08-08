@@ -10,6 +10,7 @@ interface ImportMetaEnv {
   readonly VITE_BRANDING_FAVICON: string
   readonly VITE_FOOTER_TEXT: string
   readonly VITE_BASE_PATH: string
+  readonly VITE_GITHUB_URL: string
   // more env variables...
 }
 

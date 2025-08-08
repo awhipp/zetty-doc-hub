@@ -1,5 +1,6 @@
 import React from 'react';
 import QABox from './QABox';
+import { useSiteConfig } from '../hooks/useSiteConfig';
 import './WelcomeRenderer.css';
 
 interface WelcomeRendererProps {
@@ -7,11 +8,13 @@ interface WelcomeRendererProps {
 }
 
 const WelcomeRenderer: React.FC<WelcomeRendererProps> = ({ onNavigateToFile }) => {
+  const siteConfig = useSiteConfig();
+  
   return (
     <div className="welcome-renderer">
       <div className="welcome-header">
-        <h3>Welcome to your Documentation Hub</h3>
-        <p>Select a file from the sidebar to get started, or try one of the new features!</p>
+        <h3>Welcome to {siteConfig.site.title}</h3>
+        <p>{siteConfig.site.description}</p>
       </div>
       
       <QABox onNavigateToFile={onNavigateToFile} />
