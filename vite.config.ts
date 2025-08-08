@@ -11,6 +11,9 @@ export default defineConfig(({ mode }) => {
   // Load environment variables
   const env = loadEnv(mode, process.cwd(), '');
   
+  // Generate build timestamp
+  const buildTime = new Date().toISOString();
+  
   return {
     plugins: [
       react(),
@@ -24,6 +27,7 @@ export default defineConfig(({ mode }) => {
     base: env.VITE_BASE_PATH || '/',
     define: {
       global: 'globalThis',
+      __BUILD_TIME__: JSON.stringify(buildTime),
     },
     resolve: {
       alias: {

@@ -27,22 +27,18 @@ const QABox: React.FC<QABoxProps> = ({ onNavigateToFile }) => {
   
 
   // Handle keyboard events
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       if (!question.trim() || isLoading) return;
       
-      // Trigger form submission
-      const form = qaBoxRef.current?.querySelector('form');
-      if (form) {
-        form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
-      }
+      // Call submit logic directly
+      await submitQuestion();
     }
   };
 
-  // Handle question submission
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Extract submit logic to separate function
+  const submitQuestion = async () => {
     if (!question.trim() || isLoading) return;
 
     setIsLoading(true);
@@ -74,6 +70,12 @@ const QABox: React.FC<QABoxProps> = ({ onNavigateToFile }) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Handle question submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await submitQuestion();
   };
 
   // Handle suggestion click

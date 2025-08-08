@@ -25,6 +25,9 @@ export interface SiteConfig {
         placeholder: string;
         commonQuestions: string[];
     };
+    build?: {
+        time: string;
+    };
 }
 
 export const defaultSiteConfig: SiteConfig = {
@@ -62,6 +65,9 @@ export const defaultSiteConfig: SiteConfig = {
             "How do I add new documentation?",
             "How do I customize the appearance?"
         ]
+    },
+    build: {
+        time: new Date().toISOString()
     }
 };
 
@@ -83,6 +89,15 @@ export const getSiteConfig = (): SiteConfig => {
     const parseMaxTocLevel = (envValue: string | undefined): number => {
         const parsed = envValue ? parseInt(envValue, 10) : NaN;
         return isNaN(parsed) ? (defaultSiteConfig.navigation.maxTocLevel || 2) : parsed;
+    };
+
+    // Get build time from Vite define or fallback
+    const getBuildTime = (): string => {
+        try {
+            return __BUILD_TIME__;
+        } catch {
+            return defaultSiteConfig.build?.time || new Date().toISOString();
+        }
     };
 
     return {
@@ -111,6 +126,9 @@ export const getSiteConfig = (): SiteConfig => {
         qa: {
             placeholder: import.meta.env.VITE_QA_PLACEHOLDER || defaultSiteConfig.qa?.placeholder || "e.g., How do I install Zetty Doc Hub?",
             commonQuestions: parseCommonQuestions(import.meta.env.VITE_QA_COMMON_QUESTIONS)
+        },
+        build: {
+            time: getBuildTime()
         }
     };
 };

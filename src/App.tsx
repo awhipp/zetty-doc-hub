@@ -4,6 +4,7 @@ import Header from './components/Header'
 import SidePanel from './components/SidePanel'
 import MainContent from './components/MainContent'
 import Footer from './components/Footer'
+import BuildTime from './components/BuildTime'
 import TableOfContents from './components/TableOfContents'
 import { urlToFilePathWithExtension, filePathToUrl } from './utils/routing'
 import { getAvailableFiles } from './utils/markdownLoader'
@@ -149,6 +150,7 @@ function AppContent() {
           <Route path="/*" element={<RoutedContent />} />
         </Routes>
         <Footer />
+        <BuildTime />
       </div>
     </Router>
   );
