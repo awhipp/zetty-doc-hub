@@ -67,21 +67,21 @@
 }
 
 .floating-expand-left {
-  left: calc(300px - 32px - 16px); /* Panel width - button width - padding to align with collapse button */
+  left: 16px; /* Position at left edge with some padding */
 }
 
 .floating-expand-right {
-  right: calc(300px - 32px - 16px); /* Panel width - button width - padding to align with collapse button */
+  right: 16px; /* Position at right edge with some padding */
 }
 
 /* Responsive positioning */
 @media (max-width: 1200px) {
   .floating-expand-left {
-    left: calc(260px - 32px - 16px);
+    left: 16px;
   }
   
   .floating-expand-right {
-    right: calc(260px - 32px - 16px);
+    right: 16px;
   }
 }
 
