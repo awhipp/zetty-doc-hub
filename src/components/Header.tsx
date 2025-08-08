@@ -11,7 +11,11 @@ interface HeaderProps {
   onSearchResultSelect?: (filePath: string) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onToggleSidePanel, isSidePanelVisible, onSearchResultSelect }) => {
+const Header: React.FC<HeaderProps> = ({ 
+  onToggleSidePanel, 
+  isSidePanelVisible, 
+  onSearchResultSelect
+}) => {
   const navigate = useNavigate();
   const siteConfig = useSiteConfig();
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
