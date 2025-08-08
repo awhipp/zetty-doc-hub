@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { generateUniqueHeadingId } from '../utils/textUtils';
 import { observeElementChanges, scrollToElementSafely } from '../utils/domUtils';
 import { useSiteConfig } from '../hooks/useSiteConfig';
+import { IconChevronRight } from './shared/Icons';
 import './TableOfContents.css';
 
 interface TocItem {
@@ -12,9 +13,11 @@ interface TocItem {
 
 interface TableOfContentsProps {
   contentRef?: React.RefObject<HTMLElement | null>;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
-const TableOfContents: React.FC<TableOfContentsProps> = ({ contentRef }) => {
+const TableOfContents: React.FC<TableOfContentsProps> = ({ contentRef, isCollapsed, onToggleCollapse }) => {
   const [tocItems, setTocItems] = useState<TocItem[]>([]);
   const [activeId, setActiveId] = useState<string>('');
   const siteConfig = useSiteConfig();
@@ -111,9 +114,21 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentRef }) => {
 
   if (tocItems.length === 0) {
     return (
-      <aside className="table-of-contents">
+      <aside className={`table-of-contents ${isCollapsed ? 'collapsed' : ''}`}>
         <div className="toc-sticky">
-          <h3 className="toc-title">📑 Table of Contents</h3>
+          <div className="toc-header">
+            <h3 className="toc-title">📑 Table of Contents</h3>
+            {onToggleCollapse && (
+              <button 
+                className="btn-base btn-icon btn-secondary collapse-button"
+                onClick={onToggleCollapse}
+                aria-label="Collapse table of contents"
+                title="Collapse table of contents"
+              >
+                <IconChevronRight />
+              </button>
+            )}
+          </div>
           <div className="toc-placeholder">
             <p>No headings found in this document.</p>
             <p className="toc-hint">Add headings (h1-h6) to generate a table of contents.</p>
@@ -124,9 +139,21 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentRef }) => {
   }
 
   return (
-    <aside className="table-of-contents">
+    <aside className={`table-of-contents ${isCollapsed ? 'collapsed' : ''}`}>
       <div className="toc-sticky">
-        <h3 className="toc-title">📑 Table of Contents</h3>
+        <div className="toc-header">
+          <h3 className="toc-title">📑 Table of Contents</h3>
+          {onToggleCollapse && (
+            <button 
+              className="btn-base btn-icon btn-secondary collapse-button"
+              onClick={onToggleCollapse}
+              aria-label="Collapse table of contents"
+              title="Collapse table of contents"
+            >
+              <IconChevronRight />
+            </button>
+          )}
+        </div>
         <nav className="toc-nav">
           <ul className="toc-list">
             {tocItems.map((item) => (

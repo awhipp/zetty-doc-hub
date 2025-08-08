@@ -21,6 +21,13 @@ export interface SiteConfig {
     github?: {
         url: string;
     };
+    qa?: {
+        placeholder: string;
+        commonQuestions: string[];
+    };
+    build?: {
+        time: string;
+    };
 }
 
 export const defaultSiteConfig: SiteConfig = {
@@ -45,6 +52,22 @@ export const defaultSiteConfig: SiteConfig = {
     },
     github: {
         url: "https://github.com/your-username/your-repo"
+    },
+    qa: {
+        placeholder: "e.g., How do I install Zetty Doc Hub?",
+        commonQuestions: [
+            "How do I install Zetty Doc Hub?",
+            "What is Zetty Doc Hub?",
+            "How do I configure the documentation hub?",
+            "Where can I find examples?",
+            "How does the file tree system work?",
+            "What file formats are supported?",
+            "How do I add new documentation?",
+            "How do I customize the appearance?"
+        ]
+    },
+    build: {
+        time: new Date().toISOString()
     }
 };
 
@@ -56,10 +79,25 @@ export const getSiteConfig = (): SiteConfig => {
         return envValue.split(',').map(dir => dir.trim()).filter(dir => dir.length > 0);
     };
 
+    // Parse common questions from comma-separated string
+    const parseCommonQuestions = (envValue: string | undefined): string[] => {
+        if (!envValue) return defaultSiteConfig.qa?.commonQuestions || [];
+        return envValue.split(',').map(q => q.trim()).filter(q => q.length > 0);
+    };
+
     // Parse max TOC level with fallback
     const parseMaxTocLevel = (envValue: string | undefined): number => {
         const parsed = envValue ? parseInt(envValue, 10) : NaN;
         return isNaN(parsed) ? (defaultSiteConfig.navigation.maxTocLevel || 2) : parsed;
+    };
+
+    // Get build time from Vite define or fallback
+    const getBuildTime = (): string => {
+        try {
+            return __BUILD_TIME__;
+        } catch {
+            return defaultSiteConfig.build?.time || new Date().toISOString();
+        }
     };
 
     return {
@@ -84,6 +122,13 @@ export const getSiteConfig = (): SiteConfig => {
         },
         github: {
             url: import.meta.env.VITE_GITHUB_URL || defaultSiteConfig.github?.url || ""
+        },
+        qa: {
+            placeholder: import.meta.env.VITE_QA_PLACEHOLDER || defaultSiteConfig.qa?.placeholder || "e.g., How do I install Zetty Doc Hub?",
+            commonQuestions: parseCommonQuestions(import.meta.env.VITE_QA_COMMON_QUESTIONS)
+        },
+        build: {
+            time: getBuildTime()
         }
     };
 };

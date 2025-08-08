@@ -8,9 +8,18 @@
     flex-direction: column;
     overflow: hidden;
     /* Prevent overflow at component level */
-    transition: transform 0.3s ease;
+    transition: width 0.3s ease, min-width 0.3s ease, max-width 0.3s ease, transform 0.3s ease;
     flex-shrink: 0;
     /* Prevent shrinking */
+}
+
+.side-panel.collapsed {
+    width: 0;
+    min-width: 0;
+    max-width: 0;
+    border-right: none;
+    transform: translateX(-100%);
+    overflow: hidden;
 }
 
 .side-panel.mobile-hidden {
@@ -22,6 +31,12 @@
         width: 260px;
         min-width: 260px;
         max-width: 260px;
+    }
+    
+    .side-panel.collapsed {
+        width: 0;
+        min-width: 0;
+        max-width: 0;
     }
 }
 
@@ -51,6 +66,15 @@
     padding: 16px;
     border-bottom: 1px solid #e0e0e0;
     background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.side-panel-header .collapse-button {
+    margin-left: auto;
+    padding: 4px;
+    border-radius: 4px;
 }
 
 .side-panel-header h3 {

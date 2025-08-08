@@ -175,6 +175,88 @@ export const IconArrowUp: React.FC<IconProps> = ({
   </svg>
 );
 
+export const IconChevronLeft: React.FC<IconProps> = ({ 
+  width = 20, 
+  height = 20, 
+  stroke = "currentColor", 
+  strokeWidth = 2,
+  ...props 
+}) => (
+  <svg 
+    width={width} 
+    height={height} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke={stroke} 
+    strokeWidth={strokeWidth}
+    {...props}
+  >
+    <path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+export const IconChevronRight: React.FC<IconProps> = ({ 
+  width = 20, 
+  height = 20, 
+  stroke = "currentColor", 
+  strokeWidth = 2,
+  ...props 
+}) => (
+  <svg 
+    width={width} 
+    height={height} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke={stroke} 
+    strokeWidth={strokeWidth}
+    {...props}
+  >
+    <path d="M9 18l6-6-6-6" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+export const IconPanelLeft: React.FC<IconProps> = ({ 
+  width = 20, 
+  height = 20, 
+  stroke = "currentColor", 
+  strokeWidth = 2,
+  ...props 
+}) => (
+  <svg 
+    width={width} 
+    height={height} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke={stroke} 
+    strokeWidth={strokeWidth}
+    {...props}
+  >
+    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+    <line x1="9" y1="3" x2="9" y2="21"/>
+  </svg>
+);
+
+export const IconPanelRight: React.FC<IconProps> = ({ 
+  width = 20, 
+  height = 20, 
+  stroke = "currentColor", 
+  strokeWidth = 2,
+  ...props 
+}) => (
+  <svg 
+    width={width} 
+    height={height} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke={stroke} 
+    strokeWidth={strokeWidth}
+    {...props}
+  >
+    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+    <line x1="15" y1="3" x2="15" y2="21"/>
+  </svg>
+);
+
 export const IconGitHub: React.FC<IconProps> = ({ 
   width = 20, 
   height = 20, 
