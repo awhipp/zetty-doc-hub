@@ -1,9 +1,27 @@
 import { getAvailableFiles, loadMarkdownContent } from './markdownLoader';
 import { getFileExtension } from './fileUtils';
+import { getSiteConfig } from '../config/siteConfig';
 import type { SearchResult, SearchIndex, SearchOptions } from '../types/search';
 
 let searchIndex: SearchIndex[] = [];
 let indexBuilt = false;
+
+// Helper function to check if a path should be hidden
+const isPathHidden = (filePath: string, hiddenDirectories: string[]): boolean => {
+  return hiddenDirectories.some(hiddenDir => {
+    // Normalize the hidden directory path - ensure it starts with /src/docs/
+    let normalizedHiddenDir = hiddenDir;
+    if (!normalizedHiddenDir.startsWith('/src/docs/')) {
+      if (normalizedHiddenDir.startsWith('src/docs/')) {
+        normalizedHiddenDir = '/' + normalizedHiddenDir;
+      } else {
+        normalizedHiddenDir = '/src/docs/' + normalizedHiddenDir;
+      }
+    }
+    
+    return filePath.startsWith(normalizedHiddenDir);
+  });
+};
 
 /**
  * Build search index from all markdown files
@@ -11,8 +29,18 @@ let indexBuilt = false;
 export const buildSearchIndex = async (): Promise<void> => {
   if (indexBuilt) return;
   
+  // Get the site configuration to access hidden directories
+  const siteConfig = getSiteConfig();
+  const hiddenDirectories = siteConfig.navigation.hiddenDirectories || [];
+  
   const availableFiles = getAvailableFiles();
-  const markdownFiles = availableFiles.filter(file => getFileExtension(file) === 'md');
+  const markdownFiles = availableFiles.filter(file => {
+    // Filter out files from hidden directories
+    if (isPathHidden(file, hiddenDirectories)) {
+      return false;
+    }
+    return getFileExtension(file) === 'md';
+  });
   
   const indexPromises = markdownFiles.map(async (filePath): Promise<SearchIndex | null> => {
     try {
@@ -191,6 +219,7 @@ const calculateFuzzyScore = (query: string, target: string): number => {
 
 /**
  * Clear search index (useful for testing or refreshing)
+ * Will respect hidden directories configuration when rebuilt
  */
 export const clearSearchIndex = (): void => {
   searchIndex = [];

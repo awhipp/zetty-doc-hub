@@ -1,3 +1,12 @@
+---
+title: "Zetty Documentation Hub"
+description: "Welcome to the comprehensive documentation for Zetty Doc Hub - a modern React TypeScript application for browsing and managing markdown documentation"
+template: "general"
+author: "Zetty Doc Hub"
+date: "2024-01-15"
+tags: ["overview", "documentation", "react", "typescript", "markdown", "mdx", "introduction"]
+---
+
 # Zetty Documentation Hub
 
 Welcome to the comprehensive documentation for **Zetty Doc Hub** - a modern React TypeScript application for browsing and managing markdown documentation with dynamic file tree navigation.

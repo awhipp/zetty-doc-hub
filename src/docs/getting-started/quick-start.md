@@ -1,3 +1,12 @@
+---
+title: "Quick Start Guide"
+description: "Learn the essentials of using Zetty Documentation Hub in just 5 minutes"
+template: "general"
+author: "Zetty Doc Hub"
+date: "2024-01-15"
+tags: ["quick-start", "getting-started", "tutorial", "basics", "markdown", "mdx"]
+---
+
 # Quick Start Guide
 
 Learn the essentials of using Zetty Documentation Hub in just 5 minutes.
@@ -37,6 +46,7 @@ The folder structure will automatically appear in the sidebar with expandable/co
 Zetty Doc Hub supports two types of files:
 
 ### Markdown Files (.md)
+
 Standard markdown with GitHub-flavored markdown features:
 
 ```markdown
@@ -54,6 +64,7 @@ Standard markdown with GitHub-flavored markdown features:
 ```
 
 ### MDX Files (.mdx)
+
 Markdown with JSX components for interactive content:
 
 ```mdx
@@ -75,17 +86,21 @@ export const CustomButton = () => (
 ## Navigation Features
 
 ### File Tree Navigation
+
 - **📁 Folders**: Click to expand/collapse
 - **📄 Files**: Click to view content
 - **Auto-sorting**: Folders appear first, then files alphabetically
 
 ### URL Routing
+
 Each document has its own URL:
-- `http://localhost:5173/my-first-doc` 
+
+- `http://localhost:5173/my-first-doc`
 - `http://localhost:5173/tutorials/basic`
 - URLs are shareable and bookmarkable
 
 ### Cross-Document Linking
+
 Link between documents using relative paths:
 
 ```markdown
@@ -95,6 +110,7 @@ Check out our [Installation Guide](./installation) for setup instructions.
 ## Content Organization Tips
 
 ### 1. Use Descriptive Filenames
+
 ```bash
 # Good
 user-authentication.md
@@ -108,6 +124,7 @@ notes.md
 ```
 
 ### 2. Create Logical Folder Structure
+
 ```
 src/docs/
 ├── README.md                 # Main overview
@@ -123,6 +140,7 @@ src/docs/
 ```
 
 ### 3. Use Consistent Heading Structure
+
 ```markdown
 # Page Title (H1 - only one per page)
 ## Major Section (H2)

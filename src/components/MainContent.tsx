@@ -15,9 +15,10 @@ interface MainContentProps {
   selectedFile?: string;
   onFileSelect?: (filePath: string) => void;
   contentRef?: React.RefObject<HTMLDivElement | null>;
+  onTagClick?: (tagName: string) => void;
 }
 
-const MainContent: React.FC<MainContentProps> = ({ selectedFile, onFileSelect, contentRef }) => {
+const MainContent: React.FC<MainContentProps> = ({ selectedFile, onFileSelect, contentRef, onTagClick }) => {
   const navigate = useNavigate();
   
   const handleSearchResultSelect = (filePath: string) => {
@@ -39,7 +40,7 @@ const MainContent: React.FC<MainContentProps> = ({ selectedFile, onFileSelect, c
         {selectedFile ? (
           <div className="file-content">
             {isMarkdownFile(selectedFile) ? (
-              <MarkdownRenderer filePath={selectedFile} />
+              <MarkdownRenderer filePath={selectedFile} onTagClick={onTagClick} />
             ) : isImageFile(selectedFile) ? (
               <ImageRenderer filePath={selectedFile} />
             ) : (

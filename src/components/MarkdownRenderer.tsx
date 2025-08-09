@@ -8,15 +8,17 @@ import type { ParsedMarkdown } from '../types/template';
 import MdxRenderer from './MdxRenderer';
 import TemplateWrapper from './TemplateWrapper';
 import DocumentStats from './DocumentStats';
+import DocumentTags from './DocumentTags';
 import { isMdxFile, isMarkdownFile } from '../utils/fileUtils';
 import { createCustomComponents, ContentLoading, ErrorState } from './shared';
 import './MarkdownRenderer.css';
 
 interface MarkdownRendererProps {
   filePath: string;
+  onTagClick?: (tagName: string) => void;
 }
 
-const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ filePath }) => {
+const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ filePath, onTagClick }) => {
   const [parsedMarkdown, setParsedMarkdown] = useState<ParsedMarkdown>({ content: '', frontMatter: {} });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -56,7 +58,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ filePath }) => {
 
   // If it's an MDX file, use the MdxRenderer
   if (isMdxFileType) {
-    return <MdxRenderer filePath={filePath} />;
+    return <MdxRenderer filePath={filePath} onTagClick={onTagClick} />;
   }
 
   // Custom link component to handle internal navigation
@@ -94,6 +96,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ filePath }) => {
   return (
     <div className="markdown-content-wrapper">
       <DocumentStats content={parsedMarkdown.content} />
+      <DocumentTags frontMatter={parsedMarkdown.frontMatter} onTagClick={onTagClick} />
       <TemplateWrapper
         TemplateComponent={TemplateComponent}
         templateProps={{

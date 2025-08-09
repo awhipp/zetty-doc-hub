@@ -1,3 +1,12 @@
+---
+title: "Installation Guide"
+description: "Get your Zetty Documentation Hub up and running in just a few minutes"
+template: "general"
+author: "Zetty Doc Hub"
+date: "2024-01-15"
+tags: ["installation", "setup", "getting-started", "nodejs", "git", "prerequisites"]
+---
+
 # Installation Guide
 
 Get your Zetty Documentation Hub up and running in just a few minutes.
@@ -22,11 +31,13 @@ cd zetty-doc-hub
 ### 2. Install Dependencies
 
 Using npm:
+
 ```bash
 npm install
 ```
 
 Or using yarn:
+
 ```bash
 yarn install
 ```
@@ -57,12 +68,14 @@ Once the development server is running, you should see:
 ### Common Issues
 
 **Port already in use?**
+
 ```bash
 # Use a different port
 npm run dev -- --port 3000
 ```
 
 **Build failing?**
+
 ```bash
 # Clear node_modules and reinstall
 rm -rf node_modules package-lock.json
@@ -70,6 +83,7 @@ npm install
 ```
 
 **TypeScript errors?**
+
 ```bash
 # Run type checking
 npm run build
