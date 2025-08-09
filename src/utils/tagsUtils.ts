@@ -4,26 +4,10 @@ import { filePathToUrl } from './routing';
 import { getSiteConfig } from '../config/siteConfig';
 import type { TagsIndex, TagInfo, TaggedFile, TagsOptions } from '../types/tags';
 import type { FrontMatter } from '../types/template';
+import { isPathHidden } from './fileTree';
 
 let tagsIndex: TagsIndex = {};
 let indexBuilt = false;
-
-// Helper function to check if a path should be hidden
-const isPathHidden = (filePath: string, hiddenDirectories: string[]): boolean => {
-  return hiddenDirectories.some(hiddenDir => {
-    // Normalize the hidden directory path - ensure it starts with /src/docs/
-    let normalizedHiddenDir = hiddenDir;
-    if (!normalizedHiddenDir.startsWith('/src/docs/')) {
-      if (normalizedHiddenDir.startsWith('src/docs/')) {
-        normalizedHiddenDir = '/' + normalizedHiddenDir;
-      } else {
-        normalizedHiddenDir = '/src/docs/' + normalizedHiddenDir;
-      }
-    }
-    
-    return filePath.startsWith(normalizedHiddenDir);
-  });
-};
 
 /**
  * Build tags index from all markdown and MDX files

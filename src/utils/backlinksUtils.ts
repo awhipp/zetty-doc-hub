@@ -5,26 +5,10 @@ import { getSiteConfig } from '../config/siteConfig';
 import { getAllTags } from './tagsUtils';
 import type { BacklinksIndex, Backlink, RelatedContentData, LinkReference } from '../types/backlinks';
 import type { FrontMatter } from '../types/template';
+import { isPathHidden } from './fileTree';
 
 let backlinksIndex: BacklinksIndex = {};
 let indexBuilt = false;
-
-// Helper function to check if a path should be hidden
-const isPathHidden = (filePath: string, hiddenDirectories: string[]): boolean => {
-  return hiddenDirectories.some(hiddenDir => {
-    // Normalize the hidden directory path - ensure it starts with /src/docs/
-    let normalizedHiddenDir = hiddenDir;
-    if (!normalizedHiddenDir.startsWith('/src/docs/')) {
-      if (normalizedHiddenDir.startsWith('src/docs/')) {
-        normalizedHiddenDir = '/' + normalizedHiddenDir;
-      } else {
-        normalizedHiddenDir = '/src/docs/' + normalizedHiddenDir;
-      }
-    }
-    
-    return filePath.startsWith(normalizedHiddenDir);
-  });
-};
 
 // Extract links from markdown content
 const extractLinks = (content: string): LinkReference[] => {

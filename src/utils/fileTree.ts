@@ -11,7 +11,7 @@ let cachedFilePaths: string[] | null = null;
 let lastHiddenDirectories: string[] | null = null;
 
 // Helper function to check if a path should be hidden
-const isPathHidden = (filePath: string, hiddenDirectories: string[]): boolean => {
+export const isPathHidden = (filePath: string, hiddenDirectories: string[]): boolean => {
   return hiddenDirectories.some(hiddenDir => {
     // Normalize the hidden directory path - ensure it starts with /src/docs/
     let normalizedHiddenDir = hiddenDir;

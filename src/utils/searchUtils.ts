@@ -2,26 +2,10 @@ import { getAvailableFiles, loadMarkdownContent } from './markdownLoader';
 import { getFileExtension } from './fileUtils';
 import { getSiteConfig } from '../config/siteConfig';
 import type { SearchResult, SearchIndex, SearchOptions } from '../types/search';
+import { isPathHidden } from './fileTree';
 
 let searchIndex: SearchIndex[] = [];
 let indexBuilt = false;
-
-// Helper function to check if a path should be hidden
-const isPathHidden = (filePath: string, hiddenDirectories: string[]): boolean => {
-  return hiddenDirectories.some(hiddenDir => {
-    // Normalize the hidden directory path - ensure it starts with /src/docs/
-    let normalizedHiddenDir = hiddenDir;
-    if (!normalizedHiddenDir.startsWith('/src/docs/')) {
-      if (normalizedHiddenDir.startsWith('src/docs/')) {
-        normalizedHiddenDir = '/' + normalizedHiddenDir;
-      } else {
-        normalizedHiddenDir = '/src/docs/' + normalizedHiddenDir;
-      }
-    }
-    
-    return filePath.startsWith(normalizedHiddenDir);
-  });
-};
 
 /**
  * Build search index from all markdown files
