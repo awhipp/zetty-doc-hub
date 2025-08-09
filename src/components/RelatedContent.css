@@ -106,7 +106,6 @@
 }
 
 .item-header {
-    display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 8px;
@@ -134,7 +133,6 @@
 }
 
 .tag-group-header {
-    display: flex;
     align-items: center;
     gap: 8px;
     margin-bottom: 12px;
@@ -205,8 +203,6 @@
     }
 
     .item-header {
-        flex-direction: column;
-        align-items: flex-start;
         gap: 8px;
     }
 

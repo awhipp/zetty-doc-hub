@@ -118,15 +118,6 @@ const RelatedContent: React.FC<RelatedContentProps> = ({ filePath }) => {
                         }
                       </span>
                     </div>
-                    {backlink.sourceDescription && (
-                      <p className="item-description">{backlink.sourceDescription}</p>
-                    )}
-                    <div className="link-context">
-                      <span className="link-text">"{backlink.linkText}"</span>
-                      {backlink.context && (
-                        <p className="context-preview">...{backlink.context}...</p>
-                      )}
-                    </div>
                   </div>
                 ))}
               </div>
@@ -151,8 +142,8 @@ const RelatedContent: React.FC<RelatedContentProps> = ({ filePath }) => {
                 {byTags.map((tagGroup, groupIndex) => (
                   <div key={groupIndex} className="tag-group">
                     <div className="tag-group-header">
-                      <span className="shared-tags">#{tagGroup.tag}</span>
-                      <span className="file-count">({tagGroup.files.length} files)</span>
+                      <p className="shared-tags">#{tagGroup.tag} <span className="file-count">({tagGroup.files.length} files)</span></p>
+                      
                     </div>
                     <div className="related-items">
                       {tagGroup.files.map((file, fileIndex) => (
