@@ -80,7 +80,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentRef, isCollaps
         const relatedContent = await getRelatedContent(filePath);
         const hasContent = relatedContent.backlinks.length > 0 || relatedContent.byTags.length > 0;
         setHasRelatedContent(hasContent);
-      } catch (error) {
+      } catch {
         setHasRelatedContent(false);
       }
     };
