@@ -20,7 +20,7 @@ export interface BacklinksIndex {
   [targetFile: string]: Backlink[];
 }
 
-export interface RelatedContent {
+export interface RelatedContentData {
   /** Files that share tags with the current file */
   byTags: {
     tag: string;

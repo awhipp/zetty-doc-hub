@@ -3,7 +3,7 @@ import { getFileExtension, isMdxFile } from './fileUtils';
 import { urlToFilePathWithExtension } from './routing';
 import { getSiteConfig } from '../config/siteConfig';
 import { getAllTags } from './tagsUtils';
-import type { BacklinksIndex, Backlink, RelatedContent, LinkReference } from '../types/backlinks';
+import type { BacklinksIndex, Backlink, RelatedContentData, LinkReference } from '../types/backlinks';
 import type { FrontMatter } from '../types/template';
 
 let backlinksIndex: BacklinksIndex = {};
@@ -214,13 +214,13 @@ export const getBacklinks = async (filePath: string): Promise<Backlink[]> => {
 /**
  * Get related content for a file (both by tags and backlinks)
  */
-export const getRelatedContent = async (filePath: string): Promise<RelatedContent> => {
+export const getRelatedContent = async (filePath: string): Promise<RelatedContentData> => {
   await buildBacklinksIndex();
   
   const backlinks = backlinksIndex[filePath] || [];
   
   // Get outgoing links from this file
-  const outgoingLinks: RelatedContent['outgoingLinks'] = [];
+  const outgoingLinks: RelatedContentData['outgoingLinks'] = [];
   try {
     let content: string;
     
@@ -271,7 +271,7 @@ export const getRelatedContent = async (filePath: string): Promise<RelatedConten
   }
   
   // Get related content by tags
-  const byTags: RelatedContent['byTags'] = [];
+  const byTags: RelatedContentData['byTags'] = [];
   try {
     // Get current file's tags
     let currentTags: string[] = [];

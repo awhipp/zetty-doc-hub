@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getRelatedContent } from '../utils/backlinksUtils';
 import { filePathToUrl } from '../utils/routing';
 import { ContentLoading, ErrorState } from './shared/LoadingStates';
-import type { RelatedContent } from '../types/backlinks';
+import type { RelatedContentData } from '../types/backlinks';
 import './RelatedContent.css';
 
 interface RelatedContentProps {
@@ -11,7 +11,7 @@ interface RelatedContentProps {
 }
 
 const RelatedContent: React.FC<RelatedContentProps> = ({ filePath }) => {
-  const [relatedContent, setRelatedContent] = useState<RelatedContent | null>(null);
+  const [relatedContent, setRelatedContent] = useState<RelatedContentData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [backlinksExpanded, setBacklinksExpanded] = useState(false);
