@@ -7,8 +7,6 @@ date: "2024-01-15"
 tags: ["templates", "examples", "demonstration"]
 ---
 
-# General Template Example
-
 This document showcases the different template options available in Zetty Doc Hub. Each template provides a unique layout and styling approach to present your documentation content.
 
 ## Available Templates

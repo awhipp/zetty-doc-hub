@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { generateUniqueHeadingId } from '../utils/textUtils';
 import { observeElementChanges, scrollToElementSafely } from '../utils/domUtils';
 import { useSiteConfig } from '../hooks/useSiteConfig';
+import { getRelatedContent } from '../utils/backlinksUtils';
 import { IconChevronRight } from './shared/Icons';
+import RelatedContent from './RelatedContent';
 import './TableOfContents.css';
 
 interface TocItem {
@@ -15,11 +17,13 @@ interface TableOfContentsProps {
   contentRef?: React.RefObject<HTMLElement | null>;
   isCollapsed?: boolean;
   onToggleCollapse?: () => void;
+  filePath?: string;
 }
 
-const TableOfContents: React.FC<TableOfContentsProps> = ({ contentRef, isCollapsed, onToggleCollapse }) => {
+const TableOfContents: React.FC<TableOfContentsProps> = ({ contentRef, isCollapsed, onToggleCollapse, filePath }) => {
   const [tocItems, setTocItems] = useState<TocItem[]>([]);
   const [activeId, setActiveId] = useState<string>('');
+  const [hasRelatedContent, setHasRelatedContent] = useState<boolean>(false);
   const siteConfig = useSiteConfig();
 
   useEffect(() => {
@@ -65,7 +69,24 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentRef, isCollaps
     const cleanup = observeElementChanges('h1, h2, h3, h4, h5, h6', updateTocItems, container);
 
     return cleanup;
-  }, [contentRef, siteConfig.navigation.maxTocLevel]);
+  }, [contentRef, siteConfig.navigation.maxTocLevel, hasRelatedContent]);
+
+  // Check if related content exists
+  useEffect(() => {
+    if (!filePath) return;
+    
+    const checkRelatedContent = async () => {
+      try {
+        const relatedContent = await getRelatedContent(filePath);
+        const hasContent = relatedContent.backlinks.length > 0 || relatedContent.byTags.length > 0;
+        setHasRelatedContent(hasContent);
+      } catch (error) {
+        setHasRelatedContent(false);
+      }
+    };
+    
+    checkRelatedContent();
+  }, [filePath]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -172,6 +193,13 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentRef, isCollaps
             ))}
           </ul>
         </nav>
+        
+        {/* Related Content at bottom of TOC */}
+        {filePath && (
+          <div className="toc-related-content">
+            <RelatedContent filePath={filePath} />
+          </div>
+        )}
       </div>
     </aside>
   );

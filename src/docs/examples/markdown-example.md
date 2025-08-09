@@ -7,8 +7,6 @@ date: "2024-01-15"
 tags: ["markdown", "syntax", "examples", "documentation", "formatting", "code", "tables"]
 ---
 
-# Markdown Example
-
 This document demonstrates the various Markdown features supported by Zetty Documentation Hub.
 
 ## Basic Text Formatting

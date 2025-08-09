@@ -7,8 +7,6 @@ date: "2024-01-15"
 tags: ["quick-start", "getting-started", "tutorial", "basics", "markdown", "mdx"]
 ---
 
-# Quick Start Guide
-
 Learn the essentials of using Zetty Documentation Hub in just 5 minutes.
 
 ## Your First Documentation

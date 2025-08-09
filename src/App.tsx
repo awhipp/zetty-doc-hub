@@ -156,6 +156,7 @@ const RoutedContent = () => {
           contentRef={contentRef} 
           isCollapsed={isTocCollapsed}
           onToggleCollapse={toggleTocCollapse}
+          filePath={selectedFile}
         />
       </div>
     </>

@@ -7,8 +7,6 @@ date: "2024-01-15"
 tags: ["installation", "setup", "getting-started", "nodejs", "git", "prerequisites"]
 ---
 
-# Installation Guide
-
 Get your Zetty Documentation Hub up and running in just a few minutes.
 
 ## Prerequisites
