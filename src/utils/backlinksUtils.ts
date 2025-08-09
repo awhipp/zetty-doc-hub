@@ -10,6 +10,21 @@ import { isPathHidden } from './fileTree';
 let backlinksIndex: BacklinksIndex = {};
 let indexBuilt = false;
 
+// Memoization cache for file path resolution
+const pathResolutionCache = new Map<string, string>();
+const availableFilesSet = new Set<string>();
+let availableFilesCached = false;
+
+// Initialize available files cache
+const initializeAvailableFilesCache = (): void => {
+  if (!availableFilesCached) {
+    const files = getAvailableFiles();
+    availableFilesSet.clear();
+    files.forEach(file => availableFilesSet.add(file));
+    availableFilesCached = true;
+  }
+};
+
 // Extract links from markdown content
 const extractLinks = (content: string): LinkReference[] => {
   const links: LinkReference[] = [];
@@ -43,6 +58,16 @@ const extractLinks = (content: string): LinkReference[] => {
 
 // Resolve relative URLs to absolute file paths
 const resolveFilePath = (currentFile: string, relativeUrl: string, availableFiles: string[]): string => {
+  // Create cache key
+  const cacheKey = `${currentFile}:${relativeUrl}`;
+  
+  // Check cache first
+  if (pathResolutionCache.has(cacheKey)) {
+    return pathResolutionCache.get(cacheKey)!;
+  }
+  
+  let resolvedPath: string;
+  
   // Handle relative paths
   if (relativeUrl.startsWith('./') || relativeUrl.startsWith('../')) {
     // Get the directory of the current file
@@ -60,14 +85,19 @@ const resolveFilePath = (currentFile: string, relativeUrl: string, availableFile
       }
     }
     
-    const resolvedPath = '/' + resolved.join('/');
+    const resolvedPathCandidate = '/' + resolved.join('/');
     
     // Try to find the file with the resolved path
-    return urlToFilePathWithExtension(resolvedPath, availableFiles);
+    resolvedPath = urlToFilePathWithExtension(resolvedPathCandidate, availableFiles);
+  } else {
+    // Handle absolute paths (starting with /)
+    resolvedPath = urlToFilePathWithExtension(relativeUrl, availableFiles);
   }
   
-  // Handle absolute paths (starting with /)
-  return urlToFilePathWithExtension(relativeUrl, availableFiles);
+  // Cache the result
+  pathResolutionCache.set(cacheKey, resolvedPath);
+  
+  return resolvedPath;
 };
 
 // Extract title from file path
@@ -88,7 +118,10 @@ export const buildBacklinksIndex = async (): Promise<void> => {
   const siteConfig = getSiteConfig();
   const hiddenDirectories = siteConfig.navigation.hiddenDirectories || [];
   
+  // Initialize available files cache
+  initializeAvailableFilesCache();
   const availableFiles = getAvailableFiles();
+  
   const documentFiles = availableFiles.filter(file => {
     // Filter out files from hidden directories
     if (isPathHidden(file, hiddenDirectories)) {
@@ -140,8 +173,8 @@ export const buildBacklinksIndex = async (): Promise<void> => {
       for (const link of links) {
         const targetFile = resolveFilePath(sourceFile, link.originalUrl, availableFiles);
         
-        // Only process if the target file exists
-        if (availableFiles.includes(targetFile)) {
+        // Only process if the target file exists (use cached set for faster lookup)
+        if (availableFilesSet.has(targetFile)) {
           if (!linksByTarget.has(targetFile)) {
             linksByTarget.set(targetFile, {
               linkTexts: [],
@@ -215,13 +248,15 @@ export const getRelatedContent = async (filePath: string): Promise<RelatedConten
       content = markdownContent;
     }
     
+    // Initialize available files cache
+    initializeAvailableFilesCache();
     const availableFiles = getAvailableFiles();
     const links = extractLinks(content);
     
     for (const link of links) {
       const targetFile = resolveFilePath(filePath, link.originalUrl, availableFiles);
       
-      if (availableFiles.includes(targetFile)) {
+      if (availableFilesSet.has(targetFile)) {
         // Get target file title
         let targetTitle: string;
         try {
@@ -342,4 +377,9 @@ export const getRelatedContent = async (filePath: string): Promise<RelatedConten
 export const resetBacklinksIndex = (): void => {
   backlinksIndex = {};
   indexBuilt = false;
+  
+  // Clear caches
+  pathResolutionCache.clear();
+  availableFilesSet.clear();
+  availableFilesCached = false;
 };
