@@ -56,10 +56,6 @@ const TagsBreadcrumb: React.FC<{ tagName?: string; onNavigate: (path: string) =>
   </nav>
 );
 
-interface TagsViewProps {
-  onFileSelect?: (filePath: string) => void;
-}
-
 const TagsView: React.FC<TagsViewProps> = ({ onFileSelect }) => {
   const { tagName } = useParams<{ tagName?: string }>();
   const navigate = useNavigate();
