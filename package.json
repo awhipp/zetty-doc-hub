@@ -9,6 +9,7 @@
         "prebuild": "node scripts/generate-html.js",
         "build": "tsc -b && vite build",
         "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
         "preview": "vite preview",
         "analyze": "node scripts/analyze-bundle.cjs",
         "build:analyze": "npm run build && npm run analyze"

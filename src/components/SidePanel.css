@@ -32,7 +32,7 @@
         min-width: 260px;
         max-width: 260px;
     }
-    
+
     .side-panel.collapsed {
         width: 0;
         min-width: 0;
@@ -110,4 +110,327 @@
 
 .side-panel-content::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
+}
+
+/* Side Panel Sections */
+.side-panel-section {
+    margin-bottom: 16px;
+}
+
+.side-panel-section:last-child {
+    margin-bottom: 0;
+}
+
+/* Navigation Items */
+.side-panel-nav-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 8px 12px;
+    border: none;
+    background: none;
+    color: #555;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.side-panel-nav-item:hover {
+    background-color: #e8f4f8;
+    color: #0066cc;
+}
+
+.side-panel-nav-item.active {
+    background-color: #646cff;
+    color: white;
+}
+
+.side-panel-nav-item.active .nav-icon {
+    opacity: 1;
+}
+
+.nav-icon {
+    font-size: 16px;
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+.nav-text {
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Section Titles */
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.section-icon {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.section-text {
+    flex: 1;
+}
+
+/* Tab Navigation */
+.side-panel-tabs {
+    display: flex;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #f5f5f5;
+}
+
+.tab-button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 8px;
+    border: none;
+    background: none;
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 2px solid transparent;
+}
+
+.tab-button:hover {
+    background-color: #e8f4f8;
+    color: #0066cc;
+}
+
+.tab-button.active {
+    background-color: #fff;
+    color: #646cff;
+    border-bottom-color: #646cff;
+}
+
+.tab-icon {
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+.tab-button.active .tab-icon {
+    opacity: 1;
+}
+
+.tab-text {
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* Tags List */
+.tags-list {
+    padding: 8px 0;
+}
+
+.tag-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    border: none;
+    background: none;
+    color: #333;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+    text-align: left;
+}
+
+.tag-name {
+    flex: 1;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tag-count {
+    background-color: #646cff;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 20px;
+    text-align: center;
+    margin-left: 8px;
+}
+
+.no-tags-message {
+    padding: 16px;
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+}
+
+.no-tags-message p {
+    margin: 0 0 8px 0;
+}
+
+.no-tags-message p:last-child {
+    margin-bottom: 0;
+}
+
+/* Tags Glossary */
+.tags-glossary {
+    padding: 4px 0;
+}
+
+.tag-group {
+    margin-bottom: 12px;
+}
+
+.tag-group:last-child {
+    margin-bottom: 0;
+}
+
+.tag-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 12px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    border: 1px solid #e9ecef;
+}
+
+.tag-header .tag-name {
+    font-weight: 600;
+    color: #646cff;
+    font-size: 13px;
+}
+
+.tag-header .tag-count {
+    background-color: #646cff;
+    color: white;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 6px;
+    border-radius: 8px;
+    min-width: 18px;
+    text-align: center;
+}
+
+.tag-files {
+    margin-left: 8px;
+    border-left: 2px solid #e9ecef;
+    padding-left: 8px;
+}
+
+.tag-file-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    padding: 4px 8px;
+    border: none;
+    background: none;
+    color: #555;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    border-radius: 3px;
+    margin-bottom: 2px;
+}
+
+.tag-file-item:hover {
+    background-color: #e8f4f8;
+    color: #0066cc;
+}
+
+.tag-file-item:last-child {
+    margin-bottom: 0;
+}
+
+.tag-file-item .file-icon {
+    font-size: 12px;
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+.tag-file-item .file-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 400;
+}
+
+/* Flash animation for highlighted tags */
+@keyframes tagFlash {
+    0% {
+        background-color: transparent;
+        transform: scale(1);
+    }
+
+    15% {
+        background-color: rgba(255, 193, 7, 0.15);
+        transform: scale(1.01);
+        box-shadow: 0 0 15px rgba(255, 193, 7, 0.3);
+    }
+
+    30% {
+        background-color: rgba(255, 235, 59, 0.2);
+        transform: scale(1.015);
+        box-shadow: 0 0 20px rgba(255, 235, 59, 0.4);
+    }
+
+    45% {
+        background-color: rgba(255, 193, 7, 0.15);
+        transform: scale(1.01);
+        box-shadow: 0 0 15px rgba(255, 193, 7, 0.3);
+    }
+
+    60% {
+        background-color: rgba(255, 235, 59, 0.1);
+        transform: scale(1.005);
+        box-shadow: 0 0 10px rgba(255, 235, 59, 0.2);
+    }
+
+    80% {
+        background-color: rgba(255, 193, 7, 0.05);
+        transform: scale(1);
+        box-shadow: 0 0 5px rgba(255, 193, 7, 0.1);
+    }
+
+    100% {
+        background-color: transparent;
+        transform: scale(1);
+        box-shadow: none;
+    }
+}
+
+.tag-group.flash-highlight {
+    animation: tagFlash 6s ease-in-out;
+    border-radius: 6px;
+    padding: 4px;
+    margin: 2px 0;
+}
+
+.tag-group.flash-highlight .tag-header {
+    background-color: rgba(255, 193, 7, 0.08);
+    border-color: rgba(255, 193, 7, 0.3);
+    box-shadow: 0 0 8px rgba(255, 193, 7, 0.15);
 }

@@ -1,4 +1,10 @@
-# My Daily Notes
+---
+title: "My Daily Notes"
+description: "Personal daily notes and thoughts"
+author: "Developer"
+date: "2024-01-16"
+tags: ["notes", "daily", "personal", "private", "hidden"]
+---
 
 ## 2024-01-15
 

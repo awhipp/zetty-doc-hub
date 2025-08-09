@@ -5,14 +5,16 @@ import { getTemplate } from './templates';
 import type { FrontMatter } from '../types/template';
 import TemplateWrapper from './TemplateWrapper';
 import DocumentStats from './DocumentStats';
+import DocumentTags from './DocumentTags';
 import { createCustomComponents, ContentLoading, ErrorState } from './shared';
 import './MarkdownRenderer.css';
 
 interface MdxRendererProps {
   filePath: string;
+  onTagClick?: (tagName: string) => void;
 }
 
-const MdxRenderer: React.FC<MdxRendererProps> = ({ filePath }) => {
+const MdxRenderer: React.FC<MdxRendererProps> = ({ filePath, onTagClick }) => {
   const [MdxComponent, setMdxComponent] = useState<React.ComponentType | null>(null);
   const [frontMatter, setFrontMatter] = useState<FrontMatter>({});
   const [rawContent, setRawContent] = useState<string>('');
@@ -71,6 +73,7 @@ const MdxRenderer: React.FC<MdxRendererProps> = ({ filePath }) => {
   return (
     <div className="mdx-content-wrapper">
       <DocumentStats content={rawContent} />
+      <DocumentTags frontMatter={frontMatter} onTagClick={onTagClick} />
       <TemplateWrapper
         TemplateComponent={TemplateComponent}
         templateProps={{

@@ -24,6 +24,8 @@ const RoutedContent = () => {
   const [isSidePanelCollapsed, setIsSidePanelCollapsed] = useState(false);
   const [isTocCollapsed, setIsTocCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [sidePanelActiveTab, setSidePanelActiveTab] = useState<'files' | 'tags'>('files');
+  const [scrollToTag, setScrollToTag] = useState<string | undefined>(undefined);
   const siteConfig = useSiteConfig();
   const contentRef = useRef<HTMLDivElement>(null);
   
@@ -46,7 +48,7 @@ const RoutedContent = () => {
   
   // Convert URL path to file path
   const potentialFile = urlToFilePathWithExtension(`/${urlPath || ''}`, availableFiles);
-  const selectedFile = availableFiles.includes(potentialFile) ? potentialFile : undefined;
+  const selectedFile = potentialFile && availableFiles.includes(potentialFile) ? potentialFile : undefined;
   
   const handleFileSelect = (filePath: string) => {
     // Convert file path to URL and navigate (now preserves file extensions)
@@ -72,6 +74,31 @@ const RoutedContent = () => {
 
   const handleSearchResultSelect = (filePath: string) => {
     handleFileSelect(filePath);
+  };
+
+  const handleTagClick = (tagName: string) => {
+    // Expand side panel if collapsed
+    if (isSidePanelCollapsed) {
+      setIsSidePanelCollapsed(false);
+    }
+    
+    // Show side panel on mobile
+    if (isMobile && !isSidePanelVisible) {
+      setIsSidePanelVisible(true);
+    }
+    
+    // Switch to tags tab
+    setSidePanelActiveTab('tags');
+    
+    // Scroll to the specific tag
+    setScrollToTag(tagName);
+    
+    // Clear scroll target after a delay to allow for re-triggering
+    setTimeout(() => setScrollToTag(undefined), 1000);
+  };
+
+  const handleSidePanelTabChange = (tab: 'files' | 'tags') => {
+    setSidePanelActiveTab(tab);
   };
 
   return (
@@ -113,16 +140,23 @@ const RoutedContent = () => {
           onMobileClose={closeSidePanel}
           isCollapsed={isSidePanelCollapsed}
           onToggleCollapse={toggleSidePanelCollapse}
+          activeTab={sidePanelActiveTab}
+          onTabChange={handleSidePanelTabChange}
+          scrollToTag={scrollToTag}
         />
+        
         <MainContent 
           selectedFile={selectedFile}
           onFileSelect={handleFileSelect}
           contentRef={contentRef}
+          onTagClick={handleTagClick}
         />
+        
         <TableOfContents 
           contentRef={contentRef} 
           isCollapsed={isTocCollapsed}
           onToggleCollapse={toggleTocCollapse}
+          filePath={selectedFile}
         />
       </div>
     </>

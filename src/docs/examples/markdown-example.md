@@ -1,4 +1,11 @@
-# Markdown Example
+---
+title: "Markdown Example"
+description: "Complete demonstration of Markdown features and syntax supported by Zetty Documentation Hub"
+template: "general"
+author: "Zetty Doc Hub"
+date: "2024-01-15"
+tags: ["markdown", "syntax", "examples", "documentation", "formatting", "code", "tables"]
+---
 
 This document demonstrates the various Markdown features supported by Zetty Documentation Hub.
 
@@ -72,12 +79,14 @@ Use `npm install` to install dependencies. The `buildFileTree()` function create
 ### Code Blocks
 
 Basic code block:
+
 ```
 This is a plain code block
 No syntax highlighting applied
 ```
 
 JavaScript with syntax highlighting:
+
 ```javascript
 function greetUser(name) {
   return `Hello, ${name}! Welcome to Zetty Doc Hub.`;
@@ -88,6 +97,7 @@ console.log(greetUser(user));
 ```
 
 TypeScript example:
+
 ```typescript
 interface FileTreeNode {
   name: string;
@@ -104,6 +114,7 @@ const buildFileTree = (): FileTreeNode[] => {
 ```
 
 React component example:
+
 ```tsx
 import React, { useState } from 'react';
 
@@ -124,6 +135,7 @@ export default ExampleComponent;
 ```
 
 CSS example:
+
 ```css
 .example-component {
   padding: 20px;
@@ -152,6 +164,7 @@ CSS example:
 ```
 
 Bash commands:
+
 ```bash
 # Clone the repository
 git clone https://github.com/awhipp/zetty-doc-hub.git
@@ -170,6 +183,7 @@ npm run build
 ```
 
 JSON configuration example:
+
 ```json
 {
   "name": "zetty-doc-hub",
@@ -321,12 +335,12 @@ Math: &alpha; &beta; &gamma; &delta; &pi; &Sigma; &infin;
    - React functional components
    - TypeScript interfaces
    - CSS modules for styling
-   
+
 2. **Build System**
    - Vite for development and building
    - ESLint for code quality
    - TypeScript for type safety
-   
+
 3. **Documentation Features**
    - [x] Markdown rendering with syntax highlighting
    - [x] File tree navigation

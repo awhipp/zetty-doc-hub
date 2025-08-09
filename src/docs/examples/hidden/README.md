@@ -1,4 +1,10 @@
-# Hidden Directory Example
+---
+title: "Hidden Directory Example"
+description: "Example of a hidden directory that won't appear in navigation but is accessible via direct links"
+author: "Zetty Doc Hub"
+date: "2024-01-15"
+tags: ["hidden", "configuration", "navigation", "private", "examples"]
+---
 
 This is an example of a hidden directory that won't appear in the side panel navigation but is still accessible via direct links.
 
