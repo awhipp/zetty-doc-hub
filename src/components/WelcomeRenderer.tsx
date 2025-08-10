@@ -36,9 +36,9 @@ const WelcomeRenderer: React.FC<WelcomeRendererProps> = ({ onNavigateToFile }) =
             <h5>📝 Document Experience</h5>
             <ul>
               <li>📄 <strong>Markdown</strong> - Rich text with tables, lists, code blocks</li>
-              <li>📊 <strong>MDX Support</strong> - Enhanced markdown with JSX components</li>
-              <li>📈 <strong>Document Statistics</strong> - Word count, reading time & metadata</li>
-              <li>📝 <strong>Frontmatter Templating</strong> - Custom layouts driven by metadata</li>
+              <li>⚛️ <strong>MDX Support</strong> - Enhanced markdown with JSX components</li>
+              <li>📊 <strong>Document Statistics</strong> - Word count, reading time & metadata</li>
+              <li>🎯 <strong>Frontmatter Templating</strong> - Custom layouts driven by metadata</li>
             </ul>
           </div>
           
@@ -46,8 +46,8 @@ const WelcomeRenderer: React.FC<WelcomeRendererProps> = ({ onNavigateToFile }) =
             <h5>🛠️ Advanced Tools</h5>
             <ul>
               <li>📋 <strong>Auto-generated table of contents</strong> - Navigate long documents easily</li>
-              <li>📊 <strong>Mermaid diagram support</strong> - Flowcharts & visualizations in markdown</li>
-              <li>🤖 <strong>Full-text and NLP search</strong> - Find content across all documentation</li>
+              <li>🎨 <strong>Mermaid diagram support</strong> - Flowcharts & visualizations in markdown</li>
+              <li>🔍 <strong>Full-text and NLP search</strong> - Find content across all documentation</li>
               <li>🕸️ <strong>Related content & graph visualization</strong> - Backlinks, suggestions & interactive document relationships</li>
             </ul>
           </div>
