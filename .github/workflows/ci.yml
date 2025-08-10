@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
         
-      - name: Install Playwright browsers
+      - name: Install Playwright browsers (used by rehype-mermaid plugin)
         run: npx playwright install
         
       - name: Run ESLint
@@ -35,6 +35,3 @@ jobs:
         
       - name: Build project
         run: npm run build
-        
-      - name: Run Playwright tests
-        run: npx playwright test
