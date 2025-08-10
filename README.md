@@ -78,12 +78,6 @@ Unlike static site generators, Zetty Doc Hub creates a living, breathing documen
     npm install
     ```
 
-    - You may need to install playwright browsers as rehype-mermaid uses them for rendering diagrams:
-
-        ```sh
-        npx playwright install
-        ```
-
 2. **Start development:**
 
     ```sh

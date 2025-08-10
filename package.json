@@ -13,7 +13,7 @@
         "preview": "vite preview",
         "analyze": "node scripts/analyze-bundle.cjs",
         "build:analyze": "npm run build && npm run analyze",
-        "postinstall": "npx playwright install"
+        "postinstall": "npx playwright install # used by rehype-mermaid"
     },
     "dependencies": {
         "@mdx-js/react": "^3.1.0",
