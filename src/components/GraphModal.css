@@ -91,6 +91,11 @@
 .graph-cytoscape {
     width: 100%;
     height: 100%;
+    background-color: #fafafa;
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
 }
 
 .graph-controls {
@@ -115,6 +120,9 @@
     transition: all 0.2s ease;
     color: #666;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1;
 }
 
 .graph-control-btn:hover {
@@ -166,15 +174,15 @@
 }
 
 .legend-color.document {
-    background: #007acc;
+    background: var(--graph-color-document, #1976d2);
 }
 
 .legend-color.tag {
-    background: #28a745;
+    background: var(--graph-color-tag, #646cff);
 }
 
 .legend-color.current {
-    background: #dc3545;
+    background: var(--graph-color-current, #ff9800);
 }
 
 .graph-loading {

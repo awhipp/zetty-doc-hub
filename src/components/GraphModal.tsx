@@ -3,6 +3,7 @@ import cytoscape from 'cytoscape';
 import type { Core, NodeSingular } from 'cytoscape';
 import { useNavigate } from 'react-router-dom';
 import { getGraphDataWithCurrent } from '../utils/graphUtils';
+import { getGraphColors, setGraphColorCSSVariables } from '../utils/graphColors';
 import { IconClose, IconNetwork } from './shared/Icons';
 import type { GraphData, GraphNode } from '../utils/graphUtils';
 import './GraphModal.css';
@@ -12,15 +13,13 @@ interface GraphModalProps {
   onClose: () => void;
   currentFilePath?: string;
   onNavigateToFile?: (filePath: string) => void;
-  onNavigateToTag?: (tagName: string) => void;
 }
 
 const GraphModal: React.FC<GraphModalProps> = ({ 
   isOpen, 
   onClose, 
   currentFilePath,
-  onNavigateToFile,
-  onNavigateToTag
+  onNavigateToFile
 }) => {
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -32,6 +31,7 @@ const GraphModal: React.FC<GraphModalProps> = ({
   const handleNodeClick = useCallback((node: NodeSingular) => {
     const nodeData = node.data() as GraphNode;
     
+    // Only handle document clicks, not tag clicks
     if (nodeData.type === 'document' && nodeData.filePath) {
       if (onNavigateToFile) {
         onNavigateToFile(nodeData.filePath);
@@ -43,13 +43,9 @@ const GraphModal: React.FC<GraphModalProps> = ({
         navigate(urlPath);
       }
       onClose();
-    } else if (nodeData.type === 'tag' && nodeData.tagName) {
-      if (onNavigateToTag) {
-        onNavigateToTag(nodeData.tagName);
-      }
-      onClose();
     }
-  }, [navigate, onNavigateToFile, onNavigateToTag, onClose]);
+    // Tags no longer have click actions
+  }, [navigate, onNavigateToFile, onClose]);
 
   // Initialize Cytoscape
   const initializeCytoscape = useCallback(async () => {
@@ -60,13 +56,14 @@ const GraphModal: React.FC<GraphModalProps> = ({
 
     try {
       const graphData: GraphData = await getGraphDataWithCurrent(currentFilePath);
+      const colors = getGraphColors();
 
       // Convert graph data to Cytoscape format
       const elements = [
         ...graphData.nodes.map(node => ({
           data: {
             id: node.id,
-            label: node.label,
+            label: node.type === 'tag' ? `#${node.label}` : node.label, // Add hashtag prefix for tags
             type: node.type,
             filePath: node.filePath,
             tagName: node.tagName,
@@ -100,8 +97,8 @@ const GraphModal: React.FC<GraphModalProps> = ({
             style: {
               'background-color': (ele: cytoscape.NodeSingular) => {
                 const data = ele.data();
-                if (data.isCurrent) return '#dc3545';
-                return data.type === 'tag' ? '#28a745' : '#007acc';
+                if (data.isCurrent) return colors.current;
+                return data.type === 'tag' ? colors.tag : colors.document;
               },
               'label': 'data(label)',
               'font-size': '12px',
@@ -111,8 +108,8 @@ const GraphModal: React.FC<GraphModalProps> = ({
               'text-outline-width': 2,
               'text-outline-color': (ele: cytoscape.NodeSingular) => {
                 const data = ele.data();
-                if (data.isCurrent) return '#dc3545';
-                return data.type === 'tag' ? '#28a745' : '#007acc';
+                if (data.isCurrent) return colors.current;
+                return data.type === 'tag' ? colors.tag : colors.document;
               },
               'width': (ele: cytoscape.NodeSingular) => {
                 const data = ele.data();
@@ -136,11 +133,11 @@ const GraphModal: React.FC<GraphModalProps> = ({
               'width': 2,
               'line-color': (ele: cytoscape.EdgeSingular) => {
                 const data = ele.data();
-                return data.type === 'tag' ? '#28a745' : '#666';
+                return data.type === 'tag' ? colors.tag : '#666';
               },
               'target-arrow-color': (ele: cytoscape.EdgeSingular) => {
                 const data = ele.data();
-                return data.type === 'tag' ? '#28a745' : '#666';
+                return data.type === 'tag' ? colors.tag : '#666';
               },
               'target-arrow-shape': 'triangle',
               'curve-style': 'bezier',
@@ -183,32 +180,26 @@ const GraphModal: React.FC<GraphModalProps> = ({
         handleNodeClick(evt.target);
       });
 
-      // Add tooltip functionality
+      // Add hover functionality with cursor styling
       cy.on('mouseover', 'node', (evt) => {
         const node = evt.target;
         const data = node.data();
         
-        // Create tooltip content for potential future use
-        let tooltipContent = `<strong>${data.label}</strong>`;
-        if (data.description) {
-          tooltipContent += `<br/><small>${data.description}</small>`;
-        }
+        // Set cursor style based on node type
         if (data.type === 'document') {
-          tooltipContent += `<br/><small>Click to open document</small>`;
-        } else if (data.type === 'tag') {
-          tooltipContent += `<br/><small>Click to view tag</small>`;
+          containerRef.current!.style.cursor = 'pointer';
+        } else {
+          containerRef.current!.style.cursor = 'default';
         }
         
-        // Simple visual hover effect for now
+        // Simple visual hover effect
         node.style('border-width', '2px');
         node.style('border-color', '#ff6b6b');
-        
-        // TODO: Implement proper tooltip display
-        console.log('Node hover:', tooltipContent);
       });
 
       cy.on('mouseout', 'node', (evt) => {
         const node = evt.target;
+        containerRef.current!.style.cursor = 'default';
         node.style('border-width', '0px');
       });
 
@@ -230,9 +221,18 @@ const GraphModal: React.FC<GraphModalProps> = ({
 
   const centerGraph = useCallback(() => {
     if (cyRef.current) {
+      // If there's a current document, center on that node
+      if (currentFilePath) {
+        const currentNode = cyRef.current.$(`node[id="${currentFilePath}"]`);
+        if (currentNode.length > 0) {
+          cyRef.current.center(currentNode);
+          return;
+        }
+      }
+      // Otherwise, center the entire graph
       cyRef.current.center();
     }
-  }, []);
+  }, [currentFilePath]);
 
   const resetZoom = useCallback(() => {
     if (cyRef.current) {
@@ -241,9 +241,26 @@ const GraphModal: React.FC<GraphModalProps> = ({
     }
   }, []);
 
+  const zoomIn = useCallback(() => {
+    if (cyRef.current) {
+      const currentZoom = cyRef.current.zoom();
+      cyRef.current.zoom(currentZoom * 1.2);
+    }
+  }, []);
+
+  const zoomOut = useCallback(() => {
+    if (cyRef.current) {
+      const currentZoom = cyRef.current.zoom();
+      cyRef.current.zoom(currentZoom * 0.8);
+    }
+  }, []);
+
   // Initialize when modal opens
   useEffect(() => {
     if (isOpen) {
+      // Set CSS custom properties for graph colors
+      setGraphColorCSSVariables();
+      
       // Small delay to ensure DOM is ready
       const timer = setTimeout(initializeCytoscape, 100);
       return () => clearTimeout(timer);
@@ -320,6 +337,22 @@ const GraphModal: React.FC<GraphModalProps> = ({
           {!loading && !error && (
             <>
               <div className="graph-controls">
+                <button
+                  className="graph-control-btn"
+                  onClick={zoomIn}
+                  title="Zoom in"
+                  aria-label="Zoom in"
+                >
+                  +
+                </button>
+                <button
+                  className="graph-control-btn"
+                  onClick={zoomOut}
+                  title="Zoom out"
+                  aria-label="Zoom out"
+                >
+                  −
+                </button>
                 <button
                   className="graph-control-btn"
                   onClick={fitGraph}

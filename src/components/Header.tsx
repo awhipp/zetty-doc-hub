@@ -12,7 +12,6 @@ interface HeaderProps {
   onSearchResultSelect?: (filePath: string) => void;
   currentFilePath?: string;
   onNavigateToFile?: (filePath: string) => void;
-  onNavigateToTag?: (tagName: string) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ 
@@ -20,8 +19,7 @@ const Header: React.FC<HeaderProps> = ({
   isSidePanelVisible, 
   onSearchResultSelect,
   currentFilePath,
-  onNavigateToFile,
-  onNavigateToTag
+  onNavigateToFile
 }) => {
   const navigate = useNavigate();
   const siteConfig = useSiteConfig();
@@ -106,7 +104,6 @@ const Header: React.FC<HeaderProps> = ({
         onClose={handleGraphModalClose}
         currentFilePath={currentFilePath}
         onNavigateToFile={onNavigateToFile}
-        onNavigateToTag={onNavigateToTag}
       />
     </>
   );

@@ -28,6 +28,13 @@ export interface SiteConfig {
     build?: {
         time: string;
     };
+    graph?: {
+        colors: {
+            document: string;
+            tag: string;
+            current: string;
+        };
+    };
 }
 
 export const defaultSiteConfig: SiteConfig = {
@@ -68,6 +75,13 @@ export const defaultSiteConfig: SiteConfig = {
     },
     build: {
         time: new Date().toISOString()
+    },
+    graph: {
+        colors: {
+            document: '#1976d2',  // Blue for documents
+            tag: '#646cff',       // Purple for tags  
+            current: '#ff9800'    // Orange for current document
+        }
     }
 };
 
@@ -129,6 +143,13 @@ export const getSiteConfig = (): SiteConfig => {
         },
         build: {
             time: getBuildTime()
+        },
+        graph: {
+            colors: {
+                document: import.meta.env.VITE_GRAPH_COLOR_DOCUMENT || defaultSiteConfig.graph?.colors.document || '#1976d2',
+                tag: import.meta.env.VITE_GRAPH_COLOR_TAG || defaultSiteConfig.graph?.colors.tag || '#646cff',
+                current: import.meta.env.VITE_GRAPH_COLOR_CURRENT || defaultSiteConfig.graph?.colors.current || '#ff9800'
+            }
         }
     };
 };
