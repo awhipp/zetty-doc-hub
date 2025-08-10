@@ -1,4 +1,8 @@
 import { IMAGE_EXTENSIONS } from './constants';
+import { resolveImagePath } from './pathUtils';
+
+// Re-export the resolveImagePath function for backward compatibility
+export { resolveImagePath };
 
 // Image modules loaded via Vite's import.meta.glob
 // This will import all images from the docs directory structure
@@ -31,74 +35,6 @@ export const loadImageUrl = async (filePath: string): Promise<string | null> => 
         console.error('Error loading image:', error);
         return null;
     }
-};
-
-/**
-* Resolve relative image paths to absolute paths within the docs structure
-*/
-export const resolveImagePath = (imageSrc: string, currentDocPath?: string): string => {
-    // If it's already an absolute URL or starts with http, return as is
-    if (imageSrc.startsWith('http') || imageSrc.startsWith('https')) {
-        return imageSrc;
-    }
-
-    // If it starts with /, treat as absolute path from docs root
-    if (imageSrc.startsWith('/')) {
-        // Convert /docs/path to /src/docs/path for module loading
-        if (imageSrc.startsWith('/docs/')) {
-            return imageSrc.replace('/docs/', '/src/docs/');
-        }
-        // If it already starts with /src/docs/, keep it as is
-        if (imageSrc.startsWith('/src/docs/')) {
-            return imageSrc;
-        }
-        // Otherwise, prepend /src/docs/
-        return `/src/docs${imageSrc}`;
-    }
-
-    // Handle relative paths
-    if (!currentDocPath) {
-        // Fallback: assume it's relative to docs root
-        return `/src/docs/${imageSrc}`;
-    }
-
-    // Normalize the document path - handle both /src/docs/ and other formats
-    let normalizedDocPath = currentDocPath;
-    if (normalizedDocPath.startsWith('/src/docs/')) {
-        normalizedDocPath = normalizedDocPath.substring('/src/docs/'.length);
-    }
-
-    // Get the directory part (remove filename)
-    const docDir = normalizedDocPath.replace(/\/[^/]*$/, '');
-
-    let targetPath = '';
-
-    if (imageSrc.startsWith('./')) {
-        // Current directory reference
-        const relativePath = imageSrc.substring(2);
-        targetPath = docDir ? `${docDir}/${relativePath}` : relativePath;
-    } else if (imageSrc.startsWith('../')) {
-        // Parent directory reference
-        const pathParts = docDir.split('/').filter(part => part !== '');
-        const relativeParts = imageSrc.split('/');
-
-        for (const part of relativeParts) {
-            if (part === '..') {
-                pathParts.pop();
-            } else if (part !== '.' && part !== '') {
-                pathParts.push(part);
-            }
-        }
-
-        targetPath = pathParts.join('/');
-    } else {
-        // Direct relative path (no ./ prefix)
-        targetPath = docDir ? `${docDir}/${imageSrc}` : imageSrc;
-    }
-
-    // Clean up any double slashes and ensure /src/docs/ prefix
-    const cleanPath = targetPath.replace(/\/+/g, '/').replace(/^\//, '');
-    return `/src/docs/${cleanPath}`;
 };
 
 /**

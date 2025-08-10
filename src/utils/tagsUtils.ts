@@ -2,6 +2,7 @@ import { getAvailableFiles, loadMarkdownContent, loadMdxFrontMatter } from './ma
 import { getFileExtension, isMdxFile } from './fileUtils';
 import { filePathToUrl } from './routing';
 import { getSiteConfig } from '../config/siteConfig';
+import { extractTitleFromPath } from './pathUtils';
 import type { TagsIndex, TagInfo, TaggedFile, TagsOptions } from '../types/tags';
 import type { FrontMatter } from '../types/template';
 import { isPathHidden } from './fileTree';
@@ -182,15 +183,6 @@ export const rebuildTagsIndex = async (): Promise<void> => {
  */
 const normalizeTag = (tag: string): string => {
   return tag.trim().toLowerCase().replace(/\s+/g, '-');
-};
-
-/**
- * Extract title from file path as fallback
- */
-const extractTitleFromPath = (filePath: string): string => {
-  const segments = filePath.split('/');
-  const fileName = segments[segments.length - 1];
-  return fileName.replace(/\.(md|mdx)$/, '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 };
 
 /**

@@ -1,6 +1,7 @@
 import { getAvailableFiles, loadMarkdownContent } from './markdownLoader';
 import { getFileExtension } from './fileUtils';
 import { getSiteConfig } from '../config/siteConfig';
+import { getFileNameFromPath } from './pathUtils';
 import type { SearchResult, SearchIndex, SearchOptions } from '../types/search';
 import { isPathHidden } from './fileTree';
 
@@ -135,15 +136,6 @@ export const searchDocumentation = async (query: string, options: SearchOptions 
 const extractTitleFromContent = (content: string): string | null => {
   const titleMatch = content.match(/^#\s+(.+)$/m);
   return titleMatch ? titleMatch[1].trim() : null;
-};
-
-/**
- * Extract filename from file path
- */
-const getFileNameFromPath = (filePath: string): string => {
-  const segments = filePath.split('/');
-  const fileName = segments[segments.length - 1];
-  return fileName.replace(/\.(md|mdx)$/, '').replace(/-/g, ' ');
 };
 
 /**

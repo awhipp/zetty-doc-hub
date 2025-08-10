@@ -138,6 +138,7 @@
 .general-content pre {
   background-color: #f8f9fa;
   border: 1px solid #e9ecef;
+  color: black;
   border-radius: 6px;
   padding: 1rem;
   overflow-x: auto;

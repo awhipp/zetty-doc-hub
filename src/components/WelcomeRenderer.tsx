@@ -25,37 +25,30 @@ const WelcomeRenderer: React.FC<WelcomeRendererProps> = ({ onNavigateToFile }) =
           <div className="feature-category">
             <h5>📖 Content & Navigation</h5>
             <ul>
-              <li>🌲 <strong>File tree navigation</strong> - Browse documentation structure</li>
-              <li>📁 <strong>Expandable folders</strong> - Organize content hierarchically</li>
-              <li>🧭 <strong>Breadcrumb navigation</strong> - Track your location</li>
-              <li>🔗 <strong>Smart URL routing</strong> - Shareable document links</li>
-              <li>📱 <strong>Responsive design</strong> - Mobile & desktop support</li>
+              <li>🌲 <strong>Dynamic file tree navigation</strong> - Auto-discovered documentation structure</li>
+              <li>🔗 <strong>Intelligent URL routing</strong> - Shareable, bookmarkable document links</li>
+              <li>📱 <strong>Responsive design</strong> - Mobile, tablet & desktop support</li>
+              <li>🏷️ <strong>Tags navigation</strong> - Browse content by tags and categories</li>
             </ul>
           </div>
           
           <div className="feature-category">
             <h5>📝 Document Experience</h5>
             <ul>
-              <li>📄 <strong>Markdown rendering</strong> - Rich text formatting</li>
-              <li>⚡ <strong>MDX support</strong> - Interactive components</li>
-              <li>🖼️ <strong>Image viewing</strong> - Display SVG, PNG, JPG, GIF, WebP files</li>
-              <li>🎨 <strong>Syntax highlighting</strong> - Beautiful code blocks</li>
-              <li>📋 <strong>Copy code buttons</strong> - One-click copying</li>
-              <li>📊 <strong>Reading progress bar</strong> - Track your progress</li>
-              <li>📈 <strong>Document statistics</strong> - Word count & reading time</li>
-              <li>⬆️ <strong>Back to top button</strong> - Quick navigation</li>
+              <li>📄 <strong>Markdown</strong> - Rich text with tables, lists, code blocks</li>
+              <li>⚛️ <strong>MDX Support</strong> - Enhanced markdown with JSX components</li>
+              <li>📊 <strong>Document Statistics</strong> - Word count, reading time & metadata</li>
+              <li>🎯 <strong>Frontmatter Templating</strong> - Custom layouts driven by metadata</li>
             </ul>
           </div>
           
           <div className="feature-category">
             <h5>🛠️ Advanced Tools</h5>
             <ul>
-              <li>📋 <strong>Table of contents</strong> - Auto-generated navigation</li>
-              <li>📊 <strong>Mermaid diagrams</strong> - Flowcharts & visualizations</li>
-              <li>📝 <strong>Document templates</strong> - Structured content creation</li>
-              <li>🔍 <strong>Smart search</strong> - Find content quickly</li>
-              <li>🤖 <strong>AI Q&A assistant</strong> - Get instant answers</li>
-              <li>🔥 <strong>Hot reload</strong> - Real-time development updates</li>
+              <li>📋 <strong>Auto-generated table of contents</strong> - Navigate long documents easily</li>
+              <li>🎨 <strong>Mermaid diagram support</strong> - Flowcharts & visualizations in markdown</li>
+              <li>🔍 <strong>Full-text and NLP search</strong> - Find content across all documentation</li>
+              <li>🕸️ <strong>Related content & graph visualization</strong> - Backlinks, suggestions & interactive document relationships</li>
             </ul>
           </div>
         </div>

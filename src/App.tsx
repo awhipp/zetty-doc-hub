@@ -76,6 +76,10 @@ const RoutedContent = () => {
     handleFileSelect(filePath);
   };
 
+  const handleNavigateToFile = (filePath: string) => {
+    handleFileSelect(filePath);
+  };
+
   const handleTagClick = (tagName: string) => {
     // Expand side panel if collapsed
     if (isSidePanelCollapsed) {
@@ -107,6 +111,8 @@ const RoutedContent = () => {
         onToggleSidePanel={toggleSidePanel}
         isSidePanelVisible={isSidePanelVisible}
         onSearchResultSelect={handleSearchResultSelect}
+        currentFilePath={selectedFile}
+        onNavigateToFile={handleNavigateToFile}
       />
       <div className={`app-content ${isSidePanelCollapsed ? 'side-panel-collapsed' : ''} ${isTocCollapsed ? 'toc-collapsed' : ''}`}>
         {/* Floating expand button for collapsed side panel */}
