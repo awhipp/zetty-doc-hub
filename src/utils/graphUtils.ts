@@ -1,11 +1,12 @@
 import { getAvailableFiles, loadMarkdownContent, loadMdxRawContent } from './markdownLoader';
 import { getFileExtension, isMdxFile } from './fileUtils';
-import { urlToFilePathWithExtension } from './routing';
 import { getSiteConfig } from '../config/siteConfig';
 import { getAllTags } from './tagsUtils';
 import { buildBacklinksIndex } from './backlinksUtils';
 import { isPathHidden } from './fileTree';
 import { extractLinks } from './linkExtractor';
+import { resolveFilePath, extractTitleFromPath } from './pathUtils';
+import { extractFrontMatter } from './frontMatterUtils';
 import type { FrontMatter } from '../types/template';
 
 export interface GraphNode {
@@ -34,48 +35,6 @@ export interface GraphData {
 // Cache for graph data
 let cachedGraphData: GraphData | null = null;
 let graphDataBuilt = false;
-
-/**
- * Extract title from file path
- */
-const extractTitleFromPath = (filePath: string): string => {
-  const fileName = filePath.split('/').pop() || '';
-  return fileName
-    .replace(/\.(md|mdx)$/, '')
-    .replace(/[-_]/g, ' ')
-    .replace(/\b\w/g, l => l.toUpperCase());
-};
-
-/**
- * Resolve relative URLs to absolute file paths
- */
-const resolveFilePath = (currentFile: string, relativeUrl: string, availableFiles: string[]): string => {
-  // Handle relative paths
-  if (relativeUrl.startsWith('./') || relativeUrl.startsWith('../')) {
-    // Get the directory of the current file
-    const currentDir = currentFile.substring(0, currentFile.lastIndexOf('/'));
-    
-    // Resolve the relative path
-    const parts = currentDir.split('/').concat(relativeUrl.split('/'));
-    const resolved: string[] = [];
-    
-    for (const part of parts) {
-      if (part === '..') {
-        resolved.pop();
-      } else if (part !== '.' && part !== '') {
-        resolved.push(part);
-      }
-    }
-    
-    const resolvedPathCandidate = '/' + resolved.join('/');
-    
-    // Try to find the file with the resolved path
-    return urlToFilePathWithExtension(resolvedPathCandidate, availableFiles);
-  } else {
-    // Handle absolute paths (starting with /)
-    return urlToFilePathWithExtension(relativeUrl, availableFiles);
-  }
-};
 
 /**
  * Build the complete graph data for all documents and their relationships
@@ -112,19 +71,8 @@ export const buildGraphData = async (): Promise<GraphData> => {
       
       if (isMdxFile(filePath)) {
         const content = await loadMdxRawContent(filePath);
-        // Extract front matter from raw content
-        const frontMatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
-        if (frontMatterMatch) {
-          const frontMatterText = frontMatterMatch[1];
-          const titleMatch = frontMatterText.match(/title:\s*["']?([^"'\n]+)["']?/);
-          const descMatch = frontMatterText.match(/description:\s*["']?([^"'\n]+)["']?/);
-          if (titleMatch) {
-            frontMatter.title = titleMatch[1];
-          }
-          if (descMatch) {
-            frontMatter.description = descMatch[1];
-          }
-        }
+        // Extract front matter from raw content using consolidated utility
+        frontMatter = extractFrontMatter(content);
       } else {
         const { frontMatter: parsedFrontMatter } = await loadMarkdownContent(filePath);
         frontMatter = parsedFrontMatter;

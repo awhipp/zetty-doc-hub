@@ -1,83 +1,17 @@
 import { getAvailableFiles, loadMarkdownContent, loadMdxRawContent } from './markdownLoader';
 import { getFileExtension, isMdxFile } from './fileUtils';
-import { urlToFilePathWithExtension } from './routing';
 import { getSiteConfig } from '../config/siteConfig';
 import { getAllTags } from './tagsUtils';
 import { extractLinks } from './linkExtractor';
+import { resolveFilePath, extractTitleFromPath, clearPathResolutionCache } from './pathUtils';
+import { extractFrontMatter, extractTitleFromFrontMatter, extractTagsFromFrontMatter } from './frontMatterUtils';
+import { initializeAvailableFilesCache, getAvailableFilesSet, clearAvailableFilesCache } from './sharedUtils';
 import type { BacklinksIndex, Backlink, RelatedContentData } from '../types/backlinks';
 import type { FrontMatter } from '../types/template';
 import { isPathHidden } from './fileTree';
 
 let backlinksIndex: BacklinksIndex = {};
 let indexBuilt = false;
-
-// Memoization cache for file path resolution
-const pathResolutionCache = new Map<string, string>();
-const availableFilesSet = new Set<string>();
-let availableFilesCached = false;
-
-// Initialize available files cache
-const initializeAvailableFilesCache = (): void => {
-  if (!availableFilesCached) {
-    const files = getAvailableFiles();
-    availableFilesSet.clear();
-    files.forEach(file => availableFilesSet.add(file));
-    availableFilesCached = true;
-  }
-};
-
-// Resolve relative URLs to absolute file paths
-const resolveFilePath = (currentFile: string, relativeUrl: string, availableFiles: string[]): string => {
-  // Create cache key
-  const cacheKey = `${currentFile}:${relativeUrl}`;
-  
-  // Check cache first
-  if (pathResolutionCache.has(cacheKey)) {
-    return pathResolutionCache.get(cacheKey)!;
-  }
-  
-  let resolvedPath: string;
-  
-  // Handle relative paths
-  if (relativeUrl.startsWith('./') || relativeUrl.startsWith('../')) {
-    // Get the directory of the current file
-    const currentDir = currentFile.substring(0, currentFile.lastIndexOf('/'));
-    
-    // Resolve the relative path
-    const parts = currentDir.split('/').concat(relativeUrl.split('/'));
-    const resolved: string[] = [];
-    
-    for (const part of parts) {
-      if (part === '..') {
-        resolved.pop();
-      } else if (part !== '.' && part !== '') {
-        resolved.push(part);
-      }
-    }
-    
-    const resolvedPathCandidate = '/' + resolved.join('/');
-    
-    // Try to find the file with the resolved path
-    resolvedPath = urlToFilePathWithExtension(resolvedPathCandidate, availableFiles);
-  } else {
-    // Handle absolute paths (starting with /)
-    resolvedPath = urlToFilePathWithExtension(relativeUrl, availableFiles);
-  }
-  
-  // Cache the result
-  pathResolutionCache.set(cacheKey, resolvedPath);
-  
-  return resolvedPath;
-};
-
-// Extract title from file path
-const extractTitleFromPath = (filePath: string): string => {
-  const fileName = filePath.split('/').pop() || '';
-  return fileName
-    .replace(/\.(md|mdx)$/, '')
-    .replace(/[-_]/g, ' ')
-    .replace(/\b\w/g, l => l.toUpperCase());
-};
 
 /**
  * Build backlinks index from all markdown and MDX files
@@ -91,6 +25,7 @@ export const buildBacklinksIndex = async (): Promise<void> => {
   // Initialize available files cache
   initializeAvailableFilesCache();
   const availableFiles = getAvailableFiles();
+  const availableFilesSet = getAvailableFilesSet();
   
   const documentFiles = availableFiles.filter(file => {
     // Filter out files from hidden directories
@@ -110,16 +45,8 @@ export const buildBacklinksIndex = async (): Promise<void> => {
       
       if (isMdxFile(sourceFile)) {
         content = await loadMdxRawContent(sourceFile);
-        // Extract front matter from raw content
-        const frontMatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
-        if (frontMatterMatch) {
-          // Simple front matter parsing for title extraction
-          const frontMatterText = frontMatterMatch[1];
-          const titleMatch = frontMatterText.match(/title:\s*["']?([^"'\n]+)["']?/);
-          if (titleMatch) {
-            frontMatter.title = titleMatch[1];
-          }
-        }
+        // Extract front matter from raw content using consolidated utility
+        frontMatter = extractFrontMatter(content);
       } else {
         const { content: markdownContent, frontMatter: parsedFrontMatter } = await loadMarkdownContent(sourceFile);
         content = markdownContent;
@@ -221,6 +148,7 @@ export const getRelatedContent = async (filePath: string): Promise<RelatedConten
     // Initialize available files cache
     initializeAvailableFilesCache();
     const availableFiles = getAvailableFiles();
+    const availableFilesSet = getAvailableFilesSet();
     const links = extractLinks(content, true); // Enable context extraction
     
     for (const link of links) {
@@ -231,15 +159,8 @@ export const getRelatedContent = async (filePath: string): Promise<RelatedConten
         let targetTitle: string;
         try {
           if (isMdxFile(targetFile)) {
-            const targetContent = await loadMdxRawContent(targetFile);
-            const frontMatterMatch = targetContent.match(/^---\n([\s\S]*?)\n---/);
-            if (frontMatterMatch) {
-              const frontMatterText = frontMatterMatch[1];
-              const titleMatch = frontMatterText.match(/title:\s*["']?([^"'\n]+)["']?/);
-              targetTitle = titleMatch ? titleMatch[1] : extractTitleFromPath(targetFile);
-            } else {
-              targetTitle = extractTitleFromPath(targetFile);
-            }
+            const extractedTitle = extractTitleFromFrontMatter(await loadMdxRawContent(targetFile));
+            targetTitle = extractedTitle || extractTitleFromPath(targetFile);
           } else {
             const { frontMatter } = await loadMarkdownContent(targetFile);
             targetTitle = frontMatter.title || extractTitleFromPath(targetFile);
@@ -266,17 +187,7 @@ export const getRelatedContent = async (filePath: string): Promise<RelatedConten
     let currentTags: string[] = [];
     if (isMdxFile(filePath)) {
       const content = await loadMdxRawContent(filePath);
-      const frontMatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
-      if (frontMatterMatch) {
-        const frontMatterText = frontMatterMatch[1];
-        const tagsMatch = frontMatterText.match(/tags:\s*\[(.*?)\]/s);
-        if (tagsMatch) {
-          currentTags = tagsMatch[1]
-            .split(',')
-            .map(tag => tag.trim().replace(/["']/g, ''))
-            .filter(Boolean);
-        }
-      }
+      currentTags = extractTagsFromFrontMatter(content);
     } else {
       const { frontMatter } = await loadMarkdownContent(filePath);
       currentTags = frontMatter.tags || [];
@@ -349,7 +260,6 @@ export const resetBacklinksIndex = (): void => {
   indexBuilt = false;
   
   // Clear caches
-  pathResolutionCache.clear();
-  availableFilesSet.clear();
-  availableFilesCached = false;
+  clearPathResolutionCache();
+  clearAvailableFilesCache();
 };
