@@ -171,8 +171,7 @@ const GraphModal: React.FC<GraphModalProps> = ({
           minTemp: 1.0
         },
         minZoom: 0.1,
-        maxZoom: 3,
-        wheelSensitivity: 0.2
+        maxZoom: 3
       });
 
       // Add event listeners

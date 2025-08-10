@@ -5,6 +5,7 @@ import { getSiteConfig } from '../config/siteConfig';
 import { getAllTags } from './tagsUtils';
 import { buildBacklinksIndex } from './backlinksUtils';
 import { isPathHidden } from './fileTree';
+import { extractLinks } from './linkExtractor';
 import type { FrontMatter } from '../types/template';
 
 export interface GraphNode {
@@ -43,28 +44,6 @@ const extractTitleFromPath = (filePath: string): string => {
     .replace(/\.(md|mdx)$/, '')
     .replace(/[-_]/g, ' ')
     .replace(/\b\w/g, l => l.toUpperCase());
-};
-
-/**
- * Extract links from markdown content
- */
-const extractLinks = (content: string): Array<{ linkText: string; url: string }> => {
-  const links: Array<{ linkText: string; url: string }> = [];
-  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-  
-  let match;
-  while ((match = linkRegex.exec(content)) !== null) {
-    const [, linkText, url] = match;
-    
-    // Skip external links and anchors
-    if (url.match(/^(https?:\/\/|mailto:|#)/)) {
-      continue;
-    }
-    
-    links.push({ linkText, url });
-  }
-  
-  return links;
 };
 
 /**

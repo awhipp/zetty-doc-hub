@@ -3,7 +3,8 @@ import { getFileExtension, isMdxFile } from './fileUtils';
 import { urlToFilePathWithExtension } from './routing';
 import { getSiteConfig } from '../config/siteConfig';
 import { getAllTags } from './tagsUtils';
-import type { BacklinksIndex, Backlink, RelatedContentData, LinkReference } from '../types/backlinks';
+import { extractLinks } from './linkExtractor';
+import type { BacklinksIndex, Backlink, RelatedContentData } from '../types/backlinks';
 import type { FrontMatter } from '../types/template';
 import { isPathHidden } from './fileTree';
 
@@ -23,37 +24,6 @@ const initializeAvailableFilesCache = (): void => {
     files.forEach(file => availableFilesSet.add(file));
     availableFilesCached = true;
   }
-};
-
-// Extract links from markdown content
-const extractLinks = (content: string): LinkReference[] => {
-  const links: LinkReference[] = [];
-  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-  
-  let match;
-  while ((match = linkRegex.exec(content)) !== null) {
-    const [fullMatch, linkText, url] = match;
-    
-    // Skip external links and anchors
-    if (url.match(/^(https?:\/\/|mailto:|#)/)) {
-      continue;
-    }
-    
-    // Extract context around the link (50 characters before and after)
-    const matchIndex = match.index;
-    const contextStart = Math.max(0, matchIndex - 50);
-    const contextEnd = Math.min(content.length, matchIndex + fullMatch.length + 50);
-    const context = content.slice(contextStart, contextEnd).replace(/\n/g, ' ').trim();
-    
-    links.push({
-      targetFile: '', // Will be resolved later
-      linkText,
-      originalUrl: url,
-      context
-    });
-  }
-  
-  return links;
 };
 
 // Resolve relative URLs to absolute file paths
@@ -160,7 +130,7 @@ export const buildBacklinksIndex = async (): Promise<void> => {
       const sourceDescription = frontMatter.description;
       
       // Extract all links from the content
-      const links = extractLinks(content);
+      const links = extractLinks(content, true); // Enable context extraction
       
       // Group links by target file to count references and collect contexts
       const linksByTarget = new Map<string, {
@@ -171,7 +141,7 @@ export const buildBacklinksIndex = async (): Promise<void> => {
       
       // Process each link
       for (const link of links) {
-        const targetFile = resolveFilePath(sourceFile, link.originalUrl, availableFiles);
+        const targetFile = resolveFilePath(sourceFile, link.url, availableFiles);
         
         // Only process if the target file exists (use cached set for faster lookup)
         if (availableFilesSet.has(targetFile)) {
@@ -179,7 +149,7 @@ export const buildBacklinksIndex = async (): Promise<void> => {
             linksByTarget.set(targetFile, {
               linkTexts: [],
               contexts: [],
-              originalUrl: link.originalUrl
+              originalUrl: link.url
             });
           }
           
@@ -251,10 +221,10 @@ export const getRelatedContent = async (filePath: string): Promise<RelatedConten
     // Initialize available files cache
     initializeAvailableFilesCache();
     const availableFiles = getAvailableFiles();
-    const links = extractLinks(content);
+    const links = extractLinks(content, true); // Enable context extraction
     
     for (const link of links) {
-      const targetFile = resolveFilePath(filePath, link.originalUrl, availableFiles);
+      const targetFile = resolveFilePath(filePath, link.url, availableFiles);
       
       if (availableFilesSet.has(targetFile)) {
         // Get target file title
