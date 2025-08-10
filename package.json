@@ -6,7 +6,7 @@
     "scripts": {
         "predev": "node scripts/generate-html.js",
         "dev": "vite",
-        "prebuild": "node scripts/generate-html.js",
+        "prebuild": "npx playwright install && node scripts/generate-html.js",
         "build": "tsc -b && vite build",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
