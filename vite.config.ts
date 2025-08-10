@@ -2,6 +2,7 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import mdx from '@mdx-js/rollup'
 import remarkGfm from 'remark-gfm'
+import rehypeMermaid from 'rehype-mermaid'
 import remarkFrontmatter from 'remark-frontmatter'
 import rehypeHighlight from 'rehype-highlight'
 import { docsAssetsPlugin } from './src/plugins/docsAssetsPlugin'
@@ -19,7 +20,14 @@ export default defineConfig(({ mode }) => {
       react(),
       mdx({
         remarkPlugins: [remarkFrontmatter, remarkGfm],
-        rehypePlugins: [rehypeHighlight],
+        rehypePlugins: [
+            rehypeMermaid,
+          [rehypeHighlight, { 
+            ignoreMissing: true,
+            detect: true,
+            subset: false
+          }]
+        ],
       }),
       docsAssetsPlugin()
     ],

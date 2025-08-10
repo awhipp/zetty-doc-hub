@@ -3,7 +3,6 @@ title: "Markdown Example"
 description: "Complete demonstration of Markdown features and syntax supported by Zetty Documentation Hub"
 template: "general"
 author: "Zetty Doc Hub"
-date: "2024-01-15"
 tags: ["markdown", "syntax", "examples", "documentation", "formatting", "code", "tables"]
 ---
 

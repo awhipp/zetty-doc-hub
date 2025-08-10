@@ -1,6 +1,7 @@
 import React from 'react';
 import LinkComponent from '../LinkComponent';
 import ImageComponent from '../ImageComponent';
+import Mermaid from '../Mermaid';
 
 interface CustomComponentsOptions {
   filePath?: string;
@@ -17,6 +18,9 @@ export const createCustomComponents = (options: CustomComponentsOptions = {}) =>
   const { filePath } = options;
 
   return {
+    // Explicit Mermaid component for MDX
+    Mermaid,
+
     // Headings with consistent styling
     h1: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
       <h1 className="markdown-h1" {...props}>{children}</h1>
@@ -68,10 +72,28 @@ export const createCustomComponents = (options: CustomComponentsOptions = {}) =>
       <pre className="markdown-pre" {...props}>{children}</pre>
     ),
 
-    // Inline code
-    code: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => (
-      <code className="markdown-code" {...props}>{children}</code>
-    ),
+    // Inline code and code blocks with special handling for Mermaid
+    code: ({ inline, className, children, ...props }: {
+      inline?: boolean;
+      className?: string;
+      children?: React.ReactNode;
+    } & React.HTMLAttributes<HTMLElement>) => {
+      const match = /language-(\w+)/.exec(className || '');
+      const language = match ? match[1] : '';
+      
+      // Handle Mermaid diagrams
+      if (!inline && language === 'mermaid') {
+        const chartDefinition = String(children).replace(/\n$/, '');
+        return <Mermaid chart={chartDefinition} />;
+      }
+      
+      // Regular inline code
+      return (
+        <code className={`markdown-code ${className || ''}`} {...props}>
+          {children}
+        </code>
+      );
+    },
 
     // Lists
     ul: ({ children, ...props }: React.HTMLAttributes<HTMLUListElement>) => (

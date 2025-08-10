@@ -41,7 +41,7 @@ Unlike static site generators, Zetty Doc Hub creates a living, breathing documen
 ### **Content & Navigation**
 
 - **Dynamic file tree navigation** - Auto-discovered documentation structure
-- **Intelligent URL routing** - Shareable, bookmarkable document links  
+- **Intelligent URL routing** - Shareable, bookmarkable document links
 - **Responsive design** - Mobile, tablet & desktop support
 - **Tags navigation** - Browse content by tags and categories
 - **Hidden directories** - Organize sensitive or draft content that you may want linked but not indexed
@@ -77,6 +77,12 @@ Unlike static site generators, Zetty Doc Hub creates a living, breathing documen
     cd zetty-doc-hub
     npm install
     ```
+
+    - You may need to install playwright browsers as rehype-mermaid uses them for rendering diagrams:
+
+        ```sh
+        npx playwright install
+        ```
 
 2. **Start development:**
 

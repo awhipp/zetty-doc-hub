@@ -3,7 +3,6 @@ title: "Installation Guide"
 description: "Get your Zetty Documentation Hub up and running in just a few minutes"
 template: "general"
 author: "Zetty Doc Hub"
-date: "2024-01-15"
 tags: ["installation", "setup", "getting-started", "nodejs", "git", "prerequisites"]
 ---
 
@@ -13,7 +12,7 @@ Get your Zetty Documentation Hub up and running in just a few minutes.
 
 Before you begin, ensure you have the following installed on your system:
 
-- **Node.js** (version 18 or higher)
+- **Node.js** (version 22 or higher)
 - **npm** or **yarn** package manager
 - **Git** (for cloning the repository)
 
@@ -72,14 +71,6 @@ Once the development server is running, you should see:
 npm run dev -- --port 3000
 ```
 
-**Build failing?**
-
-```bash
-# Clear node_modules and reinstall
-rm -rf node_modules package-lock.json
-npm install
-```
-
 **TypeScript errors?**
 
 ```bash
@@ -90,14 +81,6 @@ npm run build
 ### Getting Help
 
 - Look at [Examples](../examples/general-template-example) for implementation patterns
-
-## System Requirements
-
-| Requirement | Minimum | Recommended |
-|-------------|---------|-------------|
-| Node.js | v18.0.0 | v20.0.0+ |
-| RAM | 512MB | 1GB+ |
-| Disk Space | 100MB | 500MB+ |
 
 ---
 

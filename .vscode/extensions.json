@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "unifiedjs.vscode-mdx",
+        "vivaxy.vscode-conventional-commits",
+        "dbaeumer.vscode-eslint",
+        "github.vscode-github-actions",
+        "bierner.markdown-mermaid",
+        "yzhang.markdown-all-in-one"
+    ]
+}
