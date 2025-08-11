@@ -103,7 +103,6 @@ const GraphModal: React.FC<GraphModalProps> = ({
     if (!cyRef.current || !fullGraphData) return;
 
     const filteredData = getFilteredGraphData(fullGraphData);
-    const colors = getGraphColors();
 
     // Convert to Cytoscape format
     const elements = [
@@ -324,7 +323,7 @@ const GraphModal: React.FC<GraphModalProps> = ({
     if (fullGraphData) {
       updateGraphDisplay();
     }
-  }, [showTags, showRelatedOnly, updateGraphDisplay]);
+  }, [fullGraphData, showTags, showRelatedOnly, updateGraphDisplay]);
 
   // Control functions
   const fitGraph = useCallback(() => {
