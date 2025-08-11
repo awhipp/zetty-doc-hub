@@ -33,7 +33,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ filePath, onNavigate }) => {
           ) : (
             <button 
               className="breadcrumb-item breadcrumb-home"
-              onClick={() => onNavigate && onNavigate('/')}
+              onClick={() => onNavigate && onNavigate('')}
               aria-label="Go to home"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
