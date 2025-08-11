@@ -146,9 +146,9 @@ export const getSiteConfig = (): SiteConfig => {
         },
         graph: {
             colors: {
-                document: import.meta.env.VITE_GRAPH_COLOR_DOCUMENT || defaultSiteConfig.graph?.colors.document || '#1976d2',
-                tag: import.meta.env.VITE_GRAPH_COLOR_TAG || defaultSiteConfig.graph?.colors.tag || '#646cff',
-                current: import.meta.env.VITE_GRAPH_COLOR_CURRENT || defaultSiteConfig.graph?.colors.current || '#ff9800'
+                document: import.meta.env.VITE_GRAPH_COLOR_DOCUMENT || defaultSiteConfig.graph?.colors.document || '#0072B2',
+                tag: import.meta.env.VITE_GRAPH_COLOR_TAG || defaultSiteConfig.graph?.colors.tag || '#D55E00',
+                current: import.meta.env.VITE_GRAPH_COLOR_CURRENT || defaultSiteConfig.graph?.colors.current || '#009E73'
             }
         }
     };

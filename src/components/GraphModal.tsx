@@ -26,6 +26,9 @@ const GraphModal: React.FC<GraphModalProps> = ({
   const cyRef = useRef<Core | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showTags, setShowTags] = useState(true);
+  const [showRelatedOnly, setShowRelatedOnly] = useState(!!currentFilePath);
+  const [fullGraphData, setFullGraphData] = useState<GraphData | null>(null);
 
   // Handle node clicks
   const handleNodeClick = useCallback((node: NodeSingular) => {
@@ -47,6 +50,108 @@ const GraphModal: React.FC<GraphModalProps> = ({
     // Tags no longer have click actions
   }, [navigate, onNavigateToFile, onClose]);
 
+  // Filter graph data based on current settings
+  const getFilteredGraphData = useCallback((graphData: GraphData): GraphData => {
+    if (!showRelatedOnly || !currentFilePath) {
+      // Show everything (filtered by tags if needed)
+      return {
+        nodes: showTags ? graphData.nodes : graphData.nodes.filter(node => node.type !== 'tag'),
+        edges: showTags ? graphData.edges : graphData.edges.filter(edge => edge.type !== 'tag')
+      };
+    }
+
+    // Show only nodes related to current document
+    const relatedNodeIds = new Set<string>();
+    const relatedEdges: typeof graphData.edges = [];
+
+    // Always include the current document
+    relatedNodeIds.add(currentFilePath);
+
+    // Find all edges connected to the current document
+    graphData.edges.forEach(edge => {
+      if (edge.source === currentFilePath || edge.target === currentFilePath) {
+        relatedEdges.push(edge);
+        relatedNodeIds.add(edge.source);
+        relatedNodeIds.add(edge.target);
+      }
+    });
+
+    // Filter nodes to only include related ones
+    const filteredNodes = graphData.nodes.filter(node => {
+      if (!relatedNodeIds.has(node.id)) return false;
+      if (!showTags && node.type === 'tag') return false;
+      return true;
+    });
+
+    // Filter edges based on remaining nodes and tag visibility
+    const filteredEdges = relatedEdges.filter(edge => {
+      const sourceNode = filteredNodes.find(n => n.id === edge.source);
+      const targetNode = filteredNodes.find(n => n.id === edge.target);
+      if (!sourceNode || !targetNode) return false;
+      if (!showTags && edge.type === 'tag') return false;
+      return true;
+    });
+
+    return {
+      nodes: filteredNodes,
+      edges: filteredEdges
+    };
+  }, [showTags, showRelatedOnly, currentFilePath]);
+
+  // Update graph display based on current filters
+  const updateGraphDisplay = useCallback(() => {
+    if (!cyRef.current || !fullGraphData) return;
+
+    const filteredData = getFilteredGraphData(fullGraphData);
+    const colors = getGraphColors();
+
+    // Convert to Cytoscape format
+    const elements = [
+      ...filteredData.nodes.map(node => ({
+        data: {
+          id: node.id,
+          label: node.type === 'tag' ? `#${node.label}` : node.label,
+          type: node.type,
+          filePath: node.filePath,
+          tagName: node.tagName,
+          description: node.description,
+          isCurrent: node.isCurrent
+        }
+      })),
+      ...filteredData.edges.map(edge => ({
+        data: {
+          id: edge.id,
+          source: edge.source,
+          target: edge.target,
+          type: edge.type,
+          label: edge.label
+        }
+      }))
+    ];
+
+    // Update the graph
+    cyRef.current.elements().remove();
+    cyRef.current.add(elements);
+    cyRef.current.layout({
+      name: 'cose',
+      idealEdgeLength: 100,
+      nodeOverlap: 20,
+      refresh: 20,
+      fit: true,
+      padding: 30,
+      randomize: false,
+      componentSpacing: 100,
+      nodeRepulsion: 400000,
+      edgeElasticity: 100,
+      nestingFactor: 5,
+      gravity: 80,
+      numIter: 1000,
+      initialTemp: 200,
+      coolingFactor: 0.95,
+      minTemp: 1.0
+    }).run();
+  }, [fullGraphData, getFilteredGraphData]);
+
   // Initialize Cytoscape
   const initializeCytoscape = useCallback(async () => {
     if (!containerRef.current) return;
@@ -56,14 +161,17 @@ const GraphModal: React.FC<GraphModalProps> = ({
 
     try {
       const graphData: GraphData = await getGraphDataWithCurrent(currentFilePath);
+      setFullGraphData(graphData);
+      
+      const filteredData = getFilteredGraphData(graphData);
       const colors = getGraphColors();
 
       // Convert graph data to Cytoscape format
       const elements = [
-        ...graphData.nodes.map(node => ({
+        ...filteredData.nodes.map(node => ({
           data: {
             id: node.id,
-            label: node.type === 'tag' ? `#${node.label}` : node.label, // Add hashtag prefix for tags
+            label: node.type === 'tag' ? `#${node.label}` : node.label,
             type: node.type,
             filePath: node.filePath,
             tagName: node.tagName,
@@ -71,7 +179,7 @@ const GraphModal: React.FC<GraphModalProps> = ({
             isCurrent: node.isCurrent
           }
         })),
-        ...graphData.edges.map(edge => ({
+        ...filteredData.edges.map(edge => ({
           data: {
             id: edge.id,
             source: edge.source,
@@ -209,7 +317,14 @@ const GraphModal: React.FC<GraphModalProps> = ({
       setError('Failed to load document relationships');
       setLoading(false);
     }
-  }, [currentFilePath, handleNodeClick]);
+  }, [currentFilePath, handleNodeClick, getFilteredGraphData]);
+
+  // Update display when filters change
+  useEffect(() => {
+    if (fullGraphData) {
+      updateGraphDisplay();
+    }
+  }, [showTags, showRelatedOnly, updateGraphDisplay]);
 
   // Control functions
   const fitGraph = useCallback(() => {
@@ -313,6 +428,27 @@ const GraphModal: React.FC<GraphModalProps> = ({
             <IconClose width={20} height={20} />
           </button>
         </div>
+
+        <div className="graph-controls-top">
+          <label className="graph-toggle">
+            <input
+              type="checkbox"
+              checked={showTags}
+              onChange={(e) => setShowTags(e.target.checked)}
+            />
+            Show Tags
+          </label>
+          {currentFilePath && (
+            <label className="graph-toggle">
+              <input
+                type="checkbox"
+                checked={showRelatedOnly}
+                onChange={(e) => setShowRelatedOnly(e.target.checked)}
+              />
+              Show Related Only
+            </label>
+          )}
+        </div>
         
         <div className="graph-container">
           {loading && (
@@ -384,10 +520,12 @@ const GraphModal: React.FC<GraphModalProps> = ({
                   <div className="legend-color document"></div>
                   <span>Documents</span>
                 </div>
-                <div className="legend-item">
-                  <div className="legend-color tag"></div>
-                  <span>Tags</span>
-                </div>
+                {showTags && (
+                  <div className="legend-item">
+                    <div className="legend-color tag"></div>
+                    <span>Tags</span>
+                  </div>
+                )}
                 {currentFilePath && (
                   <div className="legend-item">
                     <div className="legend-color current"></div>
