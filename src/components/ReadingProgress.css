@@ -6,11 +6,7 @@
   height: 0.25rem;
   background: var(--bg-tertiary, #e9ecef);
   z-index: 1000;
-  transition: opacity 0.3s ease;
-}
-
-.reading-progress.visible {
-  opacity: 1;
+  transition: width 0.3s ease;
 }
 
 .reading-progress-bar {
@@ -18,12 +14,6 @@
   background: linear-gradient(90deg, var(--accent-color, #007bff), #28a745);
   transition: width 0.1s ease;
   border-radius: 0 3px 3px 0;
-}
-
-/* Show progress when scrolling */
-.main-content-body:not(:hover) + .reading-progress,
-.main-content-body[data-scrolling="true"] + .reading-progress {
-  opacity: 1;
 }
 
 /* Animation for when progress reaches 100% */
