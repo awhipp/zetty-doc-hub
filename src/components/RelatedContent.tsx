@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { getRelatedContent } from '../utils/backlinksUtils';
-import { filePathToUrl } from '../utils/routing';
+import { getBasePath } from '../utils/constants';
 import { ContentLoading, ErrorState } from './shared/LoadingStates';
 import type { RelatedContentData } from '../types/backlinks';
 import './RelatedContent.css';
@@ -20,14 +20,11 @@ const RelatedContent: React.FC<RelatedContentProps> = ({ filePath }) => {
 
   useEffect(() => {
     let isMounted = true;
-
     const loadRelatedContent = async () => {
       try {
         setLoading(true);
         setError(null);
-        
         const content = await getRelatedContent(filePath);
-        
         if (isMounted) {
           setRelatedContent(content);
         }
@@ -41,17 +38,20 @@ const RelatedContent: React.FC<RelatedContentProps> = ({ filePath }) => {
         }
       }
     };
-
     loadRelatedContent();
-
     return () => {
       isMounted = false;
     };
   }, [filePath]);
 
   const handleFileClick = (targetFilePath: string) => {
-    const url = filePathToUrl(targetFilePath);
-  navigate({ to: url });
+    // Remove /src/docs/ prefix for routing
+    const relPath = targetFilePath.startsWith('/src/docs/')
+      ? targetFilePath.slice('/src/docs/'.length)
+      : targetFilePath.replace(/^\/+/, '');
+    const basePath = getBasePath();
+    const url = `${basePath === '/' ? '' : basePath}/doc/${encodeURI(relPath)}`;
+    navigate({ to: url });
   };
 
   if (loading) {

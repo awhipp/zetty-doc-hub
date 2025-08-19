@@ -73,8 +73,10 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentRef, isCollaps
 
   // Check if related content exists
   useEffect(() => {
-    if (!filePath) return;
-    
+    if (!filePath) {
+      console.log('[TableOfContents] filePath is empty or undefined:', filePath);
+      return;
+    }
     const checkRelatedContent = async () => {
       try {
         const relatedContent = await getRelatedContent(filePath);
@@ -84,7 +86,6 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentRef, isCollaps
         setHasRelatedContent(false);
       }
     };
-    
     checkRelatedContent();
   }, [filePath]);
 
