@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import cytoscape from 'cytoscape';
 import type { Core, NodeSingular } from 'cytoscape';
 import { useNavigate } from '@tanstack/react-router';
+import { getBasePath } from '../utils/constants';
 import { getGraphDataWithCurrent } from '../utils/graphUtils';
 import { getGraphColors, setGraphColorCSSVariables } from '../utils/graphColors';
 import { IconClose, IconNetwork } from './shared/Icons';
@@ -33,17 +34,18 @@ const GraphModal: React.FC<GraphModalProps> = ({
   // Handle node clicks
   const handleNodeClick = useCallback((node: NodeSingular) => {
     const nodeData = node.data() as GraphNode;
-    
     // Only handle document clicks, not tag clicks
     if (nodeData.type === 'document' && nodeData.filePath) {
       if (onNavigateToFile) {
         onNavigateToFile(nodeData.filePath);
       } else {
-        // Use react-router to navigate
-        const urlPath = nodeData.filePath
-          .replace('/src/docs/', '/')
-          .replace(/\.(md|mdx)$/, '');
-  navigate({ to: urlPath });
+        // Use react-router to navigate to the correct /doc/ route with extension
+        const relPath = nodeData.filePath.startsWith('/src/docs/')
+          ? nodeData.filePath.slice('/src/docs/'.length)
+          : nodeData.filePath.replace(/^\/+/, '');
+        const basePath = getBasePath();
+        const url = `${basePath === '/' ? '' : basePath}/doc/${encodeURI(relPath)}`;
+        navigate({ to: url });
       }
       onClose();
     }
