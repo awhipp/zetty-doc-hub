@@ -1,3 +1,4 @@
+
 .side-panel {
     width: 300px;
     min-width: 300px;
@@ -7,10 +8,8 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    /* Prevent overflow at component level */
     transition: width 0.3s ease, min-width 0.3s ease, max-width 0.3s ease, transform 0.3s ease;
     flex-shrink: 0;
-    /* Prevent shrinking */
 }
 
 .side-panel.collapsed {
@@ -85,14 +84,13 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
+
 .side-panel-content {
-    flex: 1;
+    flex: 1 1 auto;
+    min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
-    /* Prevent horizontal overflow */
     padding: 8px;
-    min-height: 0;
-    /* Allow flex item to shrink */
 }
 
 .side-panel-content::-webkit-scrollbar {

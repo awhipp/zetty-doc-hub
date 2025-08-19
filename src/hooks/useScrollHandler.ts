@@ -78,12 +78,9 @@ export const useScrollHandler = (options: UseScrollHandlerOptions = {}): UseScro
     const targetElement = document.getElementById(elementId);
     
     if (containerElement && targetElement) {
-      const containerRect = containerElement.getBoundingClientRect();
-      const targetRect = targetElement.getBoundingClientRect();
-      const offsetTop = targetRect.top - containerRect.top + containerElement.scrollTop - 80; // 80px offset for header
       
       containerElement.scrollTo({
-        top: offsetTop,
+        top: 80,
         behavior: 'smooth'
       });
     }

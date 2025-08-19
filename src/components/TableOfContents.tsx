@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { generateUniqueHeadingId } from '../utils/textUtils';
-import { observeElementChanges, scrollToElementSafely } from '../utils/domUtils';
+import { observeElementChanges } from '../utils/domUtils';
 import { useSiteConfig } from '../hooks/useSiteConfig';
+import { useScrollHandler } from '../hooks';
 import { getRelatedContent } from '../utils/backlinksUtils';
 import { IconChevronRight } from './shared/Icons';
 import RelatedContent from './RelatedContent';
@@ -111,27 +112,29 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ contentRef, isCollaps
     return () => observer.disconnect();
   }, [tocItems]);
 
-  // Handle hash navigation on page load or when TOC items change
-  useEffect(() => {
-    const hash = window.location.hash.slice(1); // Remove the '#' prefix
-    if (hash && tocItems.length > 0) {
-      // Use proper DOM readiness detection instead of setTimeout
-      scrollToElementSafely(hash).then((success) => {
-        if (success) {
-          setActiveId(hash);
-        }
-      });
-    }
-  }, [tocItems]);
+  // Use scroll handler for main content area
+  const { scrollToElement } = useScrollHandler({ container: '.main-content-body' });
 
+  // Track last hash scrolled to, to avoid repeated scrolling
+  const lastScrolledHash = useRef<string | null>(null);
+
+  // Scroll to hash on mount or tocItems change
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (!hash || tocItems.length === 0) return;
+    if (lastScrolledHash.current === hash) return;
+    scrollToElement(hash);
+    setActiveId(hash);
+    lastScrolledHash.current = hash;
+  }, [tocItems, scrollToElement]);
+
+  // Scroll to heading on TOC click
   const scrollToHeading = (id: string) => {
-    scrollToElementSafely(id).then((success) => {
-      if (success) {
-        // Update URL hash without triggering page reload
-        const newUrl = `${window.location.pathname}${window.location.search}#${id}`;
-        window.history.pushState(null, '', newUrl);
-      }
-    });
+    scrollToElement(id);
+    // Update URL hash without triggering browser jump
+    const newUrl = `${window.location.pathname}${window.location.search}#${id}`;
+    window.history.replaceState(null, '', newUrl);
+    setActiveId(id);
   };
 
   if (tocItems.length === 0) {

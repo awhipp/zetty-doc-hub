@@ -16,8 +16,6 @@
   width: 100vw;
   min-height: 0; /* Allow flex items to shrink below their content size */
   overflow: hidden; /* Prevent overflow at container level */
-  overflow-x: hidden;
-  box-sizing: border-box;
   position: relative; /* For floating buttons positioning */
 }
 

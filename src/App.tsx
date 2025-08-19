@@ -1,16 +1,14 @@
 
 import AppRouter from './AppRouter';
-import Footer from './components/Footer';
-import BuildTime from './components/BuildTime';
+// Footer and BuildTime are now rendered in the layout
 import './App.css';
+
 
 function App() {
   return (
-    <>
+    <div className="app">
       <AppRouter />
-      <Footer />
-      <BuildTime />
-    </>
+    </div>
   );
 }
 

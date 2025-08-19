@@ -10,36 +10,41 @@ import {
 } from '@tanstack/react-router';
 import { getBasePath } from './utils/constants';
 import { SiteConfigProvider } from './contexts/SiteConfigContext';
+
 import Header from './components/Header';
 import SidePanel from './components/SidePanel';
 import MainContent from './components/MainContent';
 import TableOfContents from './components/TableOfContents';
+import Footer from './components/Footer';
+import BuildTime from './components/BuildTime';
 import WelcomeRenderer from './components/WelcomeRenderer';
 import { urlToFilePath } from './utils/routing';
 
 function MainLayout() {
-    const match = useMatch({ strict: false });
-    const selectedFile = match?.params?._splat ? urlToFilePath('/' + decodeURIComponent(match.params._splat)) : undefined;
-    const navigate = useNavigate();
-    const handleFileSelect = (filePath: string) => {
-        if (filePath) {
-            // Remove /src/docs/ prefix for routing
-            const relPath = filePath.startsWith('/src/docs/') ? filePath.slice('/src/docs/'.length) : filePath.replace(/^\/+/, '');
-            const basePath = getBasePath();
-            const url = `${basePath === '/' ? '' : basePath}/doc/${encodeURI(relPath)}`;
-            navigate({ to: url });
-        }
-    };
-    return (
-        <SiteConfigProvider>
-        <Header currentFilePath={selectedFile} onSearchResultSelect={handleFileSelect} />
-        <div className="app-content">
-        <SidePanel selectedFile={selectedFile} onFileSelect={handleFileSelect} />
-        <Outlet />
-        <TableOfContents filePath={selectedFile} />
-        </div>
-        </SiteConfigProvider>
-    );
+        const match = useMatch({ strict: false });
+        const selectedFile = match?.params?._splat ? urlToFilePath('/' + decodeURIComponent(match.params._splat)) : undefined;
+        const navigate = useNavigate();
+        const handleFileSelect = (filePath: string) => {
+                if (filePath) {
+                        // Remove /src/docs/ prefix for routing
+                        const relPath = filePath.startsWith('/src/docs/') ? filePath.slice('/src/docs/'.length) : filePath.replace(/^\/+/,'');
+                        const basePath = getBasePath();
+                        const url = `${basePath === '/' ? '' : basePath}/doc/${encodeURI(relPath)}`;
+                        navigate({ to: url });
+                }
+        };
+        return (
+                <SiteConfigProvider>
+                    <Header currentFilePath={selectedFile} onSearchResultSelect={handleFileSelect} />
+                    <div className="app-content">
+                        <SidePanel selectedFile={selectedFile} onFileSelect={handleFileSelect} />
+                        <Outlet />
+                        <TableOfContents filePath={selectedFile} />
+                    </div>
+                    <Footer />
+                    <BuildTime />
+                </SiteConfigProvider>
+        );
 }
 
 // Home route (welcome)
