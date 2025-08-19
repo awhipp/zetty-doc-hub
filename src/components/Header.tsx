@@ -52,9 +52,9 @@ const Header: React.FC<HeaderProps> = ({
     <>
       <header className="app-header">
         <div className="header-content">
-          <h1 className="header-title" onClick={handleTitleClick}>
+          <div className="header-title" onClick={handleTitleClick}>
             {siteConfig.site.title}
-          </h1>
+          </div>
           <div className="header-controls">
             <button 
               className="btn-base btn-icon mobile-menu-toggle"
