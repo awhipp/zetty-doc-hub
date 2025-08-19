@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import cytoscape from 'cytoscape';
 import type { Core, NodeSingular } from 'cytoscape';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import { getGraphDataWithCurrent } from '../utils/graphUtils';
 import { getGraphColors, setGraphColorCSSVariables } from '../utils/graphColors';
 import { IconClose, IconNetwork } from './shared/Icons';
@@ -43,7 +43,7 @@ const GraphModal: React.FC<GraphModalProps> = ({
         const urlPath = nodeData.filePath
           .replace('/src/docs/', '/')
           .replace(/\.(md|mdx)$/, '');
-        navigate(urlPath);
+  navigate({ to: urlPath });
       }
       onClose();
     }

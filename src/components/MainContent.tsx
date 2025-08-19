@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import MarkdownRenderer from './MarkdownRenderer';
 import ImageRenderer from './ImageRenderer';
 import ErrorRenderer from './ErrorRenderer';
@@ -29,7 +29,7 @@ const MainContent: React.FC<MainContentProps> = ({ selectedFile, onFileSelect, c
 
   const handleBreadcrumbNavigate = (path: string) => {
     const url = path === '' ? '/' : `/${path}`;
-    navigate(url);
+    navigate({ to: url });
   };
 
   return (

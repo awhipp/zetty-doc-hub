@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import { getRelatedContent } from '../utils/backlinksUtils';
 import { filePathToUrl } from '../utils/routing';
 import { ContentLoading, ErrorState } from './shared/LoadingStates';
@@ -51,7 +51,7 @@ const RelatedContent: React.FC<RelatedContentProps> = ({ filePath }) => {
 
   const handleFileClick = (targetFilePath: string) => {
     const url = filePathToUrl(targetFilePath);
-    navigate(url);
+  navigate({ to: url });
   };
 
   if (loading) {

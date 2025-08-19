@@ -52,7 +52,7 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks: {
             // Separate vendor chunks for better caching
-            'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+            'react-vendor': ['react', 'react-dom'],
             'markdown-vendor': ['react-markdown', 'remark-gfm', 'rehype-highlight', 'gray-matter'],
             // Large visualization libraries should be separate
             'mermaid-vendor': ['mermaid'],
