@@ -4,6 +4,7 @@ export interface GraphColors {
   document: string;
   tag: string;
   current: string;
+  image: string;
 }
 
 /**
@@ -11,11 +12,11 @@ export interface GraphColors {
  */
 export const getGraphColors = (): GraphColors => {
   const siteConfig = getSiteConfig();
-  
   return {
-    document: siteConfig.graph?.colors.document || '#1976d2',
-    tag: siteConfig.graph?.colors.tag || '#646cff',
-    current: siteConfig.graph?.colors.current || '#ff9800'
+    document: siteConfig.graph?.colors.document || '#377eb8',
+    tag: siteConfig.graph?.colors.tag || '#4daf4a',
+    current: siteConfig.graph?.colors.current || '#ffb300',
+    image: siteConfig.graph?.colors.image || '#984ea3'
   };
 };
 
@@ -29,4 +30,5 @@ export const setGraphColorCSSVariables = (): void => {
   root.style.setProperty('--graph-color-document', colors.document);
   root.style.setProperty('--graph-color-tag', colors.tag);
   root.style.setProperty('--graph-color-current', colors.current);
+  root.style.setProperty('--graph-color-image', colors.image);
 };

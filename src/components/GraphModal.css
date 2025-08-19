@@ -174,15 +174,19 @@
 }
 
 .legend-color.document {
-    background: var(--graph-color-document, #1976d2);
+    background: var(--graph-color-document, #377eb8);
 }
 
 .legend-color.tag {
-    background: var(--graph-color-tag, #646cff);
+    background: var(--graph-color-tag, #4daf4a);
 }
 
 .legend-color.current {
-    background: var(--graph-color-current, #ff9800);
+    background: var(--graph-color-current, #ffb300);
+}
+
+.legend-color.image {
+    background: var(--graph-color-image, #984ea3);
 }
 
 .graph-loading {

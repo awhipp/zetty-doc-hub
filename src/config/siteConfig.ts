@@ -33,6 +33,7 @@ export interface SiteConfig {
             document: string;
             tag: string;
             current: string;
+            image: string;
         };
     };
 }
@@ -78,9 +79,11 @@ export const defaultSiteConfig: SiteConfig = {
     },
     graph: {
         colors: {
-            document: '#1976d2',  // Blue for documents
-            tag: '#646cff',       // Purple for tags  
-            current: '#ff9800'    // Orange for current document
+            // Colors chosen for high contrast, color-blind friendliness, and harmony
+            document: '#377eb8',  // Blue (color-blind safe)
+            tag: '#4daf4a',       // Green (color-blind safe)
+            current: '#ffb300',   // Gold (color-blind safe, not harsh)
+            image: '#984ea3'      // Purple (color-blind safe)
         }
     }
 };
@@ -148,7 +151,8 @@ export const getSiteConfig = (): SiteConfig => {
             colors: {
                 document: import.meta.env.VITE_GRAPH_COLOR_DOCUMENT || defaultSiteConfig.graph?.colors.document || '#0072B2',
                 tag: import.meta.env.VITE_GRAPH_COLOR_TAG || defaultSiteConfig.graph?.colors.tag || '#D55E00',
-                current: import.meta.env.VITE_GRAPH_COLOR_CURRENT || defaultSiteConfig.graph?.colors.current || '#009E73'
+                current: import.meta.env.VITE_GRAPH_COLOR_CURRENT || defaultSiteConfig.graph?.colors.current || '#009E73',
+                image: import.meta.env.VITE_GRAPH_COLOR_IMAGE || defaultSiteConfig.graph?.colors.image || '#4bb3fd'
             }
         }
     };
