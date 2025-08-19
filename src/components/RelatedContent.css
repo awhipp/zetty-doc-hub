@@ -237,38 +237,3 @@
         padding: 10px;
     }
 }
-
-/* Dark theme support */
-[data-theme="dark"] .related-content {
-    background: var(--bg-secondary-dark, #2d3748);
-    border-color: var(--border-color-dark, #4a5568);
-}
-
-[data-theme="dark"] .related-section {
-    background: var(--bg-primary-dark, #1a202c);
-    border-color: var(--border-color-dark, #4a5568);
-}
-
-[data-theme="dark"] .related-item {
-    background: var(--bg-tertiary-dark, #2d3748);
-    border-color: var(--border-light-dark, #4a5568);
-}
-
-[data-theme="dark"] .related-item:hover {
-    background: var(--bg-hover-dark, #3c4856);
-}
-
-[data-theme="dark"] .tag-group-header {
-    border-color: var(--border-light-dark, #4a5568);
-}
-
-/* Print mode - hide related content */
-.print-mode .related-content {
-    display: none !important;
-}
-
-@media print {
-    .related-content {
-        display: none !important;
-    }
-}

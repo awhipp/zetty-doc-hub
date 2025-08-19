@@ -88,20 +88,3 @@
         padding: 2px 5px;
     }
 }
-
-/* Dark theme */
-[data-theme="dark"] .document-tags {
-    background: var(--bg-tertiary, #4a5568);
-    border-color: var(--border-color, #4a5568);
-}
-
-/* Print mode - hide tags */
-.print-mode .document-tags {
-    display: none !important;
-}
-
-@media print {
-    .document-tags {
-        display: none !important;
-    }
-}
