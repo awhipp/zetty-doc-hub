@@ -8,6 +8,7 @@ import {
   useMatch,
   Outlet
 } from '@tanstack/react-router';
+import { getBasePath } from './utils/constants';
 import { SiteConfigProvider } from './contexts/SiteConfigContext';
 import Header from './components/Header';
 import SidePanel from './components/SidePanel';
@@ -24,7 +25,8 @@ function MainLayout() {
     if (filePath) {
       // Remove /src/docs/ prefix for routing
       const relPath = filePath.startsWith('/src/docs/') ? filePath.slice('/src/docs/'.length) : filePath.replace(/^\/+/, '');
-  const url = `/doc/${encodeURI(relPath)}`;
+  const basePath = getBasePath();
+  const url = `${basePath === '/' ? '' : basePath}/doc/${encodeURI(relPath)}`;
   console.log('MainLayout handleFileSelect:', { filePath, relPath, url });
   navigate({ to: url });
     }
@@ -67,6 +69,8 @@ const rootRoute = createRootRoute({
   component: MainLayout,
 });
 
+
+const basePath = getBasePath();
 const homeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
@@ -86,7 +90,10 @@ const notFoundRoute = createRoute({
 });
 
 const routeTree = rootRoute.addChildren([homeRoute, docRoute, notFoundRoute]);
-const router = createRouter({ routeTree });
+const router = createRouter({
+  routeTree,
+  basepath: basePath === '/' ? '' : basePath,
+});
 
 export default function AppRouter() {
   return <RouterProvider router={router} />;

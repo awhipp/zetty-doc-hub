@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from '@tanstack/react-router';
+import { getBasePath } from '../utils/constants';
 
 interface LinkComponentProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   children?: React.ReactNode;
@@ -12,11 +13,13 @@ interface LinkComponentProps extends React.AnchorHTMLAttributes<HTMLAnchorElemen
 const LinkComponent: React.FC<LinkComponentProps> = ({ href, children, ...props }) => {
   const navigate = useNavigate();
 
+  const basePath = getBasePath();
   const handleClick = (e: React.MouseEvent) => {
     // Check if it's an internal link (doesn't start with http/https/mailto/# and doesn't have a dot indicating external)
     if (href && !href.match(/^(https?:\/\/|mailto:|#|\.)/)) {
       e.preventDefault();
-      navigate({ to: href });
+      const to = `${basePath === '/' ? '' : basePath}${href.startsWith('/') ? href : '/' + href}`;
+      navigate({ to });
     }
   };
 
