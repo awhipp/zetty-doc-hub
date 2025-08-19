@@ -33,7 +33,7 @@ function MainLayout() {
   };
   return (
     <SiteConfigProvider>
-      <Header currentFilePath={selectedFile} />
+  <Header currentFilePath={selectedFile} onSearchResultSelect={handleFileSelect} />
       <div className="app-content">
         <SidePanel selectedFile={selectedFile} onFileSelect={handleFileSelect} />
         <Outlet />
