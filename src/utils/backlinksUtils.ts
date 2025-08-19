@@ -1,5 +1,5 @@
 import { getAvailableFiles, loadMarkdownContent, loadMdxRawContent } from './markdownLoader';
-import { getFileExtension, isMdxFile } from './fileUtils';
+import { getFileExtension, isMdxFile, isMarkdownFile } from './fileUtils';
 import { getSiteConfig } from '../config/siteConfig';
 import { getAllTags } from './tagsUtils';
 import { extractLinks } from './linkExtractor';
@@ -140,9 +140,12 @@ export const getRelatedContent = async (filePath: string): Promise<RelatedConten
     
     if (isMdxFile(filePath)) {
       content = await loadMdxRawContent(filePath);
-    } else {
+    } else if (isMarkdownFile(filePath)) {
       const { content: markdownContent } = await loadMarkdownContent(filePath);
       content = markdownContent;
+    } else {
+      // Not a markdown or MDX file, skip content loading
+      content = '';
     }
     
     // Initialize available files cache
@@ -161,9 +164,11 @@ export const getRelatedContent = async (filePath: string): Promise<RelatedConten
           if (isMdxFile(targetFile)) {
             const extractedTitle = extractTitleFromFrontMatter(await loadMdxRawContent(targetFile));
             targetTitle = extractedTitle || extractTitleFromPath(targetFile);
-          } else {
+          } else if (isMarkdownFile(targetFile)) {
             const { frontMatter } = await loadMarkdownContent(targetFile);
             targetTitle = frontMatter.title || extractTitleFromPath(targetFile);
+          } else {
+            targetTitle = extractTitleFromPath(targetFile);
           }
         } catch {
           targetTitle = extractTitleFromPath(targetFile);
@@ -188,9 +193,11 @@ export const getRelatedContent = async (filePath: string): Promise<RelatedConten
     if (isMdxFile(filePath)) {
       const content = await loadMdxRawContent(filePath);
       currentTags = extractTagsFromFrontMatter(content);
-    } else {
+    } else if (isMarkdownFile(filePath)) {
       const { frontMatter } = await loadMarkdownContent(filePath);
       currentTags = frontMatter.tags || [];
+    } else {
+      currentTags = [];
     }
     
     if (currentTags.length > 0) {

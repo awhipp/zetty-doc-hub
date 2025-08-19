@@ -12,7 +12,7 @@ import type { FrontMatter } from '../types/template';
 export interface GraphNode {
   id: string;
   label: string;
-  type: 'document' | 'tag';
+  type: 'document' | 'tag' | 'image';
   filePath?: string;
   tagName?: string;
   description?: string;
@@ -39,6 +39,8 @@ let graphDataBuilt = false;
 /**
  * Build the complete graph data for all documents and their relationships
  */
+import { isImageFile } from './fileUtils';
+
 export const buildGraphData = async (): Promise<GraphData> => {
   if (graphDataBuilt && cachedGraphData) {
     return cachedGraphData;
@@ -51,12 +53,19 @@ export const buildGraphData = async (): Promise<GraphData> => {
   const hiddenDirectories = siteConfig.navigation.hiddenDirectories || [];
   
   const availableFiles = getAvailableFiles();
+
   const documentFiles = availableFiles.filter(file => {
-    // Filter out files from hidden directories
     if (isPathHidden(file, hiddenDirectories)) {
       return false;
     }
     return ['md', 'mdx'].includes(getFileExtension(file));
+  });
+
+  const imageFiles = availableFiles.filter(file => {
+    if (isPathHidden(file, hiddenDirectories)) {
+      return false;
+    }
+    return isImageFile(file);
   });
 
   const nodes: GraphNode[] = [];
@@ -96,7 +105,26 @@ export const buildGraphData = async (): Promise<GraphData> => {
     }
   }
 
-  // Add link edges between documents
+  // Add image nodes
+  for (const filePath of imageFiles) {
+    try {
+      // Use the same title extraction as for documents, but allow all extensions
+      const title = extractTitleFromPath(filePath);
+      nodes.push({
+        id: filePath,
+        label: title,
+        type: 'image',
+        filePath,
+        description: 'Image file',
+        isCurrent: false
+      });
+      nodeIds.add(filePath);
+    } catch (error) {
+      console.warn(`Failed to process image ${filePath}:`, error);
+    }
+  }
+
+  // Add link edges between documents and images
   for (const sourceFilePath of documentFiles) {
     try {
       let content: string;

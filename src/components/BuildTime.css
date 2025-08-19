@@ -108,39 +108,3 @@
     padding: 6px 10px;
   }
 }
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .build-time-indicator {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .build-time-indicator:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  }
-  
-  .build-time-indicator::before {
-    background: #64b5f6;
-  }
-  
-  .build-time-indicator:hover::before {
-    background: #42a5f5;
-  }
-  
-  .build-time-tooltip {
-    background: #222;
-    color: #e0e0e0;
-  }
-  
-  .build-time-tooltip::after {
-    border-color: #222 transparent transparent transparent;
-  }
-  
-  .build-time-tooltip .build-time-label {
-    color: #64b5f6;
-  }
-}

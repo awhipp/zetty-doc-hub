@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import SearchModal from './SearchModal';
 import GraphModal from './GraphModal';
 import { useSiteConfig } from '../hooks/useSiteConfig';
@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({
   const [isGraphModalOpen, setIsGraphModalOpen] = useState(false);
 
   const handleTitleClick = () => {
-    navigate('/');
+    navigate({ to: '/' });
   };
 
   const handleSearchClick = () => {
@@ -52,9 +52,9 @@ const Header: React.FC<HeaderProps> = ({
     <>
       <header className="app-header">
         <div className="header-content">
-          <h1 className="header-title" onClick={handleTitleClick}>
+          <div className="header-title" onClick={handleTitleClick}>
             {siteConfig.site.title}
-          </h1>
+          </div>
           <div className="header-controls">
             <button 
               className="btn-base btn-icon mobile-menu-toggle"

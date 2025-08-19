@@ -92,24 +92,6 @@
   padding: 8px;
 }
 
-/* Dark theme support */
-[data-theme="dark"] .loading-message p {
-  color: var(--text-secondary-dark, #a0aec0);
-}
-
-[data-theme="dark"] .error-state {
-  background: var(--error-bg-dark, #2d1b1b);
-  border-color: var(--error-border-dark, #5a2626);
-}
-
-[data-theme="dark"] .error-state h3 {
-  color: var(--error-color-dark, #f56565);
-}
-
-[data-theme="dark"] .error-state p {
-  color: var(--error-text-dark, #feb2b2);
-}
-
 /* Responsive design */
 @media (max-width: 768px) {
   .loading-message,

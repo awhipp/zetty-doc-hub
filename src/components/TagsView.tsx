@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from '@tanstack/react-router';
 import { getAllTags, getTagInfo, getTaggedFileUrl } from '../utils/tagsUtils';
 import { ContentLoading, ErrorState } from './shared';
 import type { TagInfo, TaggedFile } from '../types/tags';
@@ -57,9 +57,9 @@ const TagsBreadcrumb: React.FC<{ tagName?: string; onNavigate: (path: string) =>
 );
 
 const TagsView: React.FC<TagsViewProps> = ({ onFileSelect }) => {
-  const { tagName } = useParams<{ tagName?: string }>();
+  const { tagName } = useParams({ strict: false });
   const navigate = useNavigate();
-  const [allTags, setAllTags] = useState<TagInfo[]>([]);
+  const [allTags, setAllTags] = useState<TagInfo[]>([]); 
   const [selectedTag, setSelectedTag] = useState<TagInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -107,7 +107,7 @@ const TagsView: React.FC<TagsViewProps> = ({ onFileSelect }) => {
   }, [tagName]);
 
   const handleTagClick = (tag: TagInfo) => {
-    navigate(`/tags/${encodeURIComponent(tag.name)}`);
+  navigate({ to: `/tags/${encodeURIComponent(tag.name)}` });
   };
 
   const handleFileClick = (taggedFile: TaggedFile) => {
@@ -115,17 +115,17 @@ const TagsView: React.FC<TagsViewProps> = ({ onFileSelect }) => {
       onFileSelect(taggedFile.filePath);
     } else {
       const url = getTaggedFileUrl(taggedFile);
-      navigate(url);
+  navigate({ to: url });
     }
   };
 
   const handleBackToAllTags = () => {
-    navigate('/tags');
+  navigate({ to: '/tags' });
   };
 
   const handleBreadcrumbNavigate = (path: string) => {
     const url = path === '' ? '/' : path;
-    navigate(url);
+  navigate({ to: url });
   };
 
   const handleSortChange = (newSortBy: 'alphabetical' | 'frequency') => {

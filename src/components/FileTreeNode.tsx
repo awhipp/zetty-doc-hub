@@ -22,6 +22,7 @@ const FileTreeNode: React.FC<FileTreeNodeProps> = ({ node, level, onFileSelect, 
     if (node.type === 'folder') {
       setIsExpanded(!isExpanded);
     } else {
+      // Pass full path for file loading, but router will use relative
       onFileSelect?.(node.path);
     }
   };

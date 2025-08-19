@@ -5,6 +5,7 @@
 
 import { urlToFilePathWithExtension } from './routing';
 import { getAvailableFiles } from './markdownLoader';
+import { SUPPORTED_EXTENSIONS } from './constants';
 
 // Cache for path resolution results
 const pathResolutionCache = new Map<string, string>();
@@ -134,10 +135,12 @@ export const resolveImagePath = (imageSrc: string, currentDocPath?: string): str
  */
 export const extractTitleFromPath = (filePath: string): string => {
   const fileName = filePath.split('/').pop() || '';
+  // Build regex from SUPPORTED_EXTENSIONS
+  const extPattern = new RegExp(`\\.(${SUPPORTED_EXTENSIONS.join('|')})$`, 'i');
   return fileName
-    .replace(/\.(md|mdx)$/, '')
+    .replace(extPattern, '')
     .replace(/[-_]/g, ' ')
-    .replace(/\b\w/g, l => l.toUpperCase());
+    .replace(/\b\w/g, (l: string) => l.toUpperCase());
 };
 
 /**
@@ -147,7 +150,8 @@ export const extractTitleFromPath = (filePath: string): string => {
 export const getFileNameFromPath = (filePath: string): string => {
   const segments = filePath.split('/');
   const fileName = segments[segments.length - 1];
-  return fileName.replace(/\.(md|mdx)$/, '').replace(/-/g, ' ');
+  const extPattern = new RegExp(`\\.(${SUPPORTED_EXTENSIONS.join('|')})$`, 'i');
+  return fileName.replace(extPattern, '').replace(/-/g, ' ');
 };
 
 /**

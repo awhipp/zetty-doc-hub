@@ -13,7 +13,7 @@
   display: flex;
   flex: 1;
   height: calc(100vh - 80px); /* Account for header height */
-  max-width: 100vw;
+  width: 100vw;
   min-height: 0; /* Allow flex items to shrink below their content size */
   overflow: hidden; /* Prevent overflow at container level */
   position: relative; /* For floating buttons positioning */
