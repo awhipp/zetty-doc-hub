@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, statSync, existsSync, copyFileSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, readdirSync, statSync, existsSync, copyFileSync, mkdirSync } from 'fs';
 import { resolve, relative, join, extname } from 'path';
 
 interface DocEntry {
@@ -75,14 +75,18 @@ export function docsManifestPlugin() {
   let projectRoot: string;
   let syncReadme: boolean;
 
-  /** Copy the root README.md into docs/ so it appears in the manifest. */
+  /** Copy the root README.md into docs/, rewriting `docs/` link prefixes. */
   function syncRootReadme() {
     if (!syncReadme) return;
     const src = join(projectRoot, 'README.md');
     const dest = join(docsRoot, 'README.md');
     if (existsSync(src)) {
       mkdirSync(docsRoot, { recursive: true });
-      copyFileSync(src, dest);
+      // Strip the leading "docs/" from markdown link/image paths so they
+      // resolve correctly when the file lives inside docs/ itself.
+      const content = readFileSync(src, 'utf-8')
+        .replace(/(\[.*?\]\()docs\//g, '$1');
+      writeFileSync(dest, content, 'utf-8');
     }
   }
 

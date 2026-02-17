@@ -31,7 +31,7 @@ This application uses a **Mock Service Worker (MSW)** architecture:
 - The manifest is baked in at build time by a Vite plugin
 - To migrate to a real backend, simply swap MSW for Lambda/S3
 
-See the [Getting Started Guide](getting-started/install.md) for setup instructions.
+See the [Getting Started Guide](docs/getting-started/install.md) for setup instructions.
 
 ## Example Diagram
 
@@ -48,6 +48,6 @@ graph TD
 
 ## Links
 
-- [Installation Guide](getting-started/install.md)
-- [Configuration](getting-started/configuration.md)
-- [Feature Examples](examples/features.md)
+- [Installation Guide](docs/getting-started/install.md)
+- [Configuration](docs/getting-started/configuration.md)
+- [Feature Examples](docs/examples/features.md)
