@@ -1,0 +1,60 @@
+.graph-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.graph-modal {
+  width: min(900px, 95vw);
+  height: min(700px, 85vh);
+  background: var(--color-surface);
+  border-radius: 12px;
+  box-shadow: 0 16px 70px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.graph-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.graph-header h3 { margin: 0; font-size: 1rem; }
+.graph-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.graph-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: var(--color-text-muted);
+}
+.graph-legend {
+  display: flex;
+  gap: 1rem;
+  padding: 0.4rem 1rem;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border);
+}
+.legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 0.25rem;
+  vertical-align: middle;
+}
+.graph-container {
+  flex: 1;
+  min-height: 0;
+}

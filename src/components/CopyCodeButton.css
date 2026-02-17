@@ -1,0 +1,21 @@
+.copy-code-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 1;
+  color: var(--color-text);
+}
+.code-block-wrapper:hover .copy-code-btn {
+  opacity: 1;
+}
+.copy-code-btn:hover {
+  background: var(--color-hover);
+}

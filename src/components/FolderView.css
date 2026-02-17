@@ -1,0 +1,81 @@
+.folder-view {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+.folder-view-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.folder-view-icon {
+  font-size: 2rem;
+}
+.folder-view-header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+.folder-view-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+.folder-view-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  color: var(--color-text);
+  font-size: 0.9rem;
+}
+.folder-view-item:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+.folder-view-item-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+.folder-view-item-name {
+  flex: 1;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.folder-view-item-count {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+.folder-view-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--color-text-muted);
+}
+.folder-view-back {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.folder-view-back:hover {
+  opacity: 0.9;
+}
+.folder-view-loading {
+  padding: 2rem;
+  text-align: center;
+  color: var(--color-text-muted);
+}

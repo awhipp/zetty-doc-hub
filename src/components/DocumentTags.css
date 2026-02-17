@@ -1,0 +1,17 @@
+.doc-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+.doc-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.2rem 0.5rem;
+  background: var(--color-tag-bg);
+  color: var(--color-primary);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
