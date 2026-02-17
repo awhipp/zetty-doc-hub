@@ -91,6 +91,24 @@ sequenceDiagram
     UI-->>U: Display results
 ```
 
+## Images
+
+Images placed alongside markdown files are served automatically.
+
+### Inline image (relative path)
+
+![Sample Banner](images/sample-banner.svg)
+
+### Side-by-side icons
+
+| Icon | Description |
+|------|-------------|
+| ![Docs Icon](images/icon-docs.svg) | Documentation icon |
+
+### Full-width graphic
+
+![Build Progress](images/progress-bar.svg)
+
 ## Links & Navigation
 
 - Back to [Home](../README.md)

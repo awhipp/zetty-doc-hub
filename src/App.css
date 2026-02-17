@@ -15,3 +15,49 @@
   flex-direction: column;
   overflow-y: auto;
 }
+
+.image-viewer {
+  max-width: 800px;
+  padding: 1.5rem;
+}
+
+.image-viewer-title {
+  text-align: center;
+  font-size: 1.5rem;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.image-viewer-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+}
+
+.image-viewer-figure img {
+  max-width: 100%;
+  max-height: 70vh;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--border, #e2e8f0);
+  object-fit: contain;
+}
+
+.image-viewer-caption {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--text-muted, #94a3b8);
+}
+
+.image-viewer-ext {
+  background: var(--bg-muted, #334155);
+  color: var(--text-muted, #94a3b8);
+  padding: 0.1rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
